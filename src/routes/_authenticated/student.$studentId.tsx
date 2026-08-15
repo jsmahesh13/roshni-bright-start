@@ -6,7 +6,6 @@ import { NoticingStrip } from "@/components/roshni/NoticingStrip";
 import { Skeleton } from "@/components/ui/skeleton";
 import { noticingsQuery, studentQuery } from "@/lib/queries";
 import { FACET_LABEL, lastSeenLabel, summarise, daysAgo } from "@/lib/roshni";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/student/$studentId")({
   head: () => ({
@@ -80,10 +79,7 @@ function StudentPage() {
         {recent.map((n) => (
           <div key={n.id} className="flex gap-3 p-4">
             <span
-              className={cn(
-                "mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full",
-                `bg-facet-${n.facet}`,
-              )}
+              className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full"
               style={{ backgroundColor: `var(--facet-${n.facet})` }}
             />
             <div className="min-w-0">
