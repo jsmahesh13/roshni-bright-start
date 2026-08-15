@@ -14,13 +14,186 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      badges: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          student_id: string
+          teacher_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          student_id: string
+          teacher_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          student_id?: string
+          teacher_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "badges_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "badges_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classes: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      noticings: {
+        Row: {
+          author_id: string | null
+          created_at: string
+          facet: string
+          id: string
+          retracted: boolean
+          student_id: string
+          text: string
+          valence: number
+        }
+        Insert: {
+          author_id?: string | null
+          created_at?: string
+          facet: string
+          id?: string
+          retracted?: boolean
+          student_id: string
+          text: string
+          valence?: number
+        }
+        Update: {
+          author_id?: string | null
+          created_at?: string
+          facet?: string
+          id?: string
+          retracted?: boolean
+          student_id?: string
+          text?: string
+          valence?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "noticings_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "noticings_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          class_id: string | null
+          created_at: string
+          email: string | null
+          id: string
+          name: string
+          role: string
+        }
+        Insert: {
+          class_id?: string | null
+          created_at?: string
+          email?: string | null
+          id: string
+          name: string
+          role?: string
+        }
+        Update: {
+          class_id?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          name?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          class_id: string
+          created_at: string
+          id: string
+          name: string
+          roll: number
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          id?: string
+          name: string
+          roll: number
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          roll?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "students_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_see_class: { Args: { _class_id: string }; Returns: boolean }
+      is_admin: { Args: { _uid: string }; Returns: boolean }
+      my_class_id: { Args: { _uid: string }; Returns: string }
     }
     Enums: {
       [_ in never]: never
