@@ -20,9 +20,8 @@ import {
 import { FACETS, FACET_LABEL, FACET_VAR, type Facet } from "@/lib/roshni";
 
 export const Route = createFileRoute("/_authenticated/notice")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    draft: typeof search['draft'] === "string" ? (search['draft'] as string) : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { draft?: string } =>
+    typeof search['draft'] === "string" ? { draft: search['draft'] as string } : {},
   head: () => ({
     meta: [
       { title: "Notice — Roshni" },
@@ -58,7 +57,7 @@ function NoticePage() {
   useEffect(() => {
     if (incoming) {
       setRaw(incoming);
-      void navigate({ to: "/notice", search: {}, replace: true });
+      void navigate({ to: "/notice", search: { draft: undefined }, replace: true });
     }
   }, [incoming, navigate]);
 
