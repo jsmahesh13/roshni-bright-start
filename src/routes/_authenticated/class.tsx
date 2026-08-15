@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { ChevronRight } from "lucide-react";
 
+import { Constellation } from "@/components/roshni/Constellation";
 import { NoticingStrip } from "@/components/roshni/NoticingStrip";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -41,6 +42,8 @@ function ClassRegister() {
   const { data: profile } = useProfile();
   const { data: classes } = useQuery(classesQuery);
   const [sort, setSort] = useState<SortKey>("needs");
+  const [view, setView] = useState<"register" | "sky">("register");
+  const [range, setRange] = useState<number>(365);
   const [classId, setClassId] = useState<string | null>(null);
 
   const activeClassId = profile?.role === "admin" ? (classId ?? classes?.[0]?.id ?? null) : (profile?.class_id ?? null);
@@ -106,6 +109,49 @@ function ClassRegister() {
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap gap-1 rounded-xl border border-border bg-card p-1">
+          {([
+            { key: "register", label: "Register" },
+            { key: "sky", label: "Constellation" },
+          ] as const).map((v) => (
+            <button
+              key={v.key}
+              onClick={() => setView(v.key)}
+              className={cn(
+                "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
+                view === v.key
+                  ? "bg-gold-soft text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {v.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="hand text-lg text-faint">Over</span>
+          <div className="flex flex-wrap gap-1 rounded-xl border border-border bg-card p-1">
+            {([
+              { d: 90, label: "Term" },
+              { d: 365, label: "Year" },
+              { d: 730, label: "All" },
+            ] as const).map((r) => (
+              <button
+                key={r.d}
+                onClick={() => setRange(r.d)}
+                className={cn(
+                  "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
+                  range === r.d
+                    ? "bg-gold-soft text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-1 rounded-xl border border-border bg-card p-1">
           {SORTS.map((s) => (
             <button
               key={s.key}
@@ -142,6 +188,7 @@ function ClassRegister() {
         <span className="text-faint">▲ above the line = strength · ▼ below = concern</span>
       </div>
 
+      {view === "register" && (
       <div className="card-paper mt-5 overflow-hidden">
         <div className="hidden grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)_minmax(0,1.3fr)_24px] gap-4 border-b border-border px-5 py-3 text-[11px] uppercase tracking-wide text-faint md:grid">
           <span>Child</span>
@@ -211,6 +258,11 @@ function ClassRegister() {
           </div>
         )}
       </div>
+      )}
+
+      {view === "sky" && (
+        <Constellation rows={rows} rangeDays={range} classLabel={className} />
+      )}
 
       <p className="mt-4 text-xs text-faint">
         These marks are counts, not scores. Roshni does not rank children, and never labels them.
