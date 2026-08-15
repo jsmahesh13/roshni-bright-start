@@ -6,6 +6,7 @@ import { useProfile } from "@/hooks/useSession";
 import { classesQuery, studentNoticingsQuery, studentQuery } from "@/lib/queries";
 import { DAY_MS, FACET_VAR, type Noticing } from "@/lib/roshni";
 import {
+import { useT } from "@/hooks/useLang";
   DOMAIN,
   DOMAIN_ORDER,
   REGION,
@@ -62,13 +63,13 @@ export function ObservationSummary({
       <div className="print-sheet mx-auto max-w-3xl overflow-hidden rounded-lg bg-card shadow-lift">
         <div className="no-print sticky top-0 flex items-center justify-between gap-3 border-b border-border bg-background px-5 py-3">
           <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-faint">
-            Observation summary
+            {t("obssummary")}
           </div>
           <div className="flex gap-2">
             <Button variant="outline" className="bg-card" onClick={() => window.print()}>
-              Print / PDF
+              {t("print")}
             </Button>
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={onClose}>{t("close")}</Button>
           </div>
         </div>
 

@@ -18,6 +18,7 @@ import {
   studentQuery,
 } from "@/lib/queries";
 import {
+import { useT } from "@/hooks/useLang";
   FACET_LABEL,
   FACET_VAR,
   daysAgo,
@@ -221,7 +222,7 @@ function StudentPage() {
           className={crossed ? "" : "bg-card"}
           onClick={() => setSummaryOpen(true)}
         >
-          Generate observation summary
+          {t("btn_summary")}
         </Button>
       </div>
 
@@ -260,13 +261,13 @@ function StudentPage() {
       </section>
 
       <div className="mt-5 grid gap-5 md:grid-cols-2">
-        <Column title="▲ Strengths" count={strengths.length} accent="text-strength">
+        <Column title={`▲ ${t("strengths")}`} count={strengths.length} accent="text-strength">
           {strengths.map((n) => (
             <Row key={n.id} n={n} />
           ))}
           {strengths.length === 0 && <Empty text="Nothing on record here yet." />}
         </Column>
-        <Column title="▼ Concerns" count={concerns.length} accent="text-concern">
+        <Column title={`▼ ${t("concerns")}`} count={concerns.length} accent="text-concern">
           {concerns.map((n) => (
             <Row key={n.id} n={n} />
           ))}

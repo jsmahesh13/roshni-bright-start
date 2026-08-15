@@ -18,6 +18,7 @@ import {
   type SortKey,
 } from "@/lib/roshni";
 import { cn } from "@/lib/utils";
+import { useT } from "@/hooks/useLang";
 
 export const Route = createFileRoute("/_authenticated/class")({
   head: () => ({
@@ -39,6 +40,7 @@ export const Route = createFileRoute("/_authenticated/class")({
 });
 
 function ClassRegister() {
+  const t = useT();
   const { data: profile } = useProfile();
   const { data: classes } = useQuery(classesQuery);
   const [sort, setSort] = useState<SortKey>("needs");
@@ -110,8 +112,8 @@ function ClassRegister() {
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap gap-1 rounded-xl border border-border bg-card p-1">
           {([
-            { key: "register", label: "Register" },
-            { key: "sky", label: "Constellation" },
+            { key: "register", label: t("v_register") },
+            { key: "sky", label: t("v_lights") },
           ] as const).map((v) => (
             <button
               key={v.key}
@@ -129,12 +131,12 @@ function ClassRegister() {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="hand text-lg text-faint">Over</span>
+          <span className="hand text-lg text-faint">{t("over")}</span>
           <div className="flex flex-wrap gap-1 rounded-xl border border-border bg-card p-1">
             {([
-              { d: 90, label: "Term" },
-              { d: 365, label: "Year" },
-              { d: 730, label: "All" },
+              { d: 90, label: t("term") },
+              { d: 365, label: t("year") },
+              { d: 730, label: t("all") },
             ] as const).map((r) => (
               <button
                 key={r.d}
@@ -163,7 +165,7 @@ function ClassRegister() {
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
-              {s.label}
+              {t(`sort_${s.key}`) !== `sort_${s.key}` ? t(`sort_${s.key}`) : s.label}
             </button>
           ))}
         </div>
@@ -182,7 +184,7 @@ function ClassRegister() {
         {FACETS.map((f) => (
           <span key={f.key} className="inline-flex items-center gap-1.5">
             <span className={cn("h-2.5 w-1 rounded-full", f.dot)} />
-            {f.label}
+            {t(`f_${f.key}`)}
           </span>
         ))}
         <span className="text-faint">▲ above the line = strength · ▼ below = concern</span>
