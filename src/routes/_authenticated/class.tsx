@@ -39,6 +39,13 @@ export const Route = createFileRoute("/_authenticated/class")({
   component: ClassRegister,
 });
 
+const SORT_KEYS = {
+  needs: "needsyou",
+  fading: "fadingfirst",
+  most: "mostnoticed",
+  roll: "rollnumber",
+} as const;
+
 function ClassRegister() {
   const t = useT();
   const { data: profile } = useProfile();
@@ -165,7 +172,7 @@ function ClassRegister() {
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
-              {t(`sort_${s.key}`) !== `sort_${s.key}` ? t(`sort_${s.key}`) : s.label}
+              {t(SORT_KEYS[s.key])}
             </button>
           ))}
         </div>

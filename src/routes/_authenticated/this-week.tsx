@@ -30,6 +30,7 @@ export const Route = createFileRoute("/_authenticated/this-week")({
 });
 
 function ThisWeek() {
+  const t = useT();
   const navigate = useNavigate();
   const [quick, setQuick] = useState("");
   const [open, setOpen] = useState<string | null>(null);

@@ -41,6 +41,7 @@ const selectClass =
   "rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs text-foreground focus:outline-2 focus:outline-gold";
 
 function NoticePage() {
+  const t = useT();
   const { draft: incoming } = Route.useSearch();
   const navigate = useNavigate();
   const { user } = useUser();

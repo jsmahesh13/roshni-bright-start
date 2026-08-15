@@ -52,6 +52,7 @@ export const Route = createFileRoute("/_authenticated/student/$studentId")({
 });
 
 function StudentPage() {
+  const t = useT();
   const { studentId } = Route.useParams();
   const { user } = useUser();
   const queryClient = useQueryClient();

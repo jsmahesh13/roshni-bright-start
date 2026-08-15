@@ -178,6 +178,7 @@ function Section({
   items: Noticing[];
   empty?: string;
 }) {
+  const t = useT();
   return (
     <div className="mt-6 border-t-2 border-border pt-3.5">
       <div className="flex items-center gap-2.5 text-base font-semibold text-foreground">
