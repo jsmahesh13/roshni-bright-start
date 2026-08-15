@@ -57,7 +57,7 @@ function NoticePage() {
   useEffect(() => {
     if (incoming) {
       setRaw(incoming);
-      void navigate({ to: "/notice", search: { draft: undefined }, replace: true });
+      void navigate({ to: "/notice", search: {}, replace: true });
     }
   }, [incoming, navigate]);
 
