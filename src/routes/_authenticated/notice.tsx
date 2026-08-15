@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile, useUser } from "@/hooks/useSession";
-import { studentsQuery } from "@/lib/queries";
+import { classesQuery, studentsQuery } from "@/lib/queries";
 import {
   BLOCK_MSG,
   EXAMPLE_TEXT,
@@ -51,6 +51,18 @@ function NoticePage() {
   const classId = profile?.role === "admin" ? null : (profile?.class_id ?? null);
   const { data: students } = useQuery({ ...studentsQuery(classId), enabled: !!profile });
   const scope = useMemo(() => students ?? [], [students]);
+
+  // Multi-class scope (head-teacher) can contain same-named students from different
+  // classes — the picker needs class + roll to tell them apart.
+  const { data: classes } = useQuery({ ...classesQuery, enabled: classId === null });
+  const classNameById = useMemo(
+    () => Object.fromEntries((classes ?? []).map((c) => [c.id, c.name])),
+    [classes],
+  );
+  const studentLabel = (s: (typeof scope)[number]) =>
+    classId === null && classNameById[s.class_id]
+      ? `${s.name} — ${classNameById[s.class_id]} · Roll ${s.roll}`
+      : `${s.name} — Roll ${s.roll}`;
 
   const [raw, setRaw] = useState("");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -233,7 +245,7 @@ function NoticePage() {
                   <option value="">— student —</option>
                   {scope.map((s) => (
                     <option key={s.id} value={s.id}>
-                      {s.name}
+                      {studentLabel(s)}
                     </option>
                   ))}
                 </select>
