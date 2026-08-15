@@ -1,3 +1,4 @@
+import { useT } from "@/hooks/useLang";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -39,6 +40,7 @@ interface Props {
 }
 
 export function Constellation({ rows, rangeDays, classLabel }: Props) {
+  const t = useT();
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(960);
@@ -171,35 +173,35 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
         </div>
 
         <div className="sun-core">
-          <span>Your attention</span>
+          <span>{t("yourattention")}</span>
         </div>
 
         <div className="sky-legend left-4">
           <span>
             <i style={{ background: "#ffd873" }} />
-            in your light · {groups[0]!.length}
+            {t("zone_light")} · {groups[0]!.length}
           </span>
           <span>
             <i style={{ background: "#cdb98d" }} />
-            slipping · {groups[1]!.length}
+            {t("zone_slipping")} · {groups[1]!.length}
           </span>
           <span>
             <i style={{ background: "#9fb2d6" }} />
-            in the dark · {groups[2]!.length}
+            {t("zone_dark")} · {groups[2]!.length}
           </span>
         </div>
         <div className="sky-legend right-4">
           <span>
             <i style={{ background: "#ffd873" }} />
-            doing well
+            {t("key_well")}
           </span>
           <span>
             <i style={{ background: "#f0876b" }} />
-            needs you
+            {t("key_needs")}
           </span>
           <span>
             <i style={{ background: "#9fb2d6" }} />
-            fading
+            {t("key_fading")}
           </span>
         </div>
 
