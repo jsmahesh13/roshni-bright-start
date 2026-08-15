@@ -89,10 +89,10 @@ function ClassRegister() {
     <div className="mx-auto max-w-6xl px-5 py-8">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="hand text-5xl text-foreground">The class</h1>
+          <h1 className="hand text-5xl text-foreground">{t("h_class")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {className ? `Class ${className} — ` : ""}
-            {rows.length} children. Two years of noticing, one line per child.
+            {className ? `${className} · ` : ""}
+            {rows.length} · {view === "register" ? t("p_class_register") : t("p_class_lights")}
           </p>
         </div>
 
