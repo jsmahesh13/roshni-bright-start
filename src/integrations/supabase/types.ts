@@ -191,9 +191,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      can_see_class: { Args: { _class_id: string }; Returns: boolean }
-      is_admin: { Args: { _uid: string }; Returns: boolean }
-      my_class_id: { Args: { _uid: string }; Returns: string }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
