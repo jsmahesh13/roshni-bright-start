@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedClassRouteImport } from './routes/_authenticated/class'
+import { Route as AuthenticatedThisWeekRouteImport } from './routes/_authenticated/this-week'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -33,16 +34,23 @@ const AuthenticatedClassRoute = AuthenticatedClassRouteImport.update({
   path: '/class',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedThisWeekRoute = AuthenticatedThisWeekRouteImport.update({
+  id: '/this-week',
+  path: '/this-week',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/class': typeof AuthenticatedClassRoute
+  '/this-week': typeof AuthenticatedThisWeekRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/class': typeof AuthenticatedClassRoute
+  '/this-week': typeof AuthenticatedThisWeekRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -50,13 +58,20 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/class': typeof AuthenticatedClassRoute
+  '/_authenticated/this-week': typeof AuthenticatedThisWeekRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/class'
+  fullPaths: '/' | '/auth' | '/class' | '/this-week'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/class'
-  id: '__root__' | '/' | '/_authenticated' | '/auth' | '/_authenticated/class'
+  to: '/' | '/auth' | '/class' | '/this-week'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/class'
+    | '/_authenticated/this-week'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,15 +110,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClassRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/this-week': {
+      id: '/_authenticated/this-week'
+      path: '/this-week'
+      fullPath: '/this-week'
+      preLoaderRoute: typeof AuthenticatedThisWeekRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedClassRoute: typeof AuthenticatedClassRoute
+  AuthenticatedThisWeekRoute: typeof AuthenticatedThisWeekRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClassRoute: AuthenticatedClassRoute,
+  AuthenticatedThisWeekRoute: AuthenticatedThisWeekRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
