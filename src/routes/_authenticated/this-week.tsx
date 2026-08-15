@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 import { useProfile } from "@/hooks/useSession";
 import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
 import { lastSeenLabel, sortSummaries, summarise } from "@/lib/roshni";
@@ -27,6 +28,8 @@ export const Route = createFileRoute("/_authenticated/this-week")({
 });
 
 function ThisWeek() {
+  const navigate = useNavigate();
+  const [quick, setQuick] = useState("");
   const { data: profile } = useProfile();
   const { data: classes } = useQuery(classesQuery);
   const classId = profile?.role === "admin" ? null : (profile?.class_id ?? null);
