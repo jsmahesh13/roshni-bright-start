@@ -23,6 +23,7 @@ export function ObservationSummary({
   studentId: string;
   onClose: () => void;
 }) {
+  const t = useT();
   const { data: profile } = useProfile();
   const { data: student } = useQuery(studentQuery(studentId));
   const { data: allNotes } = useQuery(studentNoticingsQuery(studentId));
@@ -178,7 +179,6 @@ function Section({
   items: Noticing[];
   empty?: string;
 }) {
-  const t = useT();
   return (
     <div className="mt-6 border-t-2 border-border pt-3.5">
       <div className="flex items-center gap-2.5 text-base font-semibold text-foreground">
