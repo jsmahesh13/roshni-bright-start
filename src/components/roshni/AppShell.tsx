@@ -8,27 +8,23 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
-
-const LANGUAGES = [
-  { code: "en", label: "EN" },
-  { code: "hi", label: "हिंदी" },
-  { code: "kn", label: "ಕನ್ನಡ" },
-];
+import { useT } from "@/hooks/useLang";
+import { LanguageToggle } from "@/components/roshni/LanguageToggle";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { data: profile } = useProfile();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [lang, setLang] = useState("en");
+  const t = useT();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const nav = [
-    { to: "/this-week", label: "This week", icon: CalendarDays },
-    { to: "/notice", label: "Notice", icon: PenLine },
-    { to: "/class", label: "The class", icon: Users },
+    { to: "/this-week", label: t("nav_home"), icon: CalendarDays },
+    { to: "/notice", label: t("nav_notice"), icon: PenLine },
+    { to: "/class", label: t("nav_class"), icon: Users },
     ...(profile?.role === "admin"
-      ? [{ to: "/school", label: "School", icon: Building2 as typeof Users }]
+      ? [{ to: "/school", label: t("nav_school"), icon: Building2 as typeof Users }]
       : []),
   ] as const;
 
@@ -78,24 +74,10 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="space-y-4 px-4 pb-5">
         <div>
-          <div className="mb-1.5 px-1 text-[11px] uppercase tracking-wide text-faint">Language</div>
-          <div className="flex gap-1 rounded-xl border border-sidebar-border bg-card p-1">
-            {LANGUAGES.map((l) => (
-              <button
-                key={l.code}
-                onClick={() => setLang(l.code)}
-                className={cn(
-                  "flex-1 rounded-lg px-2 py-1.5 text-xs font-medium transition-colors",
-                  lang === l.code
-                    ? "bg-gold-soft text-foreground"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {l.label}
-              </button>
-            ))}
+          <div className="mb-1.5 px-1 text-[11px] uppercase tracking-wide text-faint">
+            {t("language")}
           </div>
-          <p className="mt-1.5 px-1 text-[11px] text-faint">Translations are on the way.</p>
+          <LanguageToggle full />
         </div>
 
         <div className="rounded-xl border border-sidebar-border bg-card p-3">

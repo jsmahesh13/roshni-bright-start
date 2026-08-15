@@ -330,3 +330,13 @@
 @media (prefers-reduced-motion: reduce) {
   .star { animation: none !important; opacity: var(--op) !important; transform: translate(-50%, -50%) !important; }
 }
+
+/* ===== script fonts for Hindi / Kannada ===== */
+.lang-hi body,
+.lang-hi {
+  font-family: "Noto Sans Devanagari", Inter, sans-serif;
+}
+.lang-kn body,
+.lang-kn {
+  font-family: "Noto Sans Kannada", Inter, sans-serif;
+}
