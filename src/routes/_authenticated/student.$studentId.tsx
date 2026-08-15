@@ -24,7 +24,6 @@ import {
   studentQuery,
 } from "@/lib/queries";
 import {
-  DAY_MS,
   FACET_LABEL,
   FACET_VAR,
   daysAgo,
@@ -345,5 +344,3 @@ function Column({
 function Empty({ text }: { text: string }) {
   return <div className="p-6 text-center text-sm text-muted-foreground">{text}</div>;
 }
-
-void DAY_MS;

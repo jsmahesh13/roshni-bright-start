@@ -17,7 +17,7 @@ import {
   scan,
   type Draft,
 } from "@/lib/composer";
-import { FACETS, FACET_LABEL, FACET_VAR, type Facet } from "@/lib/roshni";
+import { FACETS, FACET_VAR, type Facet } from "@/lib/roshni";
 
 export const Route = createFileRoute("/_authenticated/notice")({
   validateSearch: (search: Record<string, unknown>): { draft?: string } =>
