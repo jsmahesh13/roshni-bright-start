@@ -43,6 +43,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
   const t = useT();
   const navigate = useNavigate();
   const ref = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(960);
   const [tip, setTip] = useState<{ x: number; y: number; lines: string[] } | null>(null);
 
@@ -54,6 +55,23 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
     setWidth(el.clientWidth || 960);
     return () => ro.disconnect();
   }, []);
+
+  // Mouse-driven parallax tilt — mutate the scene's own transform directly so
+  // hover doesn't trigger a React re-render on every pointer move.
+  function tiltScene(e: React.MouseEvent<HTMLDivElement>) {
+    const box = ref.current?.getBoundingClientRect();
+    const scene = sceneRef.current;
+    if (!box || !scene) return;
+    const px = (e.clientX - box.left) / box.width - 0.5;
+    const py = (e.clientY - box.top) / box.height - 0.5;
+    scene.style.setProperty("--tiltX", `${(px * 9).toFixed(2)}deg`);
+    scene.style.setProperty("--tiltY", `${(-py * 7).toFixed(2)}deg`);
+  }
+  function resetTilt() {
+    setTip(null);
+    sceneRef.current?.style.setProperty("--tiltX", "0deg");
+    sceneRef.current?.style.setProperty("--tiltY", "0deg");
+  }
 
   const list = useMemo(
     () => rows.map((r) => ({ s: r.student, m: skyMetrics(r, rangeDays) })),
@@ -87,10 +105,12 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       glow: string;
       nameCol: string;
       op: number;
+      z: number;
       dx: number;
       dy: number;
       delay: number;
       pulse: boolean;
+      beacon: boolean;
       first: string;
       tip: string[];
     }[] = [];
@@ -103,24 +123,41 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
         const x = cx + Math.cos(a) * rr;
         const y = cy + Math.sin(a) * rr;
         const { m, s } = o;
-        const sr = 7 + Math.min(1, m.count / 22) * 15;
         const dark = zi === 2;
         const needs = !dark && isNeeds(m);
-        let fill: string, glow: string, nameCol: string, pulse = false;
-        if (dark) {
-          fill = "radial-gradient(circle at 40% 35%,#e2eaf7,#9fb2d6 60%,#6b7ba0)";
-          glow = `0 0 ${(sr * 1).toFixed(0)}px ${(sr * 0.15).toFixed(0)}px rgba(150,175,225,.3)`;
-          nameCol = "rgba(190,206,238,.95)";
-        } else if (needs) {
+
+        // This view exists to surface the child who is being missed — so a
+        // long-unseen child should visually dominate, not fade into the
+        // background. "neglect" grows the longer nobody has written anything.
+        const neglect = dark ? Math.min(1, Math.max(0, m.days - 42) / 260) : 0;
+
+        let sr: number, fill: string, glow: string, nameCol: string;
+        let pulse = false,
+          beacon = false,
+          z: number;
+
+        if (needs) {
+          sr = 15 + Math.min(1, m.recentCon / 5) * 9;
           fill = "radial-gradient(circle at 40% 35%,#fff,#f0876b 55%,#c8483a)";
-          glow = `0 0 ${(sr * 1.9).toFixed(0)}px ${(sr * 0.6).toFixed(0)}px rgba(240,110,90,.8)`;
+          glow = `0 0 ${(sr * 2).toFixed(0)}px ${(sr * 0.65).toFixed(0)}px rgba(240,110,90,.85)`;
           nameCol = "#ffc2b2";
           pulse = true;
+          z = 34;
+        } else if (dark) {
+          sr = 15 + neglect * 12;
+          fill = "radial-gradient(circle at 40% 35%,#fff9ec,#cfe0ff 45%,#8fa6d6 78%)";
+          glow = `0 0 ${(20 + neglect * 22).toFixed(0)}px ${(6 + neglect * 8).toFixed(0)}px rgba(200,220,255,${(0.45 + neglect * 0.3).toFixed(2)})`;
+          nameCol = "#eaf1ff";
+          beacon = true;
+          z = 16 + neglect * 20;
         } else {
+          sr = 7 + Math.min(1, m.count / 22) * 13;
           fill = "radial-gradient(circle at 40% 35%,#fffdf0,#ffd873 60%,#e0a020)";
-          glow = `0 0 ${(sr * 1.5).toFixed(0)}px ${(sr * 0.4).toFixed(0)}px rgba(255,205,90,.6)`;
+          glow = `0 0 ${(sr * 1.4).toFixed(0)}px ${(sr * 0.35).toFixed(0)}px rgba(255,205,90,.55)`;
           nameCol = "#ffe6a8";
+          z = -8;
         }
+
         out.push({
           id: s.id,
           x,
@@ -129,11 +166,13 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           fill,
           glow,
           nameCol,
-          op: dark ? (m.days > 180 ? 0.62 : 0.85) : 1,
+          op: needs ? 1 : dark ? 0.92 + neglect * 0.08 : 1,
+          z,
           dx: cx - x,
           dy: cy - y,
           delay: idx * 13,
           pulse,
+          beacon,
           first: s.name.split(" ")[0] ?? s.name,
           tip: [
             s.name,
@@ -160,20 +199,68 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       <div
         ref={ref}
         className="sky-night relative mt-5 h-[604px] overflow-hidden rounded-[18px]"
-        onMouseLeave={() => setTip(null)}
+        onMouseMove={tiltScene}
+        onMouseLeave={resetTilt}
       >
-        <div
-          className="zone-ring"
-          style={{ width: bFaint * 2, height: bFaint * 2 }}
-          aria-hidden
-        />
-        <div className="fade-line" style={{ width: bDark * 2, height: bDark * 2 }} aria-hidden />
-        <div className="fade-lbl" style={{ top: cy - bDark }}>
-          6-week line · beyond here, in the dark
-        </div>
+        <div ref={sceneRef} className="sky-scene">
+          <div
+            className="zone-ring"
+            style={{ width: bFaint * 2, height: bFaint * 2 }}
+            aria-hidden
+          />
+          <div className="fade-line" style={{ width: bDark * 2, height: bDark * 2 }} aria-hidden />
+          <div className="fade-lbl" style={{ top: cy - bDark }}>
+            6-week line · beyond here, in the dark
+          </div>
 
-        <div className="sun-core">
-          <span>{t("yourattention")}</span>
+          <div className="sun-core">
+            <span className="sun-core-glow blob-shape blob-breathe" aria-hidden />
+            <span className="sun-core-shape blob-shape blob-breathe" aria-hidden />
+            <span>{t("yourattention")}</span>
+          </div>
+
+          {stars.map((st) => (
+            <button
+              key={st.id}
+              type="button"
+              className="star"
+              aria-label={st.tip.join(", ")}
+              onClick={() => open(st.id)}
+              onMouseMove={(e) => {
+                const box = ref.current?.getBoundingClientRect();
+                if (!box) return;
+                setTip({ x: e.clientX - box.left, y: e.clientY - box.top, lines: st.tip });
+              }}
+              onMouseLeave={() => setTip(null)}
+              style={
+                {
+                  left: st.x,
+                  top: st.y,
+                  width: st.sr,
+                  height: st.sr,
+                  background: st.fill,
+                  boxShadow: st.glow,
+                  "--dx": `${st.dx.toFixed(0)}px`,
+                  "--dy": `${st.dy.toFixed(0)}px`,
+                  "--op": st.op,
+                  "--z": `${st.z.toFixed(0)}px`,
+                  animation:
+                    `orbitIn .9s cubic-bezier(.22,.61,.36,1) ${st.delay}ms both` +
+                    (st.pulse ? `, pulseStar 2s ease-in-out ${820 + st.delay}ms infinite` : ""),
+                } as React.CSSProperties
+              }
+            >
+              {st.beacon && (
+                <>
+                  <span className="star-beacon" aria-hidden />
+                  <span className="star-beacon b2" aria-hidden />
+                </>
+              )}
+              <span className="star-name" style={{ color: st.nameCol }}>
+                {st.first}
+              </span>
+            </button>
+          ))}
         </div>
 
         <div className="sky-legend left-4">
@@ -204,42 +291,6 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
             {t("key_fading")}
           </span>
         </div>
-
-        {stars.map((st) => (
-          <button
-            key={st.id}
-            type="button"
-            className="star"
-            aria-label={st.tip.join(", ")}
-            onClick={() => open(st.id)}
-            onMouseMove={(e) => {
-              const box = ref.current?.getBoundingClientRect();
-              if (!box) return;
-              setTip({ x: e.clientX - box.left, y: e.clientY - box.top, lines: st.tip });
-            }}
-            onMouseLeave={() => setTip(null)}
-            style={
-              {
-                left: st.x,
-                top: st.y,
-                width: st.sr,
-                height: st.sr,
-                background: st.fill,
-                boxShadow: st.glow,
-                "--dx": `${st.dx.toFixed(0)}px`,
-                "--dy": `${st.dy.toFixed(0)}px`,
-                "--op": st.op,
-                animation:
-                  `orbitIn .9s cubic-bezier(.22,.61,.36,1) ${st.delay}ms both` +
-                  (st.pulse ? `, pulseStar 2s ease-in-out ${820 + st.delay}ms infinite` : ""),
-              } as React.CSSProperties
-            }
-          >
-            <span className="star-name" style={{ color: st.nameCol }}>
-              {st.first}
-            </span>
-          </button>
-        ))}
 
         {tip && (
           <div
