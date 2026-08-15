@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 import { useProfile } from "@/hooks/useSession";
 import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
 import { lastSeenLabel, sortSummaries, summarise } from "@/lib/roshni";
@@ -27,6 +28,8 @@ export const Route = createFileRoute("/_authenticated/this-week")({
 });
 
 function ThisWeek() {
+  const navigate = useNavigate();
+  const [quick, setQuick] = useState("");
   const { data: profile } = useProfile();
   const { data: classes } = useQuery(classesQuery);
   const classId = profile?.role === "admin" ? null : (profile?.class_id ?? null);
@@ -97,14 +100,36 @@ function ThisWeek() {
             />
           </section>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild>
-              <Link to="/notice">Write a noticing</Link>
-            </Button>
-            <Button asChild variant="outline" className="bg-card">
-              <Link to="/class">Open the register</Link>
-            </Button>
-          </div>
+          <section className="card-paper mt-8 p-5">
+            <h2 className="hand text-3xl text-foreground">Quick capture</h2>
+            <p className="mt-0.5 text-sm text-muted-foreground">
+              Type it the way you'd say it — Roshni will structure it on the next screen. Nothing is
+              saved until you approve every word.
+            </p>
+            <Textarea
+              value={quick}
+              onChange={(e) => setQuick(e.target.value)}
+              rows={3}
+              placeholder="Fatima was quiet all morning, one-word answers…"
+              className="mt-3 resize-y bg-background text-[15px]"
+            />
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <Button
+                onClick={() =>
+                  navigate({
+                    to: "/notice",
+                    ...(quick.trim() ? { search: { draft: quick.trim() } } : { search: {} }),
+                  })
+                }
+              >
+                Structure it →
+              </Button>
+              <Button asChild variant="outline" className="bg-card">
+                <Link to="/class">Open the register</Link>
+              </Button>
+            </div>
+          </section>
+
         </>
       )}
     </div>
