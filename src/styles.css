@@ -175,3 +175,28 @@
 @utility sun-glow {
   box-shadow: var(--shadow-sun);
 }
+
+/* Observation summary print sheet — only the sheet reaches the paper. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-sheet,
+  .print-sheet * {
+    visibility: visible;
+  }
+  .print-overlay {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    padding: 0;
+  }
+  .print-sheet {
+    box-shadow: none;
+    max-width: 100%;
+    border-radius: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

@@ -4,15 +4,9 @@ import { ArrowLeft } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { ObservationSummary } from "@/components/roshni/ObservationSummary";
 import { Timeline } from "@/components/roshni/Timeline";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@/hooks/useSession";
@@ -295,18 +289,9 @@ function StudentPage() {
         but stop feeding any pattern.
       </p>
 
-      <Dialog open={summaryOpen} onOpenChange={setSummaryOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="hand text-3xl">Observation summary</DialogTitle>
-            <DialogDescription>
-              A printable summary — what was noticed, when, and by whom, with the support options a
-              teacher can actually use — is the next thing we build. It will never contain a
-              diagnosis, a score, or a prediction.
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+      {summaryOpen && (
+        <ObservationSummary studentId={studentId} onClose={() => setSummaryOpen(false)} />
+      )}
     </div>
   );
 }
