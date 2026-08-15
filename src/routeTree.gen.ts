@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedClassRouteImport } from './routes/_authenticated/class'
 import { Route as AuthenticatedNoticeRouteImport } from './routes/_authenticated/notice'
+import { Route as AuthenticatedSchoolRouteImport } from './routes/_authenticated/school'
 import { Route as AuthenticatedThisWeekRouteImport } from './routes/_authenticated/this-week'
 import { Route as AuthenticatedStudentStudentIdRouteImport } from './routes/_authenticated/student.$studentId'
 
@@ -41,6 +42,11 @@ const AuthenticatedNoticeRoute = AuthenticatedNoticeRouteImport.update({
   path: '/notice',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSchoolRoute = AuthenticatedSchoolRouteImport.update({
+  id: '/school',
+  path: '/school',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedThisWeekRoute = AuthenticatedThisWeekRouteImport.update({
   id: '/this-week',
   path: '/this-week',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/class': typeof AuthenticatedClassRoute
   '/notice': typeof AuthenticatedNoticeRoute
+  '/school': typeof AuthenticatedSchoolRoute
   '/this-week': typeof AuthenticatedThisWeekRoute
   '/student/$studentId': typeof AuthenticatedStudentStudentIdRoute
 }
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/class': typeof AuthenticatedClassRoute
   '/notice': typeof AuthenticatedNoticeRoute
+  '/school': typeof AuthenticatedSchoolRoute
   '/this-week': typeof AuthenticatedThisWeekRoute
   '/student/$studentId': typeof AuthenticatedStudentStudentIdRoute
 }
@@ -76,16 +84,29 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/class': typeof AuthenticatedClassRoute
   '/_authenticated/notice': typeof AuthenticatedNoticeRoute
+  '/_authenticated/school': typeof AuthenticatedSchoolRoute
   '/_authenticated/this-week': typeof AuthenticatedThisWeekRoute
   '/_authenticated/student/$studentId': typeof AuthenticatedStudentStudentIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/class' | '/notice' | '/this-week' | '/student/$studentId'
+    | '/'
+    | '/auth'
+    | '/class'
+    | '/notice'
+    | '/school'
+    | '/this-week'
+    | '/student/$studentId'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/auth' | '/class' | '/notice' | '/this-week' | '/student/$studentId'
+    | '/'
+    | '/auth'
+    | '/class'
+    | '/notice'
+    | '/school'
+    | '/this-week'
+    | '/student/$studentId'
   id:
     | '__root__'
     | '/'
@@ -93,6 +114,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/class'
     | '/_authenticated/notice'
+    | '/_authenticated/school'
     | '/_authenticated/this-week'
     | '/_authenticated/student/$studentId'
   fileRoutesById: FileRoutesById
@@ -140,6 +162,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNoticeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/school': {
+      id: '/_authenticated/school'
+      path: '/school'
+      fullPath: '/school'
+      preLoaderRoute: typeof AuthenticatedSchoolRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/this-week': {
       id: '/_authenticated/this-week'
       path: '/this-week'
@@ -160,6 +189,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedClassRoute: typeof AuthenticatedClassRoute
   AuthenticatedNoticeRoute: typeof AuthenticatedNoticeRoute
+  AuthenticatedSchoolRoute: typeof AuthenticatedSchoolRoute
   AuthenticatedThisWeekRoute: typeof AuthenticatedThisWeekRoute
   AuthenticatedStudentStudentIdRoute: typeof AuthenticatedStudentStudentIdRoute
 }
@@ -167,6 +197,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClassRoute: AuthenticatedClassRoute,
   AuthenticatedNoticeRoute: AuthenticatedNoticeRoute,
+  AuthenticatedSchoolRoute: AuthenticatedSchoolRoute,
   AuthenticatedThisWeekRoute: AuthenticatedThisWeekRoute,
   AuthenticatedStudentStudentIdRoute: AuthenticatedStudentStudentIdRoute,
 }
