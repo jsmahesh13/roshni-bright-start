@@ -1,3 +1,4 @@
+import { useT } from "@/hooks/useLang";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
@@ -6,7 +7,6 @@ import { useProfile } from "@/hooks/useSession";
 import { classesQuery, studentNoticingsQuery, studentQuery } from "@/lib/queries";
 import { DAY_MS, FACET_VAR, type Noticing } from "@/lib/roshni";
 import {
-import { useT } from "@/hooks/useLang";
   DOMAIN,
   DOMAIN_ORDER,
   REGION,

@@ -1,3 +1,4 @@
+import { useT } from "@/hooks/useLang";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
@@ -18,7 +19,6 @@ import {
   studentQuery,
 } from "@/lib/queries";
 import {
-import { useT } from "@/hooks/useLang";
   FACET_LABEL,
   FACET_VAR,
   daysAgo,
