@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
+import { useT } from "@/hooks/useLang";
+import { LanguageToggle } from "@/components/roshni/LanguageToggle";
 import { DEMO_STAFF, DEMO_PASSWORD } from "@/lib/demo-staff";
 import { ensureDemoStaff } from "@/lib/demo-staff.functions";
 
@@ -67,9 +69,12 @@ function AuthPage() {
         <Link to="/">
           <Wordmark size={28} textClass="text-2xl" />
         </Link>
-        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
-          Back to home
-        </Link>
+        <div className="flex items-center gap-3">
+          <LanguageToggle />
+          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+            {t("backhome")}
+          </Link>
+        </div>
       </header>
 
       <main className="mx-auto grid w-full max-w-5xl flex-1 gap-8 px-5 pb-16 lg:grid-cols-2">
@@ -81,8 +86,8 @@ function AuthPage() {
 
           <Tabs defaultValue="signin" className="mt-6">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign in</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
+              <TabsTrigger value="signin">{t("signin")}</TabsTrigger>
+              <TabsTrigger value="register">{t("register")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin" className="mt-5">
@@ -94,7 +99,7 @@ function AuthPage() {
                 }}
               >
                 <div className="space-y-2">
-                  <Label htmlFor="email">School email</Label>
+                  <Label htmlFor="email">{t("email")}</Label>
                   <Input
                     id="email"
                     type="email"
@@ -106,7 +111,7 @@ function AuthPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t("password")}</Label>
                   <Input
                     id="password"
                     type="password"
@@ -117,7 +122,7 @@ function AuthPage() {
                   />
                 </div>
                 <Button type="submit" className="w-full" disabled={busy}>
-                  {busy ? "Signing in…" : "Sign in"}
+                  {busy ? "…" : t("enter")}
                 </Button>
               </form>
             </TabsContent>
@@ -158,7 +163,7 @@ function AuthPage() {
           <div className="sticky-note p-6">
             <h2 className="hand text-3xl text-foreground">Try it as someone</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Seeded demo staff from a fictional school. Click one to fill the form.
+              {t("orstaff")}
             </p>
             <ul className="mt-5 space-y-3">
               {DEMO_STAFF.map((s) => (
@@ -189,7 +194,7 @@ function AuthPage() {
             <p className="mt-4 text-xs text-faint">
               Every demo account uses the password{" "}
               <span className="font-mono">{DEMO_PASSWORD}</span>.{" "}
-              {ready ? "Demo staff are ready." : "Preparing demo staff…"}
+              {ready ? t("demonote") : "…"}
             </p>
           </div>
         </div>
