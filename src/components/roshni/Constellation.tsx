@@ -71,7 +71,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
     const g: (typeof list)[] = [[], [], []];
     [...list]
       .sort((a, b) => a.s.name.localeCompare(b.s.name))
-      .forEach((o) => g[o.m.days <= 21 ? 0 : o.m.days <= 42 ? 1 : 2].push(o));
+      .forEach((o) => g[o.m.days <= 21 ? 0 : o.m.days <= 42 ? 1 : 2]!.push(o));
     return g;
   }, [list]);
 
@@ -96,8 +96,8 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
     groups.forEach((arr, zi) => {
       const n = arr.length;
       arr.forEach((o, j) => {
-        const a = (n ? (j / n) * Math.PI * 2 : 0) + zPhase[zi];
-        const rr = zoneR[zi] + (j % 2 ? 11 : -11);
+        const a = (n ? (j / n) * Math.PI * 2 : 0) + zPhase[zi]!;
+        const rr = zoneR[zi]! + (j % 2 ? 11 : -11);
         const x = cx + Math.cos(a) * rr;
         const y = cy + Math.sin(a) * rr;
         const { m, s } = o;
@@ -132,7 +132,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           dy: cy - y,
           delay: idx * 13,
           pulse,
-          first: s.name.split(" ")[0],
+          first: s.name.split(" ")[0] ?? s.name,
           tip: [
             s.name,
             `${classLabel} · roll ${s.roll}`,
@@ -144,7 +144,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       });
     });
     return out;
-  }, [groups, cx, cy, classLabel, zoneR[0], zoneR[1], zoneR[2]]);
+  }, [groups, cx, cy, classLabel, zoneR]);
 
   const needsL = list
     .filter((o) => o.m.days <= 42 && isNeeds(o.m))
@@ -177,15 +177,15 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
         <div className="sky-legend left-4">
           <span>
             <i style={{ background: "#ffd873" }} />
-            in your light · {groups[0].length}
+            in your light · {groups[0]!.length}
           </span>
           <span>
             <i style={{ background: "#cdb98d" }} />
-            slipping · {groups[1].length}
+            slipping · {groups[1]!.length}
           </span>
           <span>
             <i style={{ background: "#9fb2d6" }} />
-            in the dark · {groups[2].length}
+            in the dark · {groups[2]!.length}
           </span>
         </div>
         <div className="sky-legend right-4">
