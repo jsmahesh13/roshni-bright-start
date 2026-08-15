@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useProfile } from "@/hooks/useSession";
 import { buildDigest } from "@/lib/digest";
 import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
+import { useT } from "@/hooks/useLang";
 
 export const Route = createFileRoute("/_authenticated/this-week")({
   head: () => ({
@@ -29,6 +30,7 @@ export const Route = createFileRoute("/_authenticated/this-week")({
 });
 
 function ThisWeek() {
+  const t = useT();
   const navigate = useNavigate();
   const [quick, setQuick] = useState("");
   const [open, setOpen] = useState<string | null>(null);
@@ -57,10 +59,9 @@ function ThisWeek() {
       <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-faint">
         Monday morning · nothing else interrupts you
       </div>
-      <h1 className="hand mt-1 text-5xl text-foreground">Three things worth your attention.</h1>
+      <h1 className="hand mt-1 text-5xl text-foreground">{t("h_home")}</h1>
       <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-        Questions, not findings. Each opens onto the noticings it came from. You know the child;
-        Roshni only knows the notes.
+        {t("p_home")}
       </p>
       <p className="mt-1 text-xs text-faint">
         {profile?.name ? `${profile.name.split(" ")[0]} · ` : ""}
@@ -68,7 +69,7 @@ function ThisWeek() {
       </p>
 
       <section className="card-paper mt-6 p-5">
-        <h2 className="hand text-3xl text-foreground">Notice something now</h2>
+        <h2 className="hand text-3xl text-foreground">{t("noticenow")}</h2>
         <p className="mt-0.5 text-sm text-muted-foreground">
           Type it the way you'd say it — Roshni will structure it on the next screen. Nothing is
           saved until you approve every word.
@@ -89,7 +90,7 @@ function ThisWeek() {
               })
             }
           >
-            Structure it →
+            {t("btn_structure")}
           </Button>
         </div>
       </section>

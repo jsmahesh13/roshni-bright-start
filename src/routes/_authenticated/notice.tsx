@@ -18,6 +18,7 @@ import {
   type Draft,
 } from "@/lib/composer";
 import { FACETS, FACET_VAR, type Facet } from "@/lib/roshni";
+import { useT } from "@/hooks/useLang";
 
 export const Route = createFileRoute("/_authenticated/notice")({
   validateSearch: (search: Record<string, unknown>): { draft?: string } =>
@@ -40,6 +41,7 @@ const selectClass =
   "rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs text-foreground focus:outline-2 focus:outline-gold";
 
 function NoticePage() {
+  const t = useT();
   const { draft: incoming } = Route.useSearch();
   const navigate = useNavigate();
   const { user } = useUser();
@@ -124,7 +126,7 @@ function NoticePage() {
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-8">
-      <h1 className="hand text-5xl text-foreground">Notice</h1>
+      <h1 className="hand text-5xl text-foreground">{t("h_notice")}</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         Type it the way you'd say it. Roshni will split it into clean, dated observations —
         nothing is saved until you approve every word.
@@ -139,9 +141,9 @@ function NoticePage() {
           className="resize-y bg-background text-[15px]"
         />
         <div className="mt-3 flex flex-wrap items-center gap-3">
-          <Button onClick={structure}>Structure it →</Button>
+          <Button onClick={structure}>{t("btn_structure")}</Button>
           <Button variant="outline" className="bg-card" onClick={() => setRaw(EXAMPLE_TEXT)}>
-            Use example
+            {t("useexample")}
           </Button>
           <span className="text-xs text-faint">{raw.length} chars</span>
         </div>
@@ -282,7 +284,7 @@ function NoticePage() {
       {savable && (
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <Button onClick={() => save.mutate()} disabled={save.isPending}>
-            Save approved noticings →
+            {t("btn_save")}
           </Button>
           <Button asChild variant="outline" className="bg-card">
             <Link to="/class">Open the register</Link>
