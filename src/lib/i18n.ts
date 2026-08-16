@@ -310,6 +310,19 @@ export const DICTIONARY = {
   sup_engagement_2: {"en":"Give a role or a reason to participate; a front seat sometimes helps.","hi":"कोई भूमिका या भाग लेने का कारण दीजिए; कभी-कभी आगे की सीट मदद करती है।","kn":"ಒಂದು ಪಾತ್ರ ಅಥವಾ ಭಾಗವಹಿಸಲು ಕಾರಣ ನೀಡಿ; ಕೆಲವೊಮ್ಮೆ ಮುಂದಿನ ಸೀಟು ನೆರವಾಗುತ್ತದೆ."},
   sup_engagement_3: {"en":"Small, frequent successes rather than one big task.","hi":"एक बड़े काम की जगह छोटी, बार-बार मिलने वाली सफलताएँ।","kn":"ಒಂದು ದೊಡ್ಡ ಕೆಲಸಕ್ಕಿಂತ ಸಣ್ಣ, ಪದೇ ಪದೇ ಸಿಗುವ ಯಶಸ್ಸು."},
   sup_engagement_4: {"en":"Notice when engagement is highest and build from there.","hi":"देखिए कि सहभागिता कब सबसे अधिक होती है और वहीं से आगे बढ़िए।","kn":"ತೊಡಗಿಸಿಕೊಳ್ಳುವಿಕೆ ಯಾವಾಗ ಹೆಚ್ಚಿದೆ ಎಂದು ಗಮನಿಸಿ ಅಲ್ಲಿಂದ ಮುಂದುವರಿಯಿರಿ."},
+
+  // ---- landing footer ------------------------------------------------------
+  ft_privacy_h: {"en":"Data & privacy","hi":"डेटा और निजता","kn":"ದತ್ತಾಂಶ ಮತ್ತು ಗೌಪ್ಯತೆ"},
+  ft_privacy_1: {"en":"What is stored: short, teacher-written observations in plain words. No diagnoses, no scores, no ranks, no character labels.","hi":"क्या संग्रहीत होता है: शिक्षक द्वारा सरल शब्दों में लिखी छोटी टिप्पणियाँ। कोई निदान नहीं, कोई स्कोर नहीं, कोई रैंक नहीं, कोई चरित्र-लेबल नहीं।","kn":"ಏನು ಸಂಗ್ರಹವಾಗುತ್ತದೆ: ಶಿಕ್ಷಕರು ಸರಳ ಪದಗಳಲ್ಲಿ ಬರೆದ ಸಣ್ಣ ಟಿಪ್ಪಣಿಗಳು. ರೋಗನಿರ್ಣಯವಿಲ್ಲ, ಅಂಕಗಳಿಲ್ಲ, ಶ್ರೇಣಿಯಿಲ್ಲ, ಸ್ವಭಾವದ ಹಣೆಪಟ್ಟಿಯಿಲ್ಲ."},
+  ft_privacy_2: {"en":"Who can see it: only staff of that school — a teacher sees only their own class, a head teacher sees the school. A student never has access, and Roshni never speaks to a child.","hi":"कौन देख सकता है: केवल उसी विद्यालय का स्टाफ़ — शिक्षक केवल अपनी कक्षा देखता है, प्रधान शिक्षक पूरा विद्यालय। छात्र की कभी पहुँच नहीं होती, और रोशनी कभी किसी बच्चे से बात नहीं करती।","kn":"ಯಾರು ನೋಡಬಹುದು: ಆ ಶಾಲೆಯ ಸಿಬ್ಬಂದಿ ಮಾತ್ರ — ಶಿಕ್ಷಕರು ತಮ್ಮ ತರಗತಿಯನ್ನಷ್ಟೇ, ಮುಖ್ಯ ಶಿಕ್ಷಕರು ಇಡೀ ಶಾಲೆಯನ್ನು ನೋಡುತ್ತಾರೆ. ವಿದ್ಯಾರ್ಥಿಗೆ ಎಂದೂ ಪ್ರವೇಶವಿಲ್ಲ, ಮತ್ತು ರೋಶ್ನಿ ಎಂದೂ ಮಗುವಿನೊಂದಿಗೆ ಮಾತನಾಡುವುದಿಲ್ಲ."},
+  ft_privacy_3: {"en":"Forgets on purpose: raw noticings are deleted 24 months after they are written. A childhood should not follow a child forever.","hi":"जानबूझकर भूलना: कच्ची टिप्पणियाँ लिखे जाने के 24 महीने बाद हटा दी जाती हैं। बचपन जीवन भर बच्चे का पीछा नहीं करना चाहिए।","kn":"ಉದ್ದೇಶಪೂರ್ವಕವಾಗಿ ಮರೆಯುತ್ತದೆ: ಕಚ್ಚಾ ಟಿಪ್ಪಣಿಗಳು ಬರೆದ 24 ತಿಂಗಳ ನಂತರ ಅಳಿಸಲ್ಪಡುತ್ತವೆ. ಬಾಲ್ಯವು ಮಗುವನ್ನು ಶಾಶ್ವತವಾಗಿ ಹಿಂಬಾಲಿಸಬಾರದು."},
+  ft_links_h: {"en":"Project","hi":"परियोजना","kn":"ಯೋಜನೆ"},
+  ft_source: {"en":"Source code","hi":"सोर्स कोड","kn":"ಮೂಲ ಕೋಡ್"},
+  ft_screencast: {"en":"How we built it (screencast)","hi":"हमने इसे कैसे बनाया (स्क्रीनकास्ट)","kn":"ನಾವು ಇದನ್ನು ಹೇಗೆ ನಿರ್ಮಿಸಿದೆವು (ಸ್ಕ್ರೀನ್‌ಕಾಸ್ಟ್)"},
+  ft_contact: {"en":"Contact","hi":"संपर्क","kn":"ಸಂಪರ್ಕ"},
+  ft_demo: {"en":"Demo build · seeded records are fictional children.","hi":"डेमो बिल्ड · सीड किए गए रिकॉर्ड काल्पनिक बच्चों के हैं।","kn":"ಡೆಮೊ ಬಿಲ್ಡ್ · ಬಿತ್ತಿದ ದಾಖಲೆಗಳು ಕಾಲ್ಪನಿಕ ಮಕ್ಕಳವು."},
+  ft_license: {"en":"MIT Licensed · open source","hi":"MIT लाइसेंस · ओपन सोर्स","kn":"MIT ಪರವಾನಗಿ · ಓಪನ್ ಸೋರ್ಸ್"},
+  ft_soon: {"en":"link coming soon","hi":"लिंक जल्द ही","kn":"ಲಿಂಕ್ ಶೀಘ್ರದಲ್ಲೇ"},
 } as const satisfies Record<string, { en: string; hi: string; kn: string }>;
 
 
