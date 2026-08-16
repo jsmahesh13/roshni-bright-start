@@ -96,6 +96,7 @@ function NoticePage() {
     patch(d.id, {
       text,
       hits,
+      suggestion: suggestRewrite(text, hits),
       facet,
       valence: detectValence(text, facet),
       approved: hits.length === 0 && !!d.studentId,
@@ -107,6 +108,28 @@ function NoticePage() {
     });
     if (hits.length) toast(t("nc_stillflagged"));
   }
+
+  /** Accept the suggested neutral rewrite in one click. */
+  function useSuggestion(d: Draft) {
+    const text = d.suggestion!;
+    const hits = scan(text);
+    const facet = detectFacet(text);
+    patch(d.id, {
+      text,
+      hits,
+      suggestion: suggestRewrite(text, hits),
+      facet,
+      valence: detectValence(text, facet),
+      approved: hits.length === 0 && !!d.studentId,
+    });
+    setEditing((e) => {
+      const next = { ...e };
+      delete next[d.id];
+      return next;
+    });
+    toast.success(t("nc_used_suggestion"));
+  }
+
 
   const save = useMutation({
     mutationFn: async () => {
