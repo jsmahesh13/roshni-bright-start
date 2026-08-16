@@ -53,6 +53,12 @@ export const REGION: { name: string; resources: Resource[] } = {
     },
     {
       t: "res_national",
+      name: "RBSK & DEIC",
+      detail: "res_rbsk_d",
+      num: "Local District Hospital (DEIC)",
+    },
+    {
+      t: "res_national",
       name: "Tele-MANAS",
       detail: "res_telemanas_d",
       num: "14416",
@@ -67,7 +73,19 @@ export const REGION: { name: string; resources: Resource[] } = {
       t: "res_karnataka",
       name: "NIMHANS, Bengaluru",
       detail: "res_nimhans_d",
-      num: "nimhans.ac.in",
+      num: "+91 80 2699 5351",
+    },
+    {
+      t: "res_karnataka",
+      name: "Spastics Society of Karnataka",
+      detail: "res_ssk_d",
+      num: "+91 80 4074 5900",
+    },
+    {
+      t: "res_national",
+      name: "Ummeed Child Development Center",
+      detail: "res_ummeed_d",
+      num: "022-6552 8310",
     },
     {
       t: "res_school",
