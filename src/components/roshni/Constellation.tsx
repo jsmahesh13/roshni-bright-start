@@ -2,7 +2,7 @@ import { useT } from "@/hooks/useLang";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
-import { DAY_MS, daysAgo, type StudentSummary } from "@/lib/roshni";
+import { DAY_MS, daysAgo, needsYouRule, type StudentSummary } from "@/lib/roshni";
 
 /**
  * The night-sky class view. Radius = recency of the last noticing,
@@ -31,7 +31,15 @@ export function skyMetrics(row: StudentSummary, rangeDays: number, now = Date.no
   };
 }
 
-const isNeeds = (m: SkyMetrics) => m.recentCon >= 2 || (m.con >= 6 && m.con > m.str * 2);
+/** Same rule as the register and the digest — kept in one place. */
+const isNeeds = (m: SkyMetrics) =>
+  needsYouRule({
+    recentConcerns: m.recentCon,
+    concerns: m.con,
+    strengths: m.str,
+    total: m.count,
+    lastSeenDays: m.days >= 9999 ? null : m.days,
+  });
 
 interface Props {
   rows: StudentSummary[];
