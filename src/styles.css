@@ -521,6 +521,20 @@
   height: 10px;
   border-radius: 50%;
 }
+/* On a narrow phone, both left/right-anchored legends are wide enough to
+   overlap in the middle — pin left/right edges so each wraps to its own
+   box instead, and stack them top/bottom rather than side by side. */
+@media (max-width: 480px) {
+  .sky-legend.left-4,
+  .sky-legend.right-4 {
+    left: 12px;
+    right: 12px;
+  }
+  .sky-legend.right-4 {
+    top: auto;
+    bottom: 12px;
+  }
+}
 .zone-ring {
   position: absolute;
   left: 50%;

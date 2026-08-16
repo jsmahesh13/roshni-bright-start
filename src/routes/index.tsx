@@ -178,7 +178,7 @@ function Landing() {
               <li>
                 <a
                   className="underline underline-offset-4 hover:text-gold-deep"
-                  href="https://github.com/your-org/roshni"
+                  href="https://github.com/jsmahesh13/roshni-bright-start"
                   target="_blank"
                   rel="noreferrer"
                 >
