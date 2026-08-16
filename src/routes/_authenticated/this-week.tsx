@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProfile } from "@/hooks/useSession";
+import { useT } from "@/hooks/useLang";
 import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
 import { lastSeenLabel, sortSummaries, summarise } from "@/lib/roshni";
 
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/_authenticated/this-week")({
 });
 
 function ThisWeek() {
+  const t = useT();
   const { data: profile } = useProfile();
   const { data: classes } = useQuery(classesQuery);
   const classId = profile?.role === "admin" ? null : (profile?.class_id ?? null);
@@ -58,7 +60,7 @@ function ThisWeek() {
 
   return (
     <div className="mx-auto max-w-5xl px-5 py-8">
-      <h1 className="hand text-5xl text-foreground">This week</h1>
+      <h1 className="hand text-5xl text-foreground">{t("nav_home")}</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         {profile?.name ? `Good to see you, ${profile.name.split(" ")[0]}. ` : ""}
         {className ? `Class ${className}.` : "All classes."}
