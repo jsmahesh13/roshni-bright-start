@@ -119,6 +119,89 @@ export const DICTIONARY = {
   d_academic: {"en":"Learning & work","hi":"सीखना व कार्य","kn":"ಕಲಿಕೆ ಮತ್ತು ಕೆಲಸ"},
   d_engagement: {"en":"Classroom engagement","hi":"कक्षा सहभागिता","kn":"ತರಗತಿ ತೊಡಗಿಸಿಕೊಳ್ಳುವಿಕೆ"},
   rollnumber: {"en":"Roll number","hi":"क्रमांक","kn":"ಕ್ರಮಾಂಕ"},
+
+  // ---- landing stat values -------------------------------------------------
+  stat1v: {"en":"30–35 : 1","hi":"30–35 : 1","kn":"30–35 : 1"},
+  stat2v: {"en":"~40 lakh","hi":"~40 लाख","kn":"~40 ಲಕ್ಷ"},
+  stat3v: {"en":"1 in 7","hi":"7 में से 1","kn":"7ರಲ್ಲಿ 1"},
+  stat4v: {"en":"~0","hi":"~0","kn":"~0"},
+
+  // ---- app shell -----------------------------------------------------------
+  role_teacher: {"en":"Class teacher","hi":"कक्षा शिक्षक","kn":"ತರಗತಿ ಶಿಕ್ಷಕರು"},
+  role_admin: {"en":"Head teacher","hi":"प्रधान शिक्षक","kn":"ಮುಖ್ಯ ಶಿಕ್ಷಕರು"},
+  signout: {"en":"Sign out","hi":"साइन आउट","kn":"ಸೈನ್ ಔಟ್"},
+  openmenu: {"en":"Open menu","hi":"मेन्यू खोलें","kn":"ಮೆನು ತೆರೆಯಿರಿ"},
+  closemenu: {"en":"Close menu","hi":"मेन्यू बंद करें","kn":"ಮೆನು ಮುಚ್ಚಿ"},
+
+  // ---- this week -----------------------------------------------------------
+  tw_kicker: {"en":"Monday morning · nothing else interrupts you","hi":"सोमवार की सुबह · और कुछ आपको नहीं टोकता","kn":"ಸೋಮವಾರ ಬೆಳಿಗ್ಗೆ · ಬೇರೇನೂ ನಿಮ್ಮನ್ನು ತಡೆಯುವುದಿಲ್ಲ"},
+  tw_greet: {"en":"Good to see you,","hi":"आपको देखकर अच्छा लगा,","kn":"ನಿಮ್ಮನ್ನು ಕಂಡು ಸಂತೋಷ,"},
+  tw_class: {"en":"Class","hi":"कक्षा","kn":"ತರಗತಿ"},
+  tw_allclasses: {"en":"All classes.","hi":"सभी कक्षाएँ।","kn":"ಎಲ್ಲಾ ತರಗತಿಗಳು."},
+  tw_stat_written: {"en":"noticings written in the last 7 days","hi":"पिछले 7 दिनों में लिखी गई टिप्पणियाँ","kn":"ಕಳೆದ 7 ದಿನಗಳಲ್ಲಿ ಬರೆದ ಟಿಪ್ಪಣಿಗಳು"},
+  tw_stat_fading: {"en":"children not noticed in 6+ weeks","hi":"6+ सप्ताह से न देखे गए बच्चे","kn":"6+ ವಾರಗಳಿಂದ ಗಮನಿಸದ ಮಕ್ಕಳು"},
+  tw_stat_invisible: {"en":"children with almost nothing on record","hi":"जिनके बारे में लगभग कुछ भी दर्ज नहीं है","kn":"ದಾಖಲೆಯಲ್ಲಿ ಬಹುತೇಕ ಏನೂ ಇಲ್ಲದ ಮಕ್ಕಳು"},
+  tw_fading_title: {"en":"Might be fading","hi":"शायद ओझल हो रहे हैं","kn":"ಮರೆಯಾಗುತ್ತಿರಬಹುದು"},
+  tw_fading_blurb: {"en":"Nobody has written about them for a while. That's about us, not about them.","hi":"काफ़ी समय से इनके बारे में किसी ने कुछ नहीं लिखा। यह हमारे बारे में है, इनके बारे में नहीं।","kn":"ಬಹಳ ಕಾಲದಿಂದ ಇವರ ಬಗ್ಗೆ ಯಾರೂ ಬರೆದಿಲ್ಲ. ಇದು ನಮ್ಮ ಬಗ್ಗೆ, ಅವರ ಬಗ್ಗೆ ಅಲ್ಲ."},
+  tw_fading_empty: {"en":"Everyone has been noticed recently. Rare and lovely.","hi":"हाल ही में सभी को देखा गया है। दुर्लभ और सुंदर बात।","kn":"ಇತ್ತೀಚೆಗೆ ಎಲ್ಲರನ್ನೂ ಗಮನಿಸಲಾಗಿದೆ. ಅಪರೂಪದ ಒಳ್ಳೆಯ ಸಂಗತಿ."},
+  tw_needs_title: {"en":"A run of concern","hi":"चिंता का सिलसिला","kn":"ಕಳವಳದ ಸರಣಿ"},
+  tw_needs_blurb: {"en":"Three or more concerns written in the last three weeks.","hi":"पिछले तीन सप्ताह में तीन या अधिक चिंताएँ दर्ज हुईं।","kn":"ಕಳೆದ ಮೂರು ವಾರಗಳಲ್ಲಿ ಮೂರು ಅಥವಾ ಹೆಚ್ಚು ಕಳವಳಗಳು ದಾಖಲಾಗಿವೆ."},
+  tw_needs_empty: {"en":"No recent runs of concern in this class.","hi":"इस कक्षा में हाल में चिंता का कोई सिलसिला नहीं।","kn":"ಈ ತರಗತಿಯಲ್ಲಿ ಇತ್ತೀಚೆಗೆ ಕಳವಳದ ಸರಣಿ ಇಲ್ಲ."},
+  tw_concerns_count: {"en":"{n} concerns on record","hi":"{n} चिंताएँ दर्ज","kn":"{n} ಕಳವಳಗಳು ದಾಖಲಾಗಿವೆ"},
+  btn_write: {"en":"Write a noticing","hi":"एक टिप्पणी लिखें","kn":"ಒಂದು ಟಿಪ್ಪಣಿ ಬರೆಯಿರಿ"},
+  btn_openregister: {"en":"Open the register","hi":"रजिस्टर खोलें","kn":"ರಿಜಿಸ್ಟರ್ ತೆರೆಯಿರಿ"},
+
+  // ---- quick capture + digest ---------------------------------------------
+  qc_helper: {"en":"Type it the way you'd say it — Roshni will structure it for you.","hi":"जैसा कहेंगे वैसा लिखिए — रोशनी उसे व्यवस्थित कर देगी।","kn":"ನೀವು ಹೇಳುವಂತೆ ಬರೆಯಿರಿ — ರೋಶ್ನಿ ಅದನ್ನು ಕ್ರಮಬದ್ಧಗೊಳಿಸುತ್ತದೆ."},
+  qc_placeholder: {"en":"Fatima was quiet all morning, one-word answers…","hi":"फ़ातिमा सुबह भर चुप रही, एक-शब्द के उत्तर…","kn":"ಫಾತಿಮಾ ಬೆಳಗಿನಿಂದ ಮೌನವಾಗಿದ್ದಳು, ಒಂದೇ ಪದದ ಉತ್ತರಗಳು…"},
+  tag_quiet: {"en":"The quiet one","hi":"चुपचाप रहने वाला","kn":"ಮೌನವಾಗಿರುವ ಮಗು"},
+  tag_lopsided: {"en":"Lopsided","hi":"एकतरफ़ा","kn":"ಏಕಪಕ್ಷೀಯ"},
+  tag_cluster: {"en":"A cluster","hi":"एक झुंड","kn":"ಒಂದು ಗುಂಪು"},
+  tag_worth: {"en":"Worth sending","hi":"भेजने योग्य","kn":"ಕಳುಹಿಸಲು ಯೋಗ್ಯ"},
+  evidence: {"en":"Evidence","hi":"साक्ष्य","kn":"ಆಧಾರ"},
+  open_child: {"en":"Open {name}","hi":"{name} को खोलें","kn":"{name} ಅವರನ್ನು ತೆರೆಯಿರಿ"},
+  prepare_summary: {"en":"Prepare a summary →","hi":"सारांश तैयार करें →","kn":"ಸಾರಾಂಶ ಸಿದ್ಧಪಡಿಸಿ →"},
+  digest_empty: {"en":"Nothing rose above the threshold this week. That is a valid result.","hi":"इस सप्ताह कुछ भी सीमा से ऊपर नहीं गया। यह भी एक वैध परिणाम है।","kn":"ಈ ವಾರ ಯಾವುದೂ ಮಿತಿಯನ್ನು ದಾಟಲಿಲ್ಲ. ಅದೂ ಒಂದು ಸರಿಯಾದ ಫಲಿತಾಂಶ."},
+
+  // ---- last seen -----------------------------------------------------------
+  ls_never: {"en":"never noticed","hi":"कभी नहीं देखा गया","kn":"ಎಂದೂ ಗಮನಿಸಿಲ್ಲ"},
+  ls_today: {"en":"seen today","hi":"आज देखा गया","kn":"ಇಂದು ಗಮನಿಸಲಾಗಿದೆ"},
+  ls_yesterday: {"en":"seen yesterday","hi":"कल देखा गया","kn":"ನಿನ್ನೆ ಗಮನಿಸಲಾಗಿದೆ"},
+  ls_days: {"en":"{n} days ago","hi":"{n} दिन पहले","kn":"{n} ದಿನಗಳ ಹಿಂದೆ"},
+  ls_months: {"en":"{n} months ago","hi":"{n} महीने पहले","kn":"{n} ತಿಂಗಳ ಹಿಂದೆ"},
+  ls_month: {"en":"{n} month ago","hi":"{n} महीना पहले","kn":"{n} ತಿಂಗಳ ಹಿಂದೆ"},
+  ls_over2y: {"en":"over 2 years ago","hi":"2 वर्ष से अधिक पहले","kn":"2 ವರ್ಷಗಳಿಗಿಂತ ಹಿಂದೆ"},
+
+  // ---- notice composer -----------------------------------------------------
+  nc_sub: {"en":"Type it the way you'd say it. Roshni will split it into clean, dated observations — nothing is saved until you approve every word.","hi":"जैसा कहेंगे वैसा लिखिए। रोशनी उसे साफ़, दिनांकित टिप्पणियों में बाँट देगी — जब तक आप हर शब्द को स्वीकृत न करें, कुछ भी सहेजा नहीं जाता।","kn":"ನೀವು ಹೇಳುವಂತೆ ಬರೆಯಿರಿ. ರೋಶ್ನಿ ಅದನ್ನು ಸ್ಪಷ್ಟ, ದಿನಾಂಕಿತ ಟಿಪ್ಪಣಿಗಳಾಗಿ ವಿಂಗಡಿಸುತ್ತದೆ — ನೀವು ಪ್ರತಿ ಪದವನ್ನು ಒಪ್ಪುವವರೆಗೆ ಏನೂ ಉಳಿಸಲಾಗುವುದಿಲ್ಲ."},
+  nc_placeholder: {"en":"Fatima was quiet all morning, one-word answers. Arjun sat alone at lunch again…","hi":"फ़ातिमा सुबह भर चुप रही, एक-शब्द के उत्तर। अर्जुन फिर से दोपहर के भोजन में अकेला बैठा…","kn":"ಫಾತಿಮಾ ಬೆಳಗಿನಿಂದ ಮೌನವಾಗಿದ್ದಳು, ಒಂದೇ ಪದದ ಉತ್ತರಗಳು. ಅರ್ಜುನ್ ಮತ್ತೆ ಊಟದ ಹೊತ್ತಿನಲ್ಲಿ ಒಬ್ಬನೇ ಕುಳಿತಿದ್ದ…"},
+  nc_chars: {"en":"{n} chars","hi":"{n} अक्षर","kn":"{n} ಅಕ್ಷರಗಳು"},
+  nc_rule_b: {"en":"The one rule: observation, not interpretation.","hi":"एक ही नियम: व्याख्या नहीं, अवलोकन।","kn":"ಒಂದೇ ನಿಯಮ: ವ್ಯಾಖ್ಯಾನವಲ್ಲ, ಅವಲೋಕನ."},
+  nc_rule_rest: {"en":"Describe what a child did, and when. Roshni will not save a character label, a diagnosis, a theory about a home, an identity remark, or medical detail.","hi":"बताइए कि बच्चे ने क्या किया और कब। रोशनी कोई चरित्र-लेबल, निदान, घर के बारे में अनुमान, पहचान संबंधी टिप्पणी या चिकित्सा विवरण नहीं सहेजेगी।","kn":"ಮಗು ಏನು ಮಾಡಿತು ಮತ್ತು ಯಾವಾಗ ಎಂಬುದನ್ನು ಬರೆಯಿರಿ. ರೋಶ್ನಿ ಸ್ವಭಾವದ ಹಣೆಪಟ್ಟಿ, ರೋಗನಿರ್ಣಯ, ಮನೆಯ ಬಗ್ಗೆ ಊಹೆ, ಗುರುತಿನ ಟಿಪ್ಪಣಿ ಅಥವಾ ವೈದ್ಯಕೀಯ ವಿವರವನ್ನು ಉಳಿಸುವುದಿಲ್ಲ."},
+  nc_nothingparsed: {"en":"Nothing parsed yet.","hi":"अभी कुछ भी विश्लेषित नहीं हुआ।","kn":"ಇನ್ನೂ ಏನೂ ವಿಶ್ಲೇಷಿಸಲಾಗಿಲ್ಲ."},
+  nc_needsrewrite: {"en":"Needs a rewrite","hi":"फिर से लिखना होगा","kn":"ಮತ್ತೆ ಬರೆಯಬೇಕು"},
+  nc_noticing_n: {"en":"Noticing {n}","hi":"टिप्पणी {n}","kn":"ಟಿಪ್ಪಣಿ {n}"},
+  nc_approve: {"en":"Approve","hi":"स्वीकृत करें","kn":"ಅನುಮೋದಿಸಿ"},
+  nc_nostudent: {"en":"No student matched. Pick one below, or add a first name.","hi":"कोई छात्र नहीं मिला। नीचे से चुनिए, या पहला नाम जोड़िए।","kn":"ಯಾವ ವಿದ್ಯಾರ್ಥಿಯೂ ಹೊಂದಿಕೆಯಾಗಲಿಲ್ಲ. ಕೆಳಗಿನಿಂದ ಆಯ್ಕೆಮಾಡಿ, ಅಥವಾ ಮೊದಲ ಹೆಸರು ಸೇರಿಸಿ."},
+  nc_studentopt: {"en":"— student —","hi":"— छात्र —","kn":"— ವಿದ್ಯಾರ್ಥಿ —"},
+  nc_roll: {"en":"Roll","hi":"क्रमांक","kn":"ಕ್ರಮಾಂಕ"},
+  nc_strength: {"en":"Strength","hi":"क्षमता","kn":"ಸಾಮರ್ಥ್ಯ"},
+  nc_concern: {"en":"Concern","hi":"चिंता","kn":"ಕಳವಳ"},
+  nc_neutral: {"en":"Neutral","hi":"तटस्थ","kn":"ತಟಸ್ಥ"},
+  nc_recheck: {"en":"Recheck","hi":"पुनः जाँचें","kn":"ಮತ್ತೆ ಪರಿಶೀಲಿಸಿ"},
+  nc_rewritten: {"en":"I've rewritten it — recheck","hi":"मैंने फिर से लिखा — पुनः जाँचें","kn":"ನಾನು ಮತ್ತೆ ಬರೆದಿದ್ದೇನೆ — ಪರಿಶೀಲಿಸಿ"},
+  nc_retention: {"en":"Raw noticings are removed automatically after 24 months. Roshni never speaks to a child and never holds a diagnosis.","hi":"कच्ची टिप्पणियाँ 24 महीनों के बाद स्वतः हटा दी जाती हैं। रोशनी कभी किसी बच्चे से बात नहीं करती और कोई निदान नहीं रखती।","kn":"ಕಚ್ಚಾ ಟಿಪ್ಪಣಿಗಳು 24 ತಿಂಗಳ ನಂತರ ತಾನಾಗಿಯೇ ಅಳಿಸಲ್ಪಡುತ್ತವೆ. ರೋಶ್ನಿ ಎಂದೂ ಮಗುವಿನೊಂದಿಗೆ ಮಾತನಾಡುವುದಿಲ್ಲ ಮತ್ತು ಯಾವ ರೋಗನಿರ್ಣಯವನ್ನೂ ಇಟ್ಟುಕೊಳ್ಳುವುದಿಲ್ಲ."},
+  nc_nothing_structure: {"en":"Nothing to structure","hi":"व्यवस्थित करने के लिए कुछ नहीं","kn":"ಕ್ರಮಬದ್ಧಗೊಳಿಸಲು ಏನೂ ಇಲ್ಲ"},
+  nc_stillflagged: {"en":"Still flagged — describe what you saw.","hi":"अब भी चिह्नित है — जो आपने देखा वही लिखिए।","kn":"ಇನ್ನೂ ಗುರುತಿಸಲಾಗಿದೆ — ನೀವು ಕಂಡದ್ದನ್ನು ಬರೆಯಿರಿ."},
+  nc_saved: {"en":"{n} noticings saved","hi":"{n} टिप्पणियाँ सहेजी गईं","kn":"{n} ಟಿಪ್ಪಣಿಗಳು ಉಳಿಸಲಾಗಿದೆ"},
+  nc_nothing_approved: {"en":"Nothing approved yet","hi":"अभी कुछ भी स्वीकृत नहीं","kn":"ಇನ್ನೂ ಏನೂ ಅನುಮೋದಿಸಿಲ್ಲ"},
+
+  // ---- guardrail messages --------------------------------------------------
+  block_clinical: {"en":"Clinical language. Roshni does not hold diagnoses. Describe what you saw instead.","hi":"नैदानिक भाषा। रोशनी निदान नहीं रखती। इसके बजाय जो आपने देखा वह लिखिए।","kn":"ವೈದ್ಯಕೀಯ ಭಾಷೆ. ರೋಶ್ನಿ ರೋಗನಿರ್ಣಯಗಳನ್ನು ಇಟ್ಟುಕೊಳ್ಳುವುದಿಲ್ಲ. ಬದಲಾಗಿ ನೀವು ಕಂಡದ್ದನ್ನು ಬರೆಯಿರಿ."},
+  block_character: {"en":"That is a character label, not an observation. What did the child actually do, and when?","hi":"यह चरित्र-लेबल है, अवलोकन नहीं। बच्चे ने वास्तव में क्या किया, और कब?","kn":"ಅದು ಸ್ವಭಾವದ ಹಣೆಪಟ್ಟಿ, ಅವಲೋಕನವಲ್ಲ. ಮಗು ನಿಜವಾಗಿ ಏನು ಮಾಡಿತು, ಮತ್ತು ಯಾವಾಗ?"},
+  block_home: {"en":"A theory about the home. You may record what a child said to you, not what you imagine happens at home.","hi":"यह घर के बारे में अनुमान है। बच्चे ने आपसे जो कहा वह दर्ज कीजिए, न कि जो आप घर के बारे में सोचते हैं।","kn":"ಇದು ಮನೆಯ ಬಗ್ಗೆ ಊಹೆ. ಮಗು ನಿಮಗೆ ಹೇಳಿದ್ದನ್ನು ದಾಖಲಿಸಿ, ಮನೆಯಲ್ಲಿ ಏನಾಗುತ್ತದೆ ಎಂದು ನೀವು ಊಹಿಸುವುದನ್ನಲ್ಲ."},
+  block_identity: {"en":"Caste, religion, community and appearance are never part of a pastoral record.","hi":"जाति, धर्म, समुदाय और रूप-रंग कभी भी इस देखभाल-रिकॉर्ड का हिस्सा नहीं होते।","kn":"ಜಾತಿ, ಧರ್ಮ, ಸಮುದಾಯ ಮತ್ತು ರೂಪ ಎಂದಿಗೂ ಈ ಆರೈಕೆ ದಾಖಲೆಯ ಭಾಗವಲ್ಲ."},
+  block_medical: {"en":"Health and medical detail is out of scope by design. That belongs with the school office.","hi":"स्वास्थ्य और चिकित्सा विवरण जानबूझकर इसके दायरे से बाहर है। वह विद्यालय कार्यालय का विषय है।","kn":"ಆರೋಗ್ಯ ಮತ್ತು ವೈದ್ಯಕೀಯ ವಿವರ ಉದ್ದೇಶಪೂರ್ವಕವಾಗಿ ಈ ವ್ಯಾಪ್ತಿಯ ಹೊರಗಿದೆ. ಅದು ಶಾಲಾ ಕಚೇರಿಗೆ ಸೇರಿದ್ದು."},
 } as const satisfies Record<string, { en: string; hi: string; kn: string }>;
 
 export type TKey = keyof typeof DICTIONARY;
