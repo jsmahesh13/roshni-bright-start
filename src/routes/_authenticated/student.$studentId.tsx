@@ -18,22 +18,23 @@ import {
   studentNoticingsQuery,
   studentQuery,
 } from "@/lib/queries";
+import { fill } from "@/lib/i18n";
+import { thresholdReasons } from "@/lib/summary";
 import {
-  FACET_LABEL,
   FACET_VAR,
   daysAgo,
-  lastSeenLabel,
+  lastSeenLabelT,
   type BadgeKey,
   type Noticing,
 } from "@/lib/roshni";
 
-const BADGES: { key: BadgeKey; icon: string; label: string }[] = [
-  { key: "pin", icon: "📌", label: "Keep visible" },
-  { key: "watch", icon: "👀", label: "Watching" },
-  { key: "follow", icon: "↩︎", label: "Follow up" },
-  { key: "parent", icon: "✉︎", label: "Told a parent" },
-  { key: "celebrate", icon: "★", label: "Celebrate" },
-  { key: "checkin", icon: "🤝", label: "Check in" },
+const BADGES: { key: BadgeKey; icon: string; labelKey: string }[] = [
+  { key: "pin", icon: "📌", labelKey: "bdg_pin" },
+  { key: "watch", icon: "👀", labelKey: "bdg_watch" },
+  { key: "follow", icon: "↩︎", labelKey: "bdg_follow" },
+  { key: "parent", icon: "✉︎", labelKey: "bdg_parent" },
+  { key: "celebrate", icon: "★", labelKey: "bdg_celebrate" },
+  { key: "checkin", icon: "🤝", labelKey: "bdg_checkin" },
 ];
 
 export const Route = createFileRoute("/_authenticated/student/$studentId")({
@@ -67,7 +68,7 @@ function StudentPage() {
 
   const notes = useMemo(() => (all ?? []).filter((n) => !n.retracted), [all]);
   const authorName = (id: string | null) =>
-    staff?.find((s) => s.id === id)?.name ?? "A colleague";
+    staff?.find((s) => s.id === id)?.name ?? t("sp_colleague");
 
   const toggleBadge = useMutation({
     mutationFn: async (key: BadgeKey) => {
@@ -85,8 +86,8 @@ function StudentPage() {
     },
     onSuccess: ({ key, on }) => {
       void queryClient.invalidateQueries({ queryKey: ["badges", studentId] });
-      const label = BADGES.find((b) => b.key === key)?.label;
-      toast(`${label} · ${on ? "added" : "cleared"}`);
+      const bk = BADGES.find((b) => b.key === key)?.labelKey;
+      toast(`${bk ? t(bk) : ""} · ${on ? t("sp_badge_added") : t("sp_badge_cleared")}`);
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -99,7 +100,7 @@ function StudentPage() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["student-noticings", studentId] });
       void queryClient.invalidateQueries({ queryKey: ["noticings"] });
-      toast("Retracted — still in the record, no longer feeding patterns");
+      toast(t("sp_retract_toast"));
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -115,7 +116,7 @@ function StudentPage() {
   if (!student) {
     return (
       <div className="mx-auto max-w-5xl px-5 py-8">
-        <p className="text-sm text-muted-foreground">This child isn't in a class you can see.</p>
+        <p className="text-sm text-muted-foreground">{t("sp_notfound")}</p>
       </div>
     );
   }
@@ -127,13 +128,7 @@ function StudentPage() {
     ? Math.min(...notes.map((n) => daysAgo(n.created_at)))
     : null;
 
-  const recentConcerns = concerns.filter((n) => daysAgo(n.created_at) <= 21).length;
-  const reasons: string[] = [];
-  if (recentConcerns >= 3) reasons.push("A run of recent concern.");
-  if (notes.length >= 8 && concerns.length / notes.length >= 0.7)
-    reasons.push("The record is heavily one-sided.");
-  if (lastSeen !== null && lastSeen > 90) reasons.push("No entry for a long stretch.");
-  if (notes.length === 0) reasons.push("Almost nothing on record.");
+  const reasons = thresholdReasons(notes);
   const crossed = reasons.length > 0;
 
   const counts: Record<string, number> = {};
@@ -151,9 +146,9 @@ function StudentPage() {
           .toUpperCase()}
         <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2 py-0.5 normal-case tracking-normal text-muted-foreground">
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: FACET_VAR[n.facet] }} />
-          {FACET_LABEL[n.facet]}
+          {t(`f_${n.facet}`)}
         </span>
-        {n.retracted && <span className="text-concern">retracted</span>}
+        {n.retracted && <span className="text-concern">{t("sp_retracted")}</span>}
       </div>
       <p className="mt-1.5 text-sm text-foreground">{n.text}</p>
       <div className="mt-1 text-xs text-faint">
@@ -165,14 +160,12 @@ function StudentPage() {
               className="underline underline-offset-2 hover:text-foreground"
               onClick={() => {
                 if (
-                  window.confirm(
-                    "Retracting keeps the note in the record but stops it feeding patterns. Retract it?",
-                  )
+                  window.confirm(t("sp_retract_confirm"))
                 )
                   retract.mutate(n.id);
               }}
             >
-              Retract
+              {t("sp_retract")}
             </button>
           </>
         )}
@@ -186,21 +179,22 @@ function StudentPage() {
         to="/class"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="h-4 w-4" /> Back to the register
+        <ArrowLeft className="h-4 w-4" /> {t("sp_back")}
       </Link>
 
       <header className="mt-4">
         <h1 className="hand text-5xl text-foreground">{student.name}</h1>
         <p className="mt-1 text-[11px] uppercase tracking-wide text-faint">
-          CLASS {className} · ROLL {student.roll} · AUTHORED BY {authors.join(", ") || "—"}
+          {t("sp_class")} {className} · {t("sp_roll")} {student.roll} · {t("sp_authoredby")}{" "}
+          {authors.join(", ") || "—"}
         </p>
       </header>
 
       <div className="card-paper mt-5 grid grid-cols-2 gap-4 p-5 sm:grid-cols-4">
-        <Stat label="Total" value={`${notes.length} noticings`} />
-        <Stat label="Balance" value={`${strengths.length}▲ · ${concerns.length}▼`} />
-        <Stat label="Last noticed" value={lastSeenLabel(lastSeen)} />
-        <Stat label="Dominant" value={dominant ? FACET_LABEL[dominant as never] : "—"} />
+        <Stat label={t("sp_total")} value={fill(t("sp_total_v"), { n: notes.length })} />
+        <Stat label={t("sp_balance")} value={`${strengths.length}▲ · ${concerns.length}▼`} />
+        <Stat label={t("sp_lastnoticed")} value={lastSeenLabelT(lastSeen, t)} />
+        <Stat label={t("sp_dominant")} value={dominant ? t(`f_${dominant}`) : "—"} />
       </div>
 
       <div
@@ -211,11 +205,10 @@ function StudentPage() {
         <p className="max-w-2xl text-sm text-foreground">
           {crossed ? (
             <>
-              <b>A pattern has crossed a threshold.</b> {reasons.join(" ")} You may want a summary
-              you can act on.
+              <b>{t("sp_crossed")}</b> {reasons.map((r) => t(r)).join(" ")} {t("sp_crossed_tail")}
             </>
           ) : (
-            "No pattern has crossed a threshold. You can still prepare a summary any time."
+            t("sp_notcrossed")
           )}
         </p>
         <Button
@@ -228,10 +221,9 @@ function StudentPage() {
       </div>
 
       <section className="card-paper mt-5 p-5">
-        <h2 className="hand text-3xl text-foreground">Your markers for this child</h2>
+        <h2 className="hand text-3xl text-foreground">{t("sp_markers")}</h2>
         <p className="mt-0.5 text-[13px] text-muted-foreground">
-          Badges track your intentions and actions — never the child's character. They're yours;
-          clear them anytime.
+          {t("sp_markers_sub")}
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           {BADGES.map((b) => {
@@ -247,7 +239,7 @@ function StudentPage() {
                 }`}
               >
                 <span className="mr-1.5">{b.icon}</span>
-                {b.label}
+                {t(b.labelKey)}
               </button>
             );
           })}
@@ -255,7 +247,7 @@ function StudentPage() {
       </section>
 
       <section className="card-paper mt-5 p-5">
-        <div className="text-[11px] uppercase tracking-wide text-faint">Two years of noticing</div>
+        <div className="text-[11px] uppercase tracking-wide text-faint">{t("sp_twoyears")}</div>
         <div className="mt-2">
           <Timeline noticings={notes} />
         </div>
@@ -266,29 +258,28 @@ function StudentPage() {
           {strengths.map((n) => (
             <Row key={n.id} n={n} />
           ))}
-          {strengths.length === 0 && <Empty text="Nothing on record here yet." />}
+          {strengths.length === 0 && <Empty text={t("sp_nothinghere")} />}
         </Column>
         <Column title={`▼ ${t("concerns")}`} count={concerns.length} accent="text-concern">
           {concerns.map((n) => (
             <Row key={n.id} n={n} />
           ))}
-          {concerns.length === 0 && <Empty text="Nothing on record here yet." />}
+          {concerns.length === 0 && <Empty text={t("sp_nothinghere")} />}
         </Column>
       </div>
 
       <section className="card-paper mt-5">
         <div className="border-b border-border px-4 py-3 text-sm font-semibold text-foreground">
-          Actions you took <span className="text-faint">· {actions.length}</span>
+          {t("sp_actions")} <span className="text-faint">· {actions.length}</span>
         </div>
         {actions.map((n) => (
           <Row key={n.id} n={n} />
         ))}
-        {actions.length === 0 && <Empty text="No actions recorded yet." />}
+        {actions.length === 0 && <Empty text={t("sp_noactions")} />}
       </section>
 
       <p className="mt-4 text-xs text-faint">
-        Raw noticings are removed automatically after 24 months. Retracted notes stay in the record
-        but stop feeding any pattern.
+        {t("sp_retention")}
       </p>
 
       {summaryOpen && (
