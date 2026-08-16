@@ -21,7 +21,12 @@ export const Route = createFileRoute("/")({
         content:
           "One teacher holds forty children. Roshni makes sure none of them slips into the dark.",
       },
+      { property: "og:url", content: "https://roshni-bright-start.lovable.app/" },
+      { property: "og:image", content: "https://roshni-bright-start.lovable.app/og-roshni.png" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://roshni-bright-start.lovable.app/og-roshni.png" },
     ],
+    links: [{ rel: "canonical", href: "https://roshni-bright-start.lovable.app/" }],
   }),
   component: Landing,
 });
@@ -144,8 +149,67 @@ function Landing() {
         </div>
       </section>
 
-      <footer className="border-t border-border py-8 text-center text-xs text-faint">
-        Roshni · {t("footl")}
+      <footer className="border-t border-border bg-card/60">
+        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.1fr_1.4fr_0.9fr]">
+          <div>
+            <Wordmark size={26} textClass="text-2xl" />
+            <p className="hand mt-2 text-xl text-muted-foreground">{t("footl")}</p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {TENETS.map((tenet) => (
+                <span key={tenet.key} className="chip-dashed text-xs">
+                  {t(tenet.key)}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">{t("ft_privacy_h")}</h3>
+            <ul className="mt-3 space-y-2 text-xs leading-relaxed text-muted-foreground">
+              <li>{t("ft_privacy_1")}</li>
+              <li>{t("ft_privacy_2")}</li>
+              <li>{t("ft_privacy_3")}</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">{t("ft_links_h")}</h3>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              <li>
+                <a
+                  className="underline underline-offset-4 hover:text-gold-deep"
+                  href="https://github.com/your-org/roshni"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t("ft_source")}
+                </a>
+              </li>
+              <li>
+                <a className="underline underline-offset-4 hover:text-gold-deep" href="#">
+                  {t("ft_screencast")}
+                </a>{" "}
+                <span className="text-faint">({t("ft_soon")})</span>
+              </li>
+              <li>
+                {t("ft_contact")}:{" "}
+                <a
+                  className="underline underline-offset-4 hover:text-gold-deep"
+                  href="mailto:maheshjs@cricduel.com"
+                >
+                  maheshjs@cricduel.com
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-border">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-5 py-5 text-xs text-faint">
+            <span>Roshni · {t("ft_demo")}</span>
+            <span>{t("ft_license")}</span>
+          </div>
+        </div>
       </footer>
     </div>
   );
