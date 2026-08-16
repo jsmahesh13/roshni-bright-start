@@ -210,7 +210,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           />
           <div className="fade-line" style={{ width: bDark * 2, height: bDark * 2 }} aria-hidden />
           <div className="fade-lbl" style={{ top: cy - bDark }}>
-            6-week line · beyond here, in the dark
+            {t("sky_fadeline")}
           </div>
 
           <div className="sun-core">
@@ -310,17 +310,17 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
         {needsL.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[12.5px] font-bold text-concern">
-              🔴 Needs you now ({needsL.length})
+              🔴 {t("sky_needsnow")} ({needsL.length})
             </span>
             {needsL.map((o) => (
-              <NameChip key={o.s.id} onClick={() => open(o.s.id)} name={o.s.name} days={o.m.days} />
+              <NameChip key={o.s.id} onClick={() => open(o.s.id)} name={o.s.name} days={o.m.days} neverLabel={t("sky_never")} />
             ))}
           </div>
         )}
         {darkL.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[12.5px] font-bold text-[#5a6b8f]">
-              🌙 In the dark — worth a check-in ({darkL.length})
+              🌙 {t("sky_indark")} ({darkL.length})
             </span>
             {darkL.map((o) => (
               <NameChip
@@ -329,20 +329,20 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
                 onClick={() => open(o.s.id)}
                 name={o.s.name}
                 days={o.m.days}
+                neverLabel={t("sky_never")}
               />
             ))}
           </div>
         )}
         {needsL.length === 0 && darkL.length === 0 && (
           <div className="text-sm text-muted-foreground">
-            Everyone here has been seen recently. 🌞
+            {t("sky_allseen")} 🌞
           </div>
         )}
       </div>
 
       <p className="mt-4 text-xs text-faint">
-        Centre = your attention · closer = seen more recently · past the dashed line = not seen in
-        6+ weeks · size = how much noticed
+        {t("sky_legend")}
       </p>
     </div>
   );
@@ -353,11 +353,13 @@ function NameChip({
   days,
   dark,
   onClick,
+  neverLabel,
 }: {
   name: string;
   days: number;
   dark?: boolean;
   onClick: () => void;
+  neverLabel: string;
 }) {
   return (
     <button
@@ -369,7 +371,7 @@ function NameChip({
       }
     >
       {name.split(" ")[0]}
-      <span className="font-mono text-[11px] text-faint">{days > 900 ? "never" : `${days}d`}</span>
+      <span className="font-mono text-[11px] text-faint">{days > 900 ? neverLabel : `${days}d`}</span>
     </button>
   );
 }
