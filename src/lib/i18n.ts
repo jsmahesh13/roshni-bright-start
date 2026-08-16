@@ -327,6 +327,24 @@ export const DICTIONARY = {
   
   ft_demo: {"en":"Demo build · seeded records are fictional children.","hi":"डेमो बिल्ड · सीड किए गए रिकॉर्ड काल्पनिक बच्चों के हैं।","kn":"ಡೆಮೊ ಬಿಲ್ಡ್ · ಬಿತ್ತಿದ ದಾಖಲೆಗಳು ಕಾಲ್ಪನಿಕ ಮಕ್ಕಳವು."},
   ft_license: {"en":"MIT Licensed · open source","hi":"MIT लाइसेंस · ओपन सोर्स","kn":"MIT ಪರವಾನಗಿ · ಓಪನ್ ಸೋರ್ಸ್"},
+  // ---- self-registration ---------------------------------------------------
+  su_name: {"en":"Your name","hi":"आपका नाम","kn":"ನಿಮ್ಮ ಹೆಸರು"},
+  su_email: {"en":"School email","hi":"विद्यालय का ईमेल","kn":"ಶಾಲೆಯ ಇಮೇಲ್"},
+  su_password: {"en":"Password","hi":"पासवर्ड","kn":"ಪಾಸ್‌ವರ್ಡ್"},
+  su_code: {"en":"School join code","hi":"विद्यालय जॉइन कोड","kn":"ಶಾಲೆಯ ಸೇರ್ಪಡೆ ಕೋಡ್"},
+  su_check: {"en":"Check code","hi":"कोड जाँचें","kn":"ಕೋಡ್ ಪರಿಶೀಲಿಸಿ"},
+  su_checking: {"en":"Checking…","hi":"जाँच हो रही है…","kn":"ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ…"},
+  su_badcode: {"en":"We don’t recognise that school code","hi":"हम उस विद्यालय कोड को नहीं पहचानते","kn":"ಆ ಶಾಲೆಯ ಕೋಡ್ ನಮಗೆ ಗುರುತಾಗಲಿಲ್ಲ"},
+  su_class: {"en":"Your class","hi":"आपकी कक्षा","kn":"ನಿಮ್ಮ ತರಗತಿ"},
+  su_noclass: {"en":"No class yet — I’ll be assigned later","hi":"अभी कोई कक्षा नहीं — बाद में सौंपी जाएगी","kn":"ಇನ್ನೂ ತರಗತಿ ಇಲ್ಲ — ನಂತರ ನಿಯೋಜಿಸಲಾಗುವುದು"},
+  su_create: {"en":"Create my account","hi":"मेरा खाता बनाएँ","kn":"ನನ್ನ ಖಾತೆ ರಚಿಸಿ"},
+  su_creating: {"en":"Creating…","hi":"बन रहा है…","kn":"ರಚಿಸಲಾಗುತ್ತಿದೆ…"},
+  su_pwshort: {"en":"Use at least 8 characters for your password","hi":"पासवर्ड में कम से कम 8 अक्षर रखें","kn":"ಪಾಸ್‌ವರ್ಡ್‌ನಲ್ಲಿ ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳಿರಲಿ"},
+  su_needcode: {"en":"Enter and check your school code first","hi":"पहले अपना विद्यालय कोड डालकर जाँचें","kn":"ಮೊದಲು ನಿಮ್ಮ ಶಾಲಾ ಕೋಡ್ ನಮೂದಿಸಿ ಪರಿಶೀಲಿಸಿ"},
+  su_welcome: {"en":"Welcome to Roshni — you’re signed in.","hi":"रोशनी में स्वागत है — आप साइन इन हैं।","kn":"ರೋಶ್ನಿಗೆ ಸ್ವಾಗತ — ನೀವು ಸೈನ್ ಇನ್ ಆಗಿದ್ದೀರಿ."},
+  su_governance: {"en":"Staff accounts are normally created by a head teacher, so a school always knows who can read what its teachers notice.","hi":"स्टाफ़ खाते सामान्यतः प्रधान शिक्षक बनाते हैं, ताकि विद्यालय को हमेशा पता रहे कि शिक्षकों की टिप्पणियाँ कौन पढ़ सकता है।","kn":"ಸಿಬ್ಬಂದಿ ಖಾತೆಗಳನ್ನು ಸಾಮಾನ್ಯವಾಗಿ ಮುಖ್ಯ ಶಿಕ್ಷಕರು ರಚಿಸುತ್ತಾರೆ, ಇದರಿಂದ ಶಿಕ್ಷಕರ ಟಿಪ್ಪಣಿಗಳನ್ನು ಯಾರು ಓದಬಹುದೆಂದು ಶಾಲೆಗೆ ಸದಾ ತಿಳಿದಿರುತ್ತದೆ."},
+  su_democode: {"en":"Demo school code: KADUGODI-2026 — use this to join GHS Kadugodi and try Roshni.","hi":"डेमो विद्यालय कोड: KADUGODI-2026 — इससे GHS Kadugodi में शामिल होकर रोशनी आज़माएँ।","kn":"ಡೆಮೊ ಶಾಲಾ ಕೋಡ್: KADUGODI-2026 — ಇದನ್ನು ಬಳಸಿ GHS Kadugodi ಸೇರಿ ರೋಶ್ನಿಯನ್ನು ಪ್ರಯತ್ನಿಸಿ."},
+  su_scope: {"en":"You join as a teacher and see only the class you choose. Never another class, never admin.","hi":"आप शिक्षक के रूप में जुड़ते हैं और केवल चुनी हुई कक्षा देखते हैं। कोई दूसरी कक्षा नहीं, कोई एडमिन अधिकार नहीं।","kn":"ನೀವು ಶಿಕ್ಷಕರಾಗಿ ಸೇರುತ್ತೀರಿ ಮತ್ತು ಆಯ್ಕೆ ಮಾಡಿದ ತರಗತಿಯನ್ನಷ್ಟೇ ನೋಡುತ್ತೀರಿ. ಬೇರೆ ತರಗತಿ ಇಲ್ಲ, ಆಡಳಿತ ಅಧಿಕಾರ ಇಲ್ಲ."},
   ft_soon: {"en":"link coming soon","hi":"लिंक जल्द ही","kn":"ಲಿಂಕ್ ಶೀಘ್ರದಲ್ಲೇ"},
 } as const satisfies Record<string, { en: string; hi: string; kn: string }>;
 
