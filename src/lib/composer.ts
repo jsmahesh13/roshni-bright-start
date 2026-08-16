@@ -140,6 +140,32 @@ export function scan(x: string): Hit[] {
   return hits;
 }
 
+/**
+ * A guardrail should teach, not just refuse. When a line mixes a judgement with
+ * a real observation ("Rahul is lazy and didn't hand in maths homework"), keep
+ * the observable clauses and drop only the clause carrying the label.
+ */
+export function suggestRewrite(text: string, hits: Hit[]): string | null {
+  if (!hits.length) return null;
+  const words = hits.map((h) => h.word);
+  const parts = text
+    .split(/\s*(?:,|;|\band\b|\bbut\b|\bbecause\b|—|–)\s*/i)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (parts.length < 2) return null;
+
+  const kept = parts.filter((p) => !words.some((w) => wordHit(p, w)));
+  if (!kept.length) return null;
+  if (kept.length === parts.length) return null;
+
+  let out = kept.join("; ").replace(/\s+/g, " ").replace(/[;,.\s]+$/, "");
+  // Drop a dangling subject-only fragment left behind by the removed clause.
+  out = out.replace(/^(?:he|she|they|it)\s+/i, "");
+  if (out.length < 8) return null;
+  out = out.charAt(0).toUpperCase() + out.slice(1);
+  return out + ".";
+}
+
 export interface Draft {
   id: number;
   text: string;
@@ -147,6 +173,7 @@ export interface Draft {
   valence: number;
   studentId: string | null;
   hits: Hit[];
+  suggestion: string | null;
   approved: boolean;
 }
 
@@ -169,10 +196,12 @@ export function makeDrafts(raw: string, students: Student[]): Draft[] {
       valence: detectValence(text, facet),
       studentId: st?.id ?? null,
       hits,
+      suggestion: suggestRewrite(text, hits),
       approved: hits.length === 0 && !!st,
     };
   });
 }
+
 
 export const EXAMPLE_TEXT =
   "Fatima was quiet all morning, one-word answers. Arjun sat alone at lunch again, third time this week. Kabir is being lazy about homework, hasn't submitted for two weeks. I spoke to Arjun after class for five minutes.";
