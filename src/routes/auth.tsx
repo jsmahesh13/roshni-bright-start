@@ -154,7 +154,7 @@ function AuthPage() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={busy}>
+                <Button type="submit" className="w-full" disabled={busy || !hydrated}>
                   {busy ? "…" : t("enter")}
                 </Button>
               </form>
@@ -178,7 +178,7 @@ function AuthPage() {
                 <li key={s.email}>
                   <button
                     type="button"
-                    disabled={busy}
+                    disabled={busy || !hydrated}
                     onClick={() => {
                       setEmail(s.email);
                       setPassword(s.password);
