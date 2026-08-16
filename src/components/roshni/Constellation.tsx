@@ -31,7 +31,15 @@ export function skyMetrics(row: StudentSummary, rangeDays: number, now = Date.no
   };
 }
 
-const isNeeds = (m: SkyMetrics) => m.recentCon >= 2 || (m.con >= 6 && m.con > m.str * 2);
+/** Same rule as the register and the digest — kept in one place. */
+const isNeeds = (m: SkyMetrics) =>
+  needsYouRule({
+    recentConcerns: m.recentCon,
+    concerns: m.con,
+    strengths: m.str,
+    total: m.count,
+    lastSeenDays: m.days >= 9999 ? null : m.days,
+  });
 
 interface Props {
   rows: StudentSummary[];
