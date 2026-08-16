@@ -211,3 +211,8 @@ export function t(key: TKey | string, lang: Lang): string {
   if (!entry) return String(key);
   return entry[lang] ?? entry.en ?? String(key);
 }
+
+/** Fill {name}-style placeholders in a translated string. */
+export function fill(s: string, params: Record<string, string | number>): string {
+  return s.replace(/\{(\w+)\}/g, (m, k) => (k in params ? String(params[k]) : m));
+}
