@@ -50,8 +50,8 @@ export function Wordmark({
  */
 export function WordmarkLink({
   className,
-  size,
-  textClass,
+  size = 28,
+  textClass = "text-3xl",
 }: {
   className?: string;
   size?: number;
