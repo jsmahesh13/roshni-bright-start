@@ -103,6 +103,13 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
     return g;
   }, [list]);
 
+  // The dashed boundary caption sits at the top of the outer ring; reserve that
+  // strip so no star's name can be printed underneath it.
+  const lblBox = useMemo(
+    () => ({ x1: cx - 165, x2: cx + 165, y1: cy - bDark - 30, y2: cy - bDark + 2 }),
+    [cx, cy, bDark],
+  );
+
   const stars = useMemo(() => {
     const out: {
       id: string;
@@ -112,6 +119,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       fill: string;
       glow: string;
       nameCol: string;
+      nameBottom: number;
       op: number;
       z: number;
       dx: number;
@@ -122,6 +130,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       first: string;
       tip: string[];
     }[] = [];
+
     let idx = 0;
     groups.forEach((arr, zi) => {
       const n = arr.length;
