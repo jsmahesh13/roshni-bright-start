@@ -250,6 +250,24 @@ function NoticePage() {
                   </div>
                 ))}
 
+              {blocked && d.suggestion && (
+                <div className="mx-4 mb-3 rounded-lg border border-strength/40 bg-strength/8 px-3 py-2.5">
+                  <div className="text-[11px] font-semibold uppercase tracking-wide text-strength">
+                    {t("nc_suggest_title")}
+                  </div>
+                  <p className="mt-1 text-sm text-foreground">“{d.suggestion}”</p>
+                  <button
+                    type="button"
+                    onClick={() => useSuggestion(d)}
+                    className="mt-2 rounded-lg border border-strength/50 bg-card px-2.5 py-1 text-xs font-semibold text-strength hover:bg-strength/10"
+                  >
+                    {t("nc_use_this")}
+                  </button>
+                </div>
+              )}
+
+
+
               {!blocked && !d.studentId && (
                 <div className="mx-4 mb-3 rounded-lg bg-gold-soft px-3 py-2 text-xs text-foreground">
                   {t("nc_nostudent")}
