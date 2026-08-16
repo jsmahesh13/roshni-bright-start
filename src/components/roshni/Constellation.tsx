@@ -209,7 +209,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       });
     });
     return out;
-  }, [groups, cx, cy, classLabel, zoneR]);
+  }, [groups, cx, cy, classLabel, zoneR, lblBox]);
 
   const needsL = list
     .filter((o) => o.m.days <= 42 && isNeeds(o.m))
@@ -280,7 +280,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
                   <span className="star-beacon b2" aria-hidden />
                 </>
               )}
-              <span className="star-name" style={{ color: st.nameCol }}>
+              <span className="star-name" style={{ color: st.nameCol, bottom: st.nameBottom }}>
                 {st.first}
               </span>
             </button>
