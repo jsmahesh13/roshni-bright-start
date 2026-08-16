@@ -114,6 +114,8 @@ export const DICTIONARY = {
   key_well: {"en":"doing well","hi":"ठीक चल रहा है","kn":"ಚೆನ್ನಾಗಿದೆ"},
   key_needs: {"en":"needs you","hi":"आपकी ज़रूरत","kn":"ನಿಮ್ಮ ಅಗತ್ಯವಿದೆ"},
   key_fading: {"en":"fading","hi":"ओझल","kn":"ಮರೆಯಾಗುತ್ತಿದೆ"},
+  key_needs_help: {"en":"needs you = a recent run of concern, or a heavily one-sided record","hi":"आपकी ज़रूरत = हाल की चिंताओं की कड़ी, या बहुत एकतरफ़ा रिकॉर्ड","kn":"ನಿಮ್ಮ ಅಗತ್ಯವಿದೆ = ಇತ್ತೀಚಿನ ಕಳವಳಗಳ ಸರಣಿ, ಅಥವಾ ತೀರಾ ಏಕಪಕ್ಷೀಯ ದಾಖಲೆ"},
+  key_fading_help: {"en":"fading = nobody has written anything for six weeks or more","hi":"ओझल = छह सप्ताह या उससे अधिक से किसी ने कुछ नहीं लिखा","kn":"ಮರೆಯಾಗುತ್ತಿದೆ = ಆರು ವಾರ ಅಥವಾ ಹೆಚ್ಚು ಕಾಲ ಯಾರೂ ಏನನ್ನೂ ಬರೆದಿಲ್ಲ"},
   d_social: {"en":"Social & belonging","hi":"सामाजिक व अपनापन","kn":"ಸಾಮಾಜಿಕ ಮತ್ತು ಸೇರ್ಪಡೆ"},
   d_affect: {"en":"Emotional wellbeing","hi":"भावनात्मक कल्याण","kn":"ಭಾವನಾತ್ಮಕ ಯೋಗಕ್ಷೇಮ"},
   d_academic: {"en":"Learning & work","hi":"सीखना व कार्य","kn":"ಕಲಿಕೆ ಮತ್ತು ಕೆಲಸ"},
