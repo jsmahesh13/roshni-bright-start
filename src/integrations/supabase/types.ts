@@ -58,18 +58,29 @@ export type Database = {
           created_at: string
           id: string
           name: string
+          school_id: string | null
         }
         Insert: {
           created_at?: string
           id?: string
           name: string
+          school_id?: string | null
         }
         Update: {
           created_at?: string
           id?: string
           name?: string
+          school_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "classes_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       noticings: {
         Row: {
@@ -127,6 +138,7 @@ export type Database = {
           id: string
           name: string
           role: string
+          school_id: string | null
         }
         Insert: {
           class_id?: string | null
@@ -135,6 +147,7 @@ export type Database = {
           id: string
           name: string
           role?: string
+          school_id?: string | null
         }
         Update: {
           class_id?: string | null
@@ -143,6 +156,7 @@ export type Database = {
           id?: string
           name?: string
           role?: string
+          school_id?: string | null
         }
         Relationships: [
           {
@@ -152,7 +166,35 @@ export type Database = {
             referencedRelation: "classes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "profiles_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      schools: {
+        Row: {
+          created_at: string
+          id: string
+          join_code: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          join_code: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          join_code?: string
+          name?: string
+        }
+        Relationships: []
       }
       students: {
         Row: {
@@ -191,7 +233,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_staff_class: { Args: never; Returns: string }
+      current_staff_role: { Args: never; Returns: string }
+      join_school: {
+        Args: { p_class_id: string; p_code: string; p_name: string }
+        Returns: undefined
+      }
+      lookup_school: {
+        Args: { p_code: string }
+        Returns: {
+          class_id: string
+          class_name: string
+          school_id: string
+          school_name: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

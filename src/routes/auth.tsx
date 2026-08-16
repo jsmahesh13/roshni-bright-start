@@ -13,6 +13,8 @@ import { useT } from "@/hooks/useLang";
 import { LanguageToggle } from "@/components/roshni/LanguageToggle";
 import { DEMO_STAFF, DEMO_PASSWORD } from "@/lib/demo-staff";
 import { ensureDemoStaff } from "@/lib/demo-staff.functions";
+import { RegisterForm } from "@/components/roshni/RegisterForm";
+
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -37,12 +39,14 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
   const t = useT();
   const [ready, setReady] = useState(false);
+  const [signedInAs, setSignedInAs] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/this-week", replace: true });
+      setSignedInAs(data.user?.email ?? null);
     });
-  }, [navigate]);
+  }, []);
+
 
   useEffect(() => {
     seed()
@@ -85,7 +89,30 @@ function AuthPage() {
             Roshni is for staff only. There is no student login, and there never will be.
           </p>
 
+          {signedInAs && (
+            <div className="mt-5 rounded-xl border border-gold/40 bg-gold-soft px-4 py-3 text-[13px] text-gold-deep">
+              You are still signed in as <b>{signedInAs}</b>.
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Button size="sm" onClick={() => navigate({ to: "/this-week", replace: true })}>
+                  Continue
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="bg-card"
+                  onClick={async () => {
+                    await supabase.auth.signOut();
+                    setSignedInAs(null);
+                  }}
+                >
+                  Sign out
+                </Button>
+              </div>
+            </div>
+          )}
+
           <Tabs defaultValue="signin" className="mt-6">
+
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">{t("signin")}</TabsTrigger>
               <TabsTrigger value="register">{t("register")}</TabsTrigger>
@@ -129,34 +156,9 @@ function AuthPage() {
             </TabsContent>
 
             <TabsContent value="register" className="mt-5">
-              <form
-                className="space-y-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  toast.success("Request noted — your head teacher will add you to the school.");
-                }}
-              >
-                <div className="space-y-2">
-                  <Label htmlFor="rname">Your name</Label>
-                  <Input id="rname" placeholder="Meena Rao" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="remail">School email</Label>
-                  <Input id="remail" type="email" placeholder="you@school.in" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="rschool">School / class</Label>
-                  <Input id="rschool" placeholder="GHS Kadugodi — 7B" />
-                </div>
-                <Button type="submit" variant="outline" className="w-full bg-card">
-                  Request access
-                </Button>
-                <p className="text-xs text-faint">
-                  Staff accounts are created by a head teacher, so that a school always knows who
-                  can read what its teachers notice.
-                </p>
-              </form>
+              <RegisterForm />
             </TabsContent>
+
           </Tabs>
         </div>
 

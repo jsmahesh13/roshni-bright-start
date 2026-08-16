@@ -21,16 +21,21 @@ export const Route = createFileRoute("/")({
         content:
           "One teacher holds forty children. Roshni makes sure none of them slips into the dark.",
       },
+      { property: "og:url", content: "https://roshni-bright-start.lovable.app/" },
+      { property: "og:image", content: "https://roshni-bright-start.lovable.app/og-roshni.png" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://roshni-bright-start.lovable.app/og-roshni.png" },
     ],
+    links: [{ rel: "canonical", href: "https://roshni-bright-start.lovable.app/" }],
   }),
   component: Landing,
 });
 
 const STATS = [
-  { big: "30–35 : 1", key: "stat1" },
-  { big: "~40 lakh", key: "stat2" },
-  { big: "1 in 7", key: "stat3" },
-  { big: "~0", key: "stat4" },
+  { bigKey: "stat1v", key: "stat1" },
+  { bigKey: "stat2v", key: "stat2" },
+  { bigKey: "stat3v", key: "stat3" },
+  { bigKey: "stat4v", key: "stat4" },
 ];
 
 const STEPS = [
@@ -103,7 +108,7 @@ function Landing() {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {STATS.map((s) => (
               <div key={s.key} className="card-paper p-6">
-                <div className="hand text-4xl text-gold-deep">{s.big}</div>
+                <div className="hand text-4xl text-gold-deep">{t(s.bigKey)}</div>
                 <div className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {t(s.key)}
                 </div>
@@ -144,8 +149,58 @@ function Landing() {
         </div>
       </section>
 
-      <footer className="border-t border-border py-8 text-center text-xs text-faint">
-        Roshni · {t("footl")}
+      <footer className="border-t border-border bg-card/60">
+        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.1fr_1.4fr_0.9fr]">
+          <div>
+            <Wordmark size={26} textClass="text-2xl" />
+            <p className="hand mt-2 text-xl text-muted-foreground">{t("footl")}</p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {TENETS.map((tenet) => (
+                <span key={tenet.key} className="chip-dashed text-xs">
+                  {t(tenet.key)}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">{t("ft_privacy_h")}</h3>
+            <ul className="mt-3 space-y-2 text-xs leading-relaxed text-muted-foreground">
+              <li>{t("ft_privacy_1")}</li>
+              <li>{t("ft_privacy_2")}</li>
+              <li>{t("ft_privacy_3")}</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">{t("ft_links_h")}</h3>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+              <li>
+                <a
+                  className="underline underline-offset-4 hover:text-gold-deep"
+                  href="https://github.com/your-org/roshni"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t("ft_source")}
+                </a>
+              </li>
+              <li>
+                <a className="underline underline-offset-4 hover:text-gold-deep" href="#">
+                  {t("ft_screencast")}
+                </a>{" "}
+                <span className="text-faint">({t("ft_soon")})</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-border">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-5 py-5 text-xs text-faint">
+            <span>Roshni · {t("ft_demo")}</span>
+            <span>{t("ft_license")}</span>
+          </div>
+        </div>
       </footer>
     </div>
   );

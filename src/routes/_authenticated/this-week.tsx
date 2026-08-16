@@ -1,15 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
-import { ObservationSummary } from "@/components/roshni/ObservationSummary";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
 import { useProfile } from "@/hooks/useSession";
-import { buildDigest } from "@/lib/digest";
-import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
 import { useT } from "@/hooks/useLang";
+import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
+import { lastSeenLabelT, sortSummaries, summarise } from "@/lib/roshni";
+import { fill } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/this-week")({
   head: () => ({
@@ -17,12 +16,12 @@ export const Route = createFileRoute("/_authenticated/this-week")({
       { title: "This week — Roshni" },
       {
         name: "description",
-        content: "Three things worth your attention — questions drawn from what teachers noticed.",
+        content: "A quiet weekly view of who has been noticed, and who has not.",
       },
       { property: "og:title", content: "This week — Roshni" },
       {
         property: "og:description",
-        content: "Three things worth your attention — questions, not findings.",
+        content: "A quiet weekly view of who has been noticed, and who has not.",
       },
     ],
   }),
@@ -31,11 +30,6 @@ export const Route = createFileRoute("/_authenticated/this-week")({
 
 function ThisWeek() {
   const t = useT();
-  const navigate = useNavigate();
-  const [quick, setQuick] = useState("");
-  const [open, setOpen] = useState<string | null>(null);
-  const [summaryFor, setSummaryFor] = useState<string | null>(null);
-
   const { data: profile } = useProfile();
   const { data: classes } = useQuery(classesQuery);
   const classId = profile?.role === "admin" ? null : (profile?.class_id ?? null);
@@ -47,126 +41,122 @@ function ThisWeek() {
   const ids = useMemo(() => (students ?? []).map((s) => s.id), [students]);
   const { data: noticings } = useQuery(noticingsQuery(ids));
 
-  const items = useMemo(
-    () => buildDigest(students ?? [], noticings ?? []),
-    [students, noticings],
-  );
+  const rows = useMemo(() => {
+    if (!students) return [];
+    const byStudent = new Map<string, NonNullable<typeof noticings>>();
+    for (const n of noticings ?? []) {
+      const list = byStudent.get(n.student_id) ?? [];
+      list.push(n);
+      byStudent.set(n.student_id, list);
+    }
+    return students.map((s) => summarise(s, byStudent.get(s.id) ?? []));
+  }, [students, noticings]);
 
+  const thisWeek = (noticings ?? []).filter(
+    (n) => Date.now() - new Date(n.created_at).getTime() < 7 * 86_400_000,
+  );
+  const fading = sortSummaries(rows.filter((r) => r.fading), "fading").slice(0, 5);
+  const needs = sortSummaries(rows.filter((r) => r.needsYou), "needs").slice(0, 5);
   const className = classes?.find((c) => c.id === profile?.class_id)?.name;
 
   return (
     <div className="mx-auto max-w-5xl px-5 py-8">
-      <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-faint">
-        Monday morning · nothing else interrupts you
-      </div>
-      <h1 className="hand mt-1 text-5xl text-foreground">{t("h_home")}</h1>
-      <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-        {t("p_home")}
+      <div className="text-[11px] uppercase tracking-wide text-faint">{t("tw_kicker")}</div>
+      <h1 className="hand mt-1 text-5xl text-foreground">{t("nav_home")}</h1>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {profile?.name ? `${t("tw_greet")} ${profile.name.split(" ")[0]}. ` : ""}
+        {className ? `${t("tw_class")} ${className}.` : t("tw_allclasses")}
       </p>
-      <p className="mt-1 text-xs text-faint">
-        {profile?.name ? `${profile.name.split(" ")[0]} · ` : ""}
-        {className ? `Class ${className}` : "All classes"}
-      </p>
-
-      <section className="card-paper mt-6 p-5">
-        <h2 className="hand text-3xl text-foreground">{t("noticenow")}</h2>
-        <p className="mt-0.5 text-sm text-muted-foreground">
-          Type it the way you'd say it — Roshni will structure it on the next screen. Nothing is
-          saved until you approve every word.
-        </p>
-        <Textarea
-          value={quick}
-          onChange={(e) => setQuick(e.target.value)}
-          rows={3}
-          placeholder="Fatima was quiet all morning, one-word answers…"
-          className="mt-3 resize-y bg-background text-[15px]"
-        />
-        <div className="mt-3">
-          <Button
-            onClick={() =>
-              navigate({
-                to: "/notice",
-                ...(quick.trim() ? { search: { draft: quick.trim() } } : { search: {} }),
-              })
-            }
-          >
-            {t("btn_structure")}
-          </Button>
-        </div>
-      </section>
 
       {isLoading ? (
         <Skeleton className="mt-6 h-40 w-full" />
-      ) : items.length === 0 ? (
-        <div className="card-paper mt-6 p-8 text-center text-sm text-muted-foreground">
-          Nothing rose above the threshold this week. That is a valid result.
-        </div>
       ) : (
-        <div className="mt-6">
-          {items.map((it, i) => {
-            const isOpen = open === it.studentId + it.tag;
-            return (
-              <article key={it.tag} className="card-paper mb-3.5 overflow-hidden">
-                <div className="flex items-start justify-between gap-4 px-5 py-4">
-                  <div className="flex gap-4">
-                    <div className="hand text-3xl text-gold-deep">
-                      {String(i + 1).padStart(2, "0")}
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-faint">
-                        {it.tag}
-                      </span>
-                      <p className="mt-1.5 max-w-2xl text-lg leading-snug text-foreground">
-                        {it.question}
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="shrink-0 bg-card"
-                    onClick={() => setOpen(isOpen ? null : it.studentId + it.tag)}
-                  >
-                    Evidence
-                  </Button>
-                </div>
-                {isOpen && (
-                  <div className="border-t border-border bg-background px-5 py-4">
-                    <ul className="mb-3 list-disc space-y-1.5 pl-5 text-[13.5px] text-muted-foreground">
-                      {it.evidence.map((e) => (
-                        <li key={e}>{e}</li>
-                      ))}
-                    </ul>
-                    <div className="flex flex-wrap gap-2">
-                      <Button
-                        variant="ghost"
-                        onClick={() =>
-                          navigate({
-                            to: "/student/$studentId",
-                            params: { studentId: it.studentId },
-                          })
-                        }
-                      >
-                        Open {it.studentName.split(" ")[0]}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="bg-card"
-                        onClick={() => setSummaryFor(it.studentId)}
-                      >
-                        Prepare a summary →
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </article>
-            );
-          })}
-        </div>
-      )}
+        <>
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            <Stat big={String(thisWeek.length)} label={t("tw_stat_written")} />
+            <Stat big={String(rows.filter((r) => r.fading).length)} label={t("tw_stat_fading")} />
+            <Stat
+              big={String(rows.filter((r) => r.nearlyInvisible).length)}
+              label={t("tw_stat_invisible")}
+            />
+          </div>
 
-      {summaryFor && (
-        <ObservationSummary studentId={summaryFor} onClose={() => setSummaryFor(null)} />
+          <section className="mt-8 grid gap-5 md:grid-cols-2">
+            <Panel
+              title={t("tw_fading_title")}
+              blurb={t("tw_fading_blurb")}
+              rows={fading.map((r) => ({
+                id: r.student.id,
+                name: r.student.name,
+                note: lastSeenLabelT(r.lastSeenDays, t),
+              }))}
+              empty={t("tw_fading_empty")}
+            />
+            <Panel
+              title={t("tw_needs_title")}
+              blurb={t("tw_needs_blurb")}
+              rows={needs.map((r) => ({
+                id: r.student.id,
+                name: r.student.name,
+                note: fill(t("tw_concerns_count"), { n: r.concerns }),
+              }))}
+              empty={t("tw_needs_empty")}
+            />
+          </section>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild>
+              <Link to="/notice">{t("btn_write")}</Link>
+            </Button>
+            <Button asChild variant="outline" className="bg-card">
+              <Link to="/class">{t("btn_openregister")}</Link>
+            </Button>
+          </div>
+        </>
       )}
+    </div>
+  );
+}
+
+function Stat({ big, label }: { big: string; label: string }) {
+  return (
+    <div className="card-paper p-5">
+      <div className="hand text-4xl text-gold-deep">{big}</div>
+      <div className="mt-1 text-sm text-muted-foreground">{label}</div>
+    </div>
+  );
+}
+
+function Panel({
+  title,
+  blurb,
+  rows,
+  empty,
+}: {
+  title: string;
+  blurb: string;
+  rows: { id: string; name: string; note: string }[];
+  empty: string;
+}) {
+  return (
+    <div className="card-paper p-5">
+      <h2 className="hand text-3xl text-foreground">{title}</h2>
+      <p className="mt-1 text-sm text-muted-foreground">{blurb}</p>
+      <ul className="mt-4 space-y-1">
+        {rows.map((r) => (
+          <li key={r.id}>
+            <Link
+              to="/student/$studentId"
+              params={{ studentId: r.id }}
+              className="flex items-center justify-between gap-3 rounded-lg px-2 py-2 text-sm transition-colors hover:bg-accent/60"
+            >
+              <span className="truncate font-medium text-foreground">{r.name}</span>
+              <span className="shrink-0 text-xs text-muted-foreground">{r.note}</span>
+            </Link>
+          </li>
+        ))}
+        {rows.length === 0 && <li className="px-2 py-3 text-sm text-faint">{empty}</li>}
+      </ul>
     </div>
   );
 }

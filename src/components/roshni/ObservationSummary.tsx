@@ -1,6 +1,8 @@
 import { useT } from "@/hooks/useLang";
+import { fill } from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+
 
 import { Button } from "@/components/ui/button";
 import { useProfile } from "@/hooks/useSession";
@@ -30,6 +32,16 @@ export function ObservationSummary({
   const { data: classes } = useQuery(classesQuery);
 
   const notes = useMemo(() => (allNotes ?? []).filter((n) => !n.retracted), [allNotes]);
+
+  // Lock the page behind the overlay so only the summary sheet scrolls.
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
 
   const recent = notes.filter((n) => Date.now() - new Date(n.created_at).getTime() < 180 * DAY_MS);
   const byDomain = DOMAIN_ORDER.map((d) => ({
@@ -77,22 +89,21 @@ export function ObservationSummary({
         <div className="px-6 py-7 sm:px-10 sm:pb-11">
           <h1 className="hand text-4xl text-foreground">{student?.name ?? "…"}</h1>
           <div className="mt-1 text-[12.5px] text-muted-foreground">
-            Class {className} · Roll {student?.roll ?? "—"} · Prepared by {profile?.name ?? "—"} ·{" "}
-            {today} · covers the last 6 months
+            {fill(t("os_meta"), {
+              cls: className,
+              roll: student?.roll ?? "—",
+              by: profile?.name ?? "—",
+              date: today,
+            })}
           </div>
 
           <div className="my-5 rounded-xl border border-gold/40 bg-gold-soft px-4 py-3 text-[12.5px] text-gold-deep">
-            <b>
-              This is an organised record of what was observed — not a diagnosis, prediction or
-              score.
-            </b>{" "}
-            It exists to help a teacher decide what to do next, with the child’s consent and dignity
-            in mind.
+            <b>{t("os_disclaimer_b")}</b> {t("os_disclaimer_rest")}
           </div>
 
           {reasons.length > 0 && (
             <p className="mb-1 text-sm text-concern">
-              <b>Why now:</b> {reasons.join(" ")}
+              <b>{t("os_whynow")}</b> {reasons.map((r) => t(r)).join(" ")}
             </p>
           )}
 
@@ -100,65 +111,58 @@ export function ObservationSummary({
             <Section
               key={domain}
               dot={FACET_VAR[domain]}
-              title={DOMAIN[domain]}
-              synthesis={`${ns.length} concern${ns.length > 1 ? "s" : ""} recorded in this area over the period.`}
+              title={t(DOMAIN[domain])}
+              synthesis={fill(t("os_synthesis"), { n: ns.length })}
               items={sortDesc(ns).slice(0, 6)}
             />
           ))}
 
           <Section
             dot={FACET_VAR.strength}
-            title="Strengths — not to be forgotten"
+            title={t("os_strengths")}
             items={sortDesc(strengths).slice(0, 5)}
-            empty="No strengths recorded recently — that itself is worth noticing."
+            empty={t("os_nostrengths")}
           />
 
           {actions.length > 0 && (
             <Section
               dot={FACET_VAR.action}
-              title="What has already been tried"
+              title={t("os_tried")}
               items={sortDesc(actions)}
             />
           )}
 
           <div className="mt-6 rounded-xl border border-border bg-background px-5 py-4">
             <div className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-faint">
-              Suggested next steps · {DOMAIN[primary].toLowerCase()}
+              {t("os_nextsteps")} · {t(DOMAIN[primary])}
             </div>
             <ul className="list-disc space-y-1.5 pl-5 text-[13.5px] text-foreground">
               {SUPPORTS[primary].map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s}>{t(s)}</li>
               ))}
             </ul>
-            <p className="mt-2 text-xs text-faint">
-              Suggestions for the teacher — Roshni does not decide for you, and never contacts
-              anyone itself.
-            </p>
+            <p className="mt-2 text-xs text-faint">{t("os_suggestnote")}</p>
           </div>
 
           <div className="mt-6">
             <div className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-faint">
-              Resources · region: {REGION.name}
+              {t("os_resources")} {t(REGION.name)}
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {REGION.resources.map((r) => (
                 <div key={r.name} className="rounded-xl border border-border bg-card px-4 py-3">
                   <div className="text-[10px] font-bold uppercase tracking-[0.09em] text-gold-deep">
-                    {r.t}
+                    {t(r.t)}
                   </div>
-                  <b className="mt-1 block text-sm text-foreground">{r.name}</b>
-                  <span className="text-[12.5px] text-muted-foreground">{r.detail}</span>
+                  <b className="mt-1 block text-sm text-foreground">{t(r.name)}</b>
+                  <span className="text-[12.5px] text-muted-foreground">{t(r.detail)}</span>
                   {r.num !== "—" && (
                     <div className="font-mono text-sm font-bold text-foreground">{r.num}</div>
                   )}
                 </div>
               ))}
             </div>
-            <p className="mt-2.5 text-[11.5px] text-faint">
-              Illustrative directory — the production app keeps a verified, district-level list.
-              Confirm current numbers before sharing. Escalate through the school first unless a
-              child is in immediate danger.
-            </p>
+            <p className="mt-2.5 text-[11.5px] text-faint">{t("os_rescaption")}</p>
           </div>
         </div>
       </div>

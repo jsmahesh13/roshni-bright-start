@@ -429,17 +429,18 @@
 .fade-lbl {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, -150%);
-  z-index: 2;
+  transform: translate(-50%, -170%);
+  z-index: 60;
   font-size: 9.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255,214,140,.9);
   white-space: nowrap;
   pointer-events: none;
-  background: rgba(0,0,0,.34);
-  padding: 2px 9px;
+  background: rgba(6,10,24,.82);
+  padding: 3px 10px;
   border-radius: 10px;
+  box-shadow: 0 0 0 1px rgba(255,205,120,.22);
 }
 @keyframes orbitIn {
   from { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) translateZ(var(--z, 0px)) scale(.15); }

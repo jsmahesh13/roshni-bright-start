@@ -2,7 +2,7 @@ import { useT } from "@/hooks/useLang";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
-import { DAY_MS, daysAgo, type StudentSummary } from "@/lib/roshni";
+import { DAY_MS, daysAgo, needsYouRule, type StudentSummary } from "@/lib/roshni";
 
 /**
  * The night-sky class view. Radius = recency of the last noticing,
@@ -31,7 +31,15 @@ export function skyMetrics(row: StudentSummary, rangeDays: number, now = Date.no
   };
 }
 
-export const isNeeds = (m: SkyMetrics) => m.recentCon >= 2 || (m.con >= 6 && m.con > m.str * 2);
+/** Same rule as the register and the digest — kept in one place. */
+export const isNeeds = (m: SkyMetrics) =>
+  needsYouRule({
+    recentConcerns: m.recentCon,
+    concerns: m.con,
+    strengths: m.str,
+    total: m.count,
+    lastSeenDays: m.days >= 9999 ? null : m.days,
+  });
 
 interface Props {
   rows: StudentSummary[];
@@ -95,6 +103,13 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
     return g;
   }, [list]);
 
+  // The dashed boundary caption sits at the top of the outer ring; reserve that
+  // strip so no star's name can be printed underneath it.
+  const lblBox = useMemo(
+    () => ({ x1: cx - 165, x2: cx + 165, y1: cy - bDark - 30, y2: cy - bDark + 2 }),
+    [cx, cy, bDark],
+  );
+
   const stars = useMemo(() => {
     const out: {
       id: string;
@@ -104,6 +119,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       fill: string;
       glow: string;
       nameCol: string;
+      nameBottom: number;
       op: number;
       z: number;
       dx: number;
@@ -114,6 +130,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       first: string;
       tip: string[];
     }[] = [];
+
     let idx = 0;
     groups.forEach((arr, zi) => {
       const n = arr.length;
@@ -158,6 +175,11 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           z = -8;
         }
 
+        // Nudge the name clear of the boundary caption if it would land under it.
+        const nTop = y + sr / 2 + 3;
+        const collides =
+          x + 34 > lblBox.x1 && x - 34 < lblBox.x2 && nTop < lblBox.y2 && nTop + 13 > lblBox.y1;
+
         out.push({
           id: s.id,
           x,
@@ -166,7 +188,9 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           fill,
           glow,
           nameCol,
+          nameBottom: collides ? -30 : -14,
           op: needs ? 1 : dark ? 0.92 + neglect * 0.08 : 1,
+
           z,
           dx: cx - x,
           dy: cy - y,
@@ -185,7 +209,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       });
     });
     return out;
-  }, [groups, cx, cy, classLabel, zoneR]);
+  }, [groups, cx, cy, classLabel, zoneR, lblBox]);
 
   const needsL = list
     .filter((o) => o.m.days <= 42 && isNeeds(o.m))
@@ -210,7 +234,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           />
           <div className="fade-line" style={{ width: bDark * 2, height: bDark * 2 }} aria-hidden />
           <div className="fade-lbl" style={{ top: cy - bDark }}>
-            6-week line · beyond here, in the dark
+            {t("sky_fadeline")}
           </div>
 
           <div className="sun-core">
@@ -256,7 +280,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
                   <span className="star-beacon b2" aria-hidden />
                 </>
               )}
-              <span className="star-name" style={{ color: st.nameCol }}>
+              <span className="star-name" style={{ color: st.nameCol, bottom: st.nameBottom }}>
                 {st.first}
               </span>
             </button>
@@ -310,17 +334,17 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
         {needsL.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[12.5px] font-bold text-concern">
-              🔴 Needs you now ({needsL.length})
+              🔴 {t("sky_needsnow")} ({needsL.length})
             </span>
             {needsL.map((o) => (
-              <NameChip key={o.s.id} onClick={() => open(o.s.id)} name={o.s.name} days={o.m.days} />
+              <NameChip key={o.s.id} onClick={() => open(o.s.id)} name={o.s.name} days={o.m.days} neverLabel={t("sky_never")} />
             ))}
           </div>
         )}
         {darkL.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[12.5px] font-bold text-[#5a6b8f]">
-              🌙 In the dark — worth a check-in ({darkL.length})
+              🌙 {t("sky_indark")} ({darkL.length})
             </span>
             {darkL.map((o) => (
               <NameChip
@@ -329,20 +353,20 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
                 onClick={() => open(o.s.id)}
                 name={o.s.name}
                 days={o.m.days}
+                neverLabel={t("sky_never")}
               />
             ))}
           </div>
         )}
         {needsL.length === 0 && darkL.length === 0 && (
           <div className="text-sm text-muted-foreground">
-            Everyone here has been seen recently. 🌞
+            {t("sky_allseen")} 🌞
           </div>
         )}
       </div>
 
       <p className="mt-4 text-xs text-faint">
-        Centre = your attention · closer = seen more recently · past the dashed line = not seen in
-        6+ weeks · size = how much noticed
+        {t("sky_legend")}
       </p>
     </div>
   );
@@ -353,11 +377,13 @@ function NameChip({
   days,
   dark,
   onClick,
+  neverLabel,
 }: {
   name: string;
   days: number;
   dark?: boolean;
   onClick: () => void;
+  neverLabel: string;
 }) {
   return (
     <button
@@ -369,7 +395,7 @@ function NameChip({
       }
     >
       {name.split(" ")[0]}
-      <span className="font-mono text-[11px] text-faint">{days > 900 ? "never" : `${days}d`}</span>
+      <span className="font-mono text-[11px] text-faint">{days > 900 ? neverLabel : `${days}d`}</span>
     </button>
   );
 }
