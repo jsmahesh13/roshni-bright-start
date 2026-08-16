@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 
-import { Wordmark } from "@/components/roshni/SunLogo";
+import { WordmarkLink } from "@/components/roshni/SunLogo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -76,9 +76,7 @@ function AuthPage() {
   return (
     <div className="flex min-h-screen flex-col paper">
       <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-5 py-6">
-        <Link to="/">
-          <Wordmark size={28} textClass="text-2xl" />
-        </Link>
+        <WordmarkLink size={28} textClass="text-2xl" />
         <div className="flex items-center gap-3">
           <LanguageToggle />
           <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
@@ -89,17 +87,17 @@ function AuthPage() {
 
       <main className="mx-auto grid w-full max-w-5xl flex-1 gap-8 px-5 pb-16 lg:grid-cols-2">
         <div className="card-paper p-7">
-          <h1 className="hand text-4xl text-foreground">Welcome back</h1>
+          <h1 className="hand text-4xl text-foreground">{t("au_welcome")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Roshni is for staff only. There is no student login, and there never will be.
+            {t("au_staffonly")}
           </p>
 
           {signedInAs && (
             <div className="mt-5 rounded-xl border border-gold/40 bg-gold-soft px-4 py-3 text-[13px] text-gold-deep">
-              You are still signed in as <b>{signedInAs}</b>.
+              {t("au_stillsigned")} <b>{signedInAs}</b>
               <div className="mt-2 flex flex-wrap gap-2">
                 <Button size="sm" onClick={() => navigate({ to: "/this-week", replace: true })}>
-                  Continue
+                  {t("au_continue")}
                 </Button>
                 <Button
                   size="sm"
@@ -110,7 +108,7 @@ function AuthPage() {
                     setSignedInAs(null);
                   }}
                 >
-                  Sign out
+                  {t("signout")}
                 </Button>
               </div>
             </div>
@@ -169,7 +167,7 @@ function AuthPage() {
 
         <div>
           <div className="sticky-note p-6">
-            <h2 className="hand text-3xl text-foreground">Try it as someone</h2>
+            <h2 className="hand text-3xl text-foreground">{t("au_tryas")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               {t("orstaff")}
             </p>
@@ -192,7 +190,7 @@ function AuthPage() {
                         <div className="text-sm text-muted-foreground">{s.blurb}</div>
                       </div>
                       <span className="hand shrink-0 text-xl text-gold-deep">
-                        {s.role === "admin" ? "head" : (s.className ?? "")}
+                        {s.role === "admin" ? t("au_head") : (s.className ?? "")}
                       </span>
                     </div>
                   </button>
@@ -200,7 +198,7 @@ function AuthPage() {
               ))}
             </ul>
             <p className="mt-4 text-xs text-faint">
-              Every demo account uses the password{" "}
+              {t("au_demopw")}{" "}
               <span className="font-mono">{DEMO_PASSWORD}</span>.{" "}
               {ready ? t("demonote") : "…"}
             </p>

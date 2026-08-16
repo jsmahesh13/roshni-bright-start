@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { classesQuery } from "@/lib/queries";
 import type { Profile } from "@/lib/roshni";
+import { useT } from "@/hooks/useLang";
 
 export const Route = createFileRoute("/_authenticated/school")({
   head: () => ({
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/_authenticated/school")({
 });
 
 function SchoolPage() {
+  const t = useT();
   const { data: classes, isLoading } = useQuery(classesQuery);
   const { data: staff } = useQuery({
     queryKey: ["staff"],
@@ -37,14 +39,13 @@ function SchoolPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-5 py-8">
-      <h1 className="hand text-5xl text-foreground">School</h1>
+      <h1 className="hand text-5xl text-foreground">{t("sch_h1")}</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Head-teacher view. You can see every class; you cannot see who wrote what about whom in a
-        way that judges a teacher.
+        {t("sch_sub")}
       </p>
 
       <section className="mt-7">
-        <h2 className="hand text-3xl text-foreground">Classes</h2>
+        <h2 className="hand text-3xl text-foreground">{t("sch_classes")}</h2>
         {isLoading ? (
           <Skeleton className="mt-3 h-24 w-full" />
         ) : (
@@ -56,7 +57,7 @@ function SchoolPage() {
                 className="card-paper p-5 text-center transition-shadow hover:shadow-lift"
               >
                 <div className="hand text-4xl text-gold-deep">{c.name}</div>
-                <div className="mt-1 text-xs text-muted-foreground">open register</div>
+                <div className="mt-1 text-xs text-muted-foreground">{t("sch_open")}</div>
               </Link>
             ))}
           </div>
@@ -64,7 +65,7 @@ function SchoolPage() {
       </section>
 
       <section className="mt-8">
-        <h2 className="hand text-3xl text-foreground">Staff</h2>
+        <h2 className="hand text-3xl text-foreground">{t("sch_staff")}</h2>
         <div className="card-paper mt-3 divide-y divide-border">
           {(staff ?? []).map((p) => (
             <div key={p.id} className="flex items-center justify-between gap-3 p-4">
@@ -73,22 +74,20 @@ function SchoolPage() {
                 <div className="truncate text-xs text-muted-foreground">{p.email}</div>
               </div>
               <span className="shrink-0 rounded-full bg-gold-soft px-2.5 py-1 text-xs font-medium text-gold-deep">
-                {p.role === "admin" ? "Head teacher" : (classes?.find((c) => c.id === p.class_id)?.name ?? "Unassigned")}
+                {p.role === "admin" ? t("sch_headteacher") : (classes?.find((c) => c.id === p.class_id)?.name ?? t("sch_unassigned"))}
               </span>
             </div>
           ))}
           {(staff ?? []).length === 0 && (
-            <div className="p-6 text-sm text-muted-foreground">No staff yet.</div>
+            <div className="p-6 text-sm text-muted-foreground">{t("sch_nostaff")}</div>
           )}
         </div>
       </section>
 
       <section className="mt-8">
-        <h2 className="hand text-3xl text-foreground">Forgetting</h2>
+        <h2 className="hand text-3xl text-foreground">{t("sch_forgetting")}</h2>
         <div className="sticky-note mt-3 p-5 text-sm text-muted-foreground">
-          Raw noticings are removed automatically 24 months after they are written. Nothing about a
-          child follows them beyond that, and Roshni keeps no scores, ranks or labels to carry
-          forward.
+          {t("sch_forget_body")}
         </div>
       </section>
     </div>

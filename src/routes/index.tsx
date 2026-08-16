@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { EyeOff, Gauge, Timer, PenLine, Eye, HandHeart } from "lucide-react";
 
 import { LanguageToggle } from "@/components/roshni/LanguageToggle";
-import { Wordmark, SunMark } from "@/components/roshni/SunLogo";
+import { WordmarkLink, SunMark } from "@/components/roshni/SunLogo";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/hooks/useLang";
 
@@ -56,7 +56,7 @@ function Landing() {
   return (
     <div className="min-h-screen paper">
       <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-6">
-        <Wordmark size={30} textClass="text-3xl" />
+        <WordmarkLink size={30} textClass="text-3xl" />
         <div className="flex items-center gap-2">
           <LanguageToggle />
           <Button asChild variant="ghost" className="text-muted-foreground">
@@ -152,7 +152,7 @@ function Landing() {
       <footer className="border-t border-border bg-card/60">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.1fr_1.4fr_0.9fr]">
           <div>
-            <Wordmark size={26} textClass="text-2xl" />
+            <WordmarkLink size={26} textClass="text-2xl" />
             <p className="hand mt-2 text-xl text-muted-foreground">{t("footl")}</p>
             <div className="mt-5 flex flex-wrap gap-2">
               {TENETS.map((tenet) => (

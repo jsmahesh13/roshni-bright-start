@@ -71,7 +71,7 @@ export function ObservationSummary({
       className="fixed inset-0 z-80 overflow-auto bg-foreground/50 px-4 py-8 print-overlay"
       role="dialog"
       aria-modal="true"
-      aria-label="Observation summary"
+      aria-label={t("os_aria")}
     >
       <div className="print-sheet mx-auto max-w-3xl overflow-hidden rounded-lg bg-card shadow-lift">
         <div className="no-print sticky top-0 flex items-center justify-between gap-3 border-b border-border bg-background px-5 py-3">

@@ -1,3 +1,4 @@
+import { useT } from "@/hooks/useLang";
 import { FACETS, FACET_VAR, DAY_MS, type Noticing } from "@/lib/roshni";
 
 /**
@@ -6,6 +7,7 @@ import { FACETS, FACET_VAR, DAY_MS, type Noticing } from "@/lib/roshni";
  * last six weeks highlighted.
  */
 export function Timeline({ noticings }: { noticings: Noticing[] }) {
+  const tr = useT();
   const W = 1160;
   const H = 260;
   const mid = H / 2;
@@ -56,7 +58,7 @@ export function Timeline({ noticings }: { noticings: Noticing[] }) {
 
   return (
     <div>
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Two years of noticing">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={tr("tl_aria")}>
         {months.map((m) => (
           <g key={m.px}>
             <line x1={m.px} y1={22} x2={m.px} y2={H - 22} stroke="var(--foreground)" strokeOpacity={0.06} />
@@ -66,14 +68,14 @@ export function Timeline({ noticings }: { noticings: Noticing[] }) {
           </g>
         ))}
         <line x1={L} y1={mid} x2={R} y2={mid} stroke="var(--foreground)" strokeWidth={1.1} strokeOpacity={0.4} />
-        <text x={8} y={mid - 58} fontSize={9} fill="var(--strength)">STRENGTH</text>
-        <text x={8} y={mid + 66} fontSize={9} fill="var(--concern)">CONCERN</text>
+        <text x={8} y={mid - 58} fontSize={9} fill="var(--strength)">{tr("tl_strength")}</text>
+        <text x={8} y={mid + 66} fontSize={9} fill="var(--concern)">{tr("tl_concern")}</text>
 
         {sw > 10 && (
           <>
             <rect x={sx} y={24} width={sw} height={H - 52} fill="var(--gold)" fillOpacity={0.09} stroke="var(--gold)" strokeOpacity={0.5} />
             <rect x={sx} y={7} width={106} height={15} fill="var(--gold)" />
-            <text x={sx + 7} y={19} fontSize={9} fill="#3a2c08">LAST SIX WEEKS</text>
+            <text x={sx + 7} y={19} fontSize={9} fill="#3a2c08">{tr("tl_lastsix")}</text>
           </>
         )}
 
@@ -96,7 +98,7 @@ export function Timeline({ noticings }: { noticings: Noticing[] }) {
         {FACETS.map((f) => (
           <span key={f.key} className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: FACET_VAR[f.key] }} />
-            {f.label}
+            {tr(`f_${f.key}`)}
           </span>
         ))}
       </div>

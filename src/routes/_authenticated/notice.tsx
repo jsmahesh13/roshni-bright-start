@@ -186,7 +186,7 @@ function NoticePage() {
     mutationFn: async () => {
       const ok = drafts.filter((d) => d.approved && d.studentId && d.hits.length === 0);
       if (!ok.length) throw new Error(t("nc_nothing_approved"));
-      if (!user?.id) throw new Error("Not signed in");
+      if (!user?.id) throw new Error(t("nc_err_signedout"));
       // Insert and read the rows back: if RLS silently filters a row, or the
       // write never lands, we must not clear the composer as if it saved.
       const { data, error } = await supabase
@@ -205,7 +205,7 @@ function NoticePage() {
         .select("id");
       if (error) throw error;
       if (!data || data.length !== ok.length) {
-        throw new Error("The save did not complete. Nothing was recorded — please try again.");
+        throw new Error(t("nc_err_savefailed"));
       }
       return data.length;
     },
