@@ -21,7 +21,12 @@ export const Route = createFileRoute("/")({
         content:
           "One teacher holds forty children. Roshni makes sure none of them slips into the dark.",
       },
+      { property: "og:url", content: "https://roshni-bright-start.lovable.app/" },
+      { property: "og:image", content: "https://roshni-bright-start.lovable.app/og-roshni.png" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://roshni-bright-start.lovable.app/og-roshni.png" },
     ],
+    links: [{ rel: "canonical", href: "https://roshni-bright-start.lovable.app/" }],
   }),
   component: Landing,
 });
