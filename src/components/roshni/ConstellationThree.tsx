@@ -423,7 +423,7 @@ export function ConstellationThree({ rows, rangeDays, classLabel }: Props) {
       <div className="mt-4 space-y-3">
         {needsL.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[12.5px] font-bold text-concern">🔴 Needs you now ({needsL.length})</span>
+            <span className="text-[12.5px] font-bold text-concern">🔴 {t("sky_needsnow")} ({needsL.length})</span>
             {needsL.map((o) => (
               <NameChip key={o.s.id} onClick={() => open(o.s.id)} name={o.s.name} days={o.m.days} />
             ))}
@@ -432,7 +432,7 @@ export function ConstellationThree({ rows, rangeDays, classLabel }: Props) {
         {darkL.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[12.5px] font-bold text-[#5a6b8f]">
-              🌙 In the dark — worth a check-in ({darkL.length})
+              🌙 {t("sky_indark")} ({darkL.length})
             </span>
             {darkL.map((o) => (
               <NameChip key={o.s.id} dark onClick={() => open(o.s.id)} name={o.s.name} days={o.m.days} />
@@ -445,8 +445,7 @@ export function ConstellationThree({ rows, rangeDays, classLabel }: Props) {
       </div>
 
       <p className="mt-4 text-xs text-faint">
-        Centre = your attention · orbit = when last seen · float &amp; beacon = calling for notice ·
-        size = how urgently they need it
+        {t("sky_legend")}
       </p>
     </div>
   );
