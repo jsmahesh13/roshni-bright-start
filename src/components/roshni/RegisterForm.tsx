@@ -37,29 +37,25 @@ export function RegisterForm() {
     if (!code.trim()) return;
     setChecking(true);
     setCodeError(null);
-    const { data, error } = await supabase.rpc("lookup_school", { p_code: code.trim() });
+    let result: Awaited<ReturnType<typeof lookupSchoolByCode>> | null = null;
+    try {
+      result = await lookupSchoolByCode({ data: { code: code.trim() } });
+    } catch {
+      result = null;
+    }
     setChecking(false);
-    const rows = (data ?? []) as {
-      school_id: string;
-      school_name: string;
-      class_id: string | null;
-      class_name: string | null;
-    }[];
-    if (error || rows.length === 0) {
+    if (!result?.found) {
       setSchool(null);
       setClasses([]);
       setClassId("");
       setCodeError(t("su_badcode"));
       return;
     }
-    setSchool({ id: rows[0]!.school_id, name: rows[0]!.school_name });
-    setClasses(
-      rows
-        .filter((r) => r.class_id && r.class_name)
-        .map((r) => ({ id: r.class_id as string, name: r.class_name as string })),
-    );
+    setSchool(result.school);
+    setClasses(result.classes);
     setClassId("");
   }
+
 
   async function submit() {
     if (!school) {
