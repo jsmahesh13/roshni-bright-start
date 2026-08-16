@@ -345,6 +345,16 @@ export const DICTIONARY = {
   su_governance: {"en":"Staff accounts are normally created by a head teacher, so a school always knows who can read what its teachers notice.","hi":"स्टाफ़ खाते सामान्यतः प्रधान शिक्षक बनाते हैं, ताकि विद्यालय को हमेशा पता रहे कि शिक्षकों की टिप्पणियाँ कौन पढ़ सकता है।","kn":"ಸಿಬ್ಬಂದಿ ಖಾತೆಗಳನ್ನು ಸಾಮಾನ್ಯವಾಗಿ ಮುಖ್ಯ ಶಿಕ್ಷಕರು ರಚಿಸುತ್ತಾರೆ, ಇದರಿಂದ ಶಿಕ್ಷಕರ ಟಿಪ್ಪಣಿಗಳನ್ನು ಯಾರು ಓದಬಹುದೆಂದು ಶಾಲೆಗೆ ಸದಾ ತಿಳಿದಿರುತ್ತದೆ."},
   su_democode: {"en":"Demo school code: KADUGODI-2026 — use this to join GHS Kadugodi and try Roshni.","hi":"डेमो विद्यालय कोड: KADUGODI-2026 — इससे GHS Kadugodi में शामिल होकर रोशनी आज़माएँ।","kn":"ಡೆಮೊ ಶಾಲಾ ಕೋಡ್: KADUGODI-2026 — ಇದನ್ನು ಬಳಸಿ GHS Kadugodi ಸೇರಿ ರೋಶ್ನಿಯನ್ನು ಪ್ರಯತ್ನಿಸಿ."},
   su_scope: {"en":"You join as a teacher and see only the class you choose. Never another class, never admin.","hi":"आप शिक्षक के रूप में जुड़ते हैं और केवल चुनी हुई कक्षा देखते हैं। कोई दूसरी कक्षा नहीं, कोई एडमिन अधिकार नहीं।","kn":"ನೀವು ಶಿಕ್ಷಕರಾಗಿ ಸೇರುತ್ತೀರಿ ಮತ್ತು ಆಯ್ಕೆ ಮಾಡಿದ ತರಗತಿಯನ್ನಷ್ಟೇ ನೋಡುತ್ತೀರಿ. ಬೇರೆ ತರಗತಿ ಇಲ್ಲ, ಆಡಳಿತ ಅಧಿಕಾರ ಇಲ್ಲ."},
+  // ---- voice capture -------------------------------------------------------
+  vc_record: {"en":"Record a noticing","hi":"बोलकर टिप्पणी दर्ज करें","kn":"ಮಾತನಾಡಿ ಟಿಪ್ಪಣಿ ದಾಖಲಿಸಿ"},
+  vc_stop: {"en":"Recording… tap to stop","hi":"रिकॉर्ड हो रहा है… रोकने के लिए दबाएँ","kn":"ರೆಕಾರ್ಡ್ ಆಗುತ್ತಿದೆ… ನಿಲ್ಲಿಸಲು ಒತ್ತಿ"},
+  vc_transcribing: {"en":"Transcribing…","hi":"लिखा जा रहा है…","kn":"ಪಠ್ಯಕ್ಕೆ ಪರಿವರ್ತಿಸಲಾಗುತ್ತಿದೆ…"},
+  vc_hint: {"en":"Speak in English, हिंदी or ಕನ್ನಡ — the words land in the box for you to edit.","hi":"अंग्रेज़ी, हिंदी या ಕನ್ನಡ में बोलिए — शब्द ऊपर के बॉक्स में आ जाएँगे, आप उन्हें संपादित कर सकते हैं।","kn":"ಇಂಗ್ಲಿಷ್, ಹಿಂದಿ ಅಥವಾ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಿ — ಪದಗಳು ಮೇಲಿನ ಪೆಟ್ಟಿಗೆಗೆ ಬರುತ್ತವೆ, ನೀವು ತಿದ್ದಬಹುದು."},
+  vc_added: {"en":"Added to your note — read it over before structuring.","hi":"आपकी टिप्पणी में जोड़ दिया गया — संरचित करने से पहले पढ़ लें।","kn":"ನಿಮ್ಮ ಟಿಪ್ಪಣಿಗೆ ಸೇರಿಸಲಾಗಿದೆ — ರಚಿಸುವ ಮೊದಲು ಓದಿಕೊಳ್ಳಿ."},
+  vc_nomic: {"en":"Voice input needs microphone access — you can type instead.","hi":"बोलकर लिखने के लिए माइक्रोफ़ोन की अनुमति चाहिए — आप टाइप भी कर सकते हैं।","kn":"ಧ್ವನಿ ಇನ್‌ಪುಟ್‌ಗೆ ಮೈಕ್ರೊಫೋನ್ ಅನುಮತಿ ಬೇಕು — ನೀವು ಟೈಪ್ ಕೂಡ ಮಾಡಬಹುದು."},
+  vc_tooshort: {"en":"That recording was too short — try again, or just type it.","hi":"रिकॉर्डिंग बहुत छोटी थी — फिर कोशिश करें, या टाइप कर लें।","kn":"ಆ ರೆಕಾರ್ಡಿಂಗ್ ತುಂಬಾ ಚಿಕ್ಕದಾಗಿತ್ತು — ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ, ಅಥವಾ ಟೈಪ್ ಮಾಡಿ."},
+  vc_empty: {"en":"We couldn’t hear any words — try again, or just type it.","hi":"हमें कोई शब्द सुनाई नहीं दिए — फिर कोशिश करें, या टाइप कर लें।","kn":"ಯಾವ ಪದವೂ ಕೇಳಿಸಲಿಲ್ಲ — ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ, ಅಥವಾ ಟೈಪ್ ಮಾಡಿ."},
+  vc_failed: {"en":"Transcription didn’t work just now — try again, or just type it.","hi":"अभी लिखाई नहीं हो पाई — फिर कोशिश करें, या टाइप कर लें।","kn":"ಈಗ ಪಠ್ಯಕ್ಕೆ ಪರಿವರ್ತನೆ ಆಗಲಿಲ್ಲ — ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ, ಅಥವಾ ಟೈಪ್ ಮಾಡಿ."},
   ft_soon: {"en":"link coming soon","hi":"लिंक जल्द ही","kn":"ಲಿಂಕ್ ಶೀಘ್ರದಲ್ಲೇ"},
 } as const satisfies Record<string, { en: string; hi: string; kn: string }>;
 
