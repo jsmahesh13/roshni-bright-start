@@ -362,6 +362,47 @@ export const DICTIONARY = {
   vc_empty: {"en":"We couldn’t hear any words — try again, or just type it.","hi":"हमें कोई शब्द सुनाई नहीं दिए — फिर कोशिश करें, या टाइप कर लें।","kn":"ಯಾವ ಪದವೂ ಕೇಳಿಸಲಿಲ್ಲ — ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ, ಅಥವಾ ಟೈಪ್ ಮಾಡಿ."},
   vc_failed: {"en":"Transcription didn’t work just now — try again, or just type it.","hi":"अभी लिखाई नहीं हो पाई — फिर कोशिश करें, या टाइप कर लें।","kn":"ಈಗ ಪಠ್ಯಕ್ಕೆ ಪರಿವರ್ತನೆ ಆಗಲಿಲ್ಲ — ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ, ಅಥವಾ ಟೈಪ್ ಮಾಡಿ."},
   ft_soon: {"en":"link coming soon","hi":"लिंक जल्द ही","kn":"ಲಿಂಕ್ ಶೀಘ್ರದಲ್ಲೇ"},
+
+  // ---- wordmark / home link ------------------------------------------------
+  home_aria: {"en":"Roshni — go to the home page","hi":"रोशनी — मुखपृष्ठ पर जाएँ","kn":"ರೋಶ್ನಿ — ಮುಖಪುಟಕ್ಕೆ ಹೋಗಿ"},
+
+  // ---- sign-in page --------------------------------------------------------
+  au_welcome: {"en":"Welcome back","hi":"वापसी पर स्वागत है","kn":"ಮರಳಿ ಸ್ವಾಗತ"},
+  au_staffonly: {"en":"Roshni is for staff only. There is no student login, and there never will be.","hi":"रोशनी केवल स्टाफ़ के लिए है। छात्रों के लिए कोई लॉगिन नहीं है, और कभी नहीं होगा।","kn":"ರೋಶ್ನಿ ಸಿಬ್ಬಂದಿಗಾಗಿ ಮಾತ್ರ. ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಲಾಗಿನ್ ಇಲ್ಲ, ಎಂದೂ ಇರುವುದಿಲ್ಲ."},
+  au_stillsigned: {"en":"You are still signed in as","hi":"आप अब भी इस रूप में साइन इन हैं:","kn":"ನೀವು ಇನ್ನೂ ಈ ಖಾತೆಯಲ್ಲಿ ಸೈನ್ ಇನ್ ಆಗಿದ್ದೀರಿ:"},
+  au_continue: {"en":"Continue","hi":"जारी रखें","kn":"ಮುಂದುವರಿಸಿ"},
+  au_tryas: {"en":"Try it as someone","hi":"किसी के रूप में आज़माएँ","kn":"ಯಾರಾದರೊಬ್ಬರಂತೆ ಪ್ರಯತ್ನಿಸಿ"},
+  au_demopw: {"en":"Every demo account uses the password","hi":"हर डेमो खाते का पासवर्ड है","kn":"ಪ್ರತಿ ಡೆಮೊ ಖಾತೆಯ ಪಾಸ್‌ವರ್ಡ್"},
+  au_head: {"en":"head","hi":"प्रधान","kn":"ಮುಖ್ಯಸ್ಥ"},
+
+  // ---- school (head teacher) page -----------------------------------------
+  sch_h1: {"en":"School","hi":"विद्यालय","kn":"ಶಾಲೆ"},
+  sch_sub: {"en":"Head-teacher view. You can see every class; you cannot see who wrote what about whom in a way that judges a teacher.","hi":"प्रधान शिक्षक दृश्य। आप हर कक्षा देख सकते हैं; पर किसने किसके बारे में क्या लिखा — इस तरह नहीं देख सकते कि किसी शिक्षक को आँका जाए।","kn":"ಮುಖ್ಯ ಶಿಕ್ಷಕರ ನೋಟ. ನೀವು ಪ್ರತಿ ತರಗತಿಯನ್ನೂ ನೋಡಬಹುದು; ಆದರೆ ಯಾರು ಯಾರ ಬಗ್ಗೆ ಏನು ಬರೆದರು ಎಂಬುದನ್ನು ಶಿಕ್ಷಕರನ್ನು ಅಳೆಯುವ ರೀತಿಯಲ್ಲಿ ನೋಡಲಾಗದು."},
+  sch_classes: {"en":"Classes","hi":"कक्षाएँ","kn":"ತರಗತಿಗಳು"},
+  sch_open: {"en":"open register","hi":"रजिस्टर खोलें","kn":"ರಿಜಿಸ್ಟರ್ ತೆರೆಯಿರಿ"},
+  sch_staff: {"en":"Staff","hi":"स्टाफ़","kn":"ಸಿಬ್ಬಂದಿ"},
+  sch_nostaff: {"en":"No staff yet.","hi":"अभी कोई स्टाफ़ नहीं।","kn":"ಇನ್ನೂ ಸಿಬ್ಬಂದಿ ಇಲ್ಲ."},
+  sch_headteacher: {"en":"Head teacher","hi":"प्रधान शिक्षक","kn":"ಮುಖ್ಯ ಶಿಕ್ಷಕರು"},
+  sch_unassigned: {"en":"Unassigned","hi":"अनिर्धारित","kn":"ನಿಯೋಜಿಸಿಲ್ಲ"},
+  sch_forgetting: {"en":"Forgetting","hi":"भूलना","kn":"ಮರೆಯುವಿಕೆ"},
+  sch_forget_body: {"en":"Raw noticings are removed automatically 24 months after they are written. Nothing about a child follows them beyond that, and Roshni keeps no scores, ranks or labels to carry forward.","hi":"कच्ची टिप्पणियाँ लिखे जाने के 24 महीने बाद अपने आप हट जाती हैं। उसके बाद बच्चे के बारे में कुछ भी उसका पीछा नहीं करता, और रोशनी आगे ले जाने के लिए कोई स्कोर, रैंक या लेबल नहीं रखती।","kn":"ಕಚ್ಚಾ ಟಿಪ್ಪಣಿಗಳು ಬರೆದ 24 ತಿಂಗಳ ನಂತರ ತಾನಾಗಿಯೇ ಅಳಿಸಲ್ಪಡುತ್ತವೆ. ಆ ನಂತರ ಮಗುವಿನ ಬಗ್ಗೆ ಏನೂ ಅದನ್ನು ಹಿಂಬಾಲಿಸುವುದಿಲ್ಲ, ಮತ್ತು ರೋಶ್ನಿ ಮುಂದೆ ಸಾಗಿಸಲು ಯಾವ ಅಂಕ, ಶ್ರೇಣಿ ಅಥವಾ ಹಣೆಪಟ್ಟಿಯನ್ನೂ ಇಡುವುದಿಲ್ಲ."},
+
+  // ---- timeline / summary chrome -------------------------------------------
+  tl_aria: {"en":"Two years of noticing","hi":"दो वर्षों की टिप्पणियाँ","kn":"ಎರಡು ವರ್ಷಗಳ ಟಿಪ್ಪಣಿಗಳು"},
+  tl_strength: {"en":"STRENGTH","hi":"क्षमता","kn":"ಸಾಮರ್ಥ್ಯ"},
+  tl_concern: {"en":"CONCERN","hi":"चिंता","kn":"ಕಳವಳ"},
+  tl_lastsix: {"en":"LAST SIX WEEKS","hi":"पिछले छह सप्ताह","kn":"ಕಳೆದ ಆರು ವಾರ"},
+  os_aria: {"en":"Observation summary","hi":"अवलोकन सारांश","kn":"ಅವಲೋಕನ ಸಾರಾಂಶ"},
+
+  // ---- composer save errors -------------------------------------------------
+  nc_err_signedout: {"en":"You are not signed in — sign in again and try saving.","hi":"आप साइन इन नहीं हैं — दोबारा साइन इन करके सहेजें।","kn":"ನೀವು ಸೈನ್ ಇನ್ ಆಗಿಲ್ಲ — ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಿ ಉಳಿಸಲು ಪ್ರಯತ್ನಿಸಿ."},
+  nc_err_savefailed: {"en":"The save did not complete. Nothing was recorded — please try again.","hi":"सहेजना पूरा नहीं हुआ। कुछ भी दर्ज नहीं हुआ — कृपया फिर कोशिश करें।","kn":"ಉಳಿಸುವಿಕೆ ಪೂರ್ಣಗೊಳ್ಳಲಿಲ್ಲ. ಏನೂ ದಾಖಲಾಗಿಲ್ಲ — ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."},
+
+  // ---- 3D constellation test page ------------------------------------------
+  ct_title: {"en":"Constellation, in 3D","hi":"तारामंडल, 3D में","kn":"ನಕ್ಷತ್ರಪುಂಜ, 3Dಯಲ್ಲಿ"},
+  ct_sub: {"en":"Test page — drag to orbit the class, scroll to zoom. Not linked from the sidebar.","hi":"परीक्षण पृष्ठ — कक्षा को घुमाने के लिए खींचें, ज़ूम के लिए स्क्रॉल करें। साइडबार से जुड़ा नहीं है।","kn":"ಪರೀಕ್ಷಾ ಪುಟ — ತರಗತಿಯನ್ನು ತಿರುಗಿಸಲು ಎಳೆಯಿರಿ, ಜೂಮ್‌ಗೆ ಸ್ಕ್ರಾಲ್ ಮಾಡಿ. ಸೈಡ್‌ಬಾರ್‌ನಿಂದ ಜೋಡಿಸಿಲ್ಲ."},
+  ct_back: {"en":"Back to the class register","hi":"कक्षा रजिस्टर पर वापस","kn":"ತರಗತಿ ರಿಜಿಸ್ಟರ್‌ಗೆ ಹಿಂತಿರುಗಿ"},
+  ct_noclass: {"en":"No class assigned yet.","hi":"अभी कोई कक्षा नहीं सौंपी गई।","kn":"ಇನ್ನೂ ಯಾವ ತರಗತಿಯನ್ನೂ ನಿಯೋಜಿಸಿಲ್ಲ."},
 } as const satisfies Record<string, { en: string; hi: string; kn: string }>;
 
 
