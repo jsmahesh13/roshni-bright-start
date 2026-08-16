@@ -185,25 +185,6 @@
     blobMorph 10s ease-in-out infinite,
     blobBreathe 4.5s ease-in-out infinite;
 }
-.sun-blob-wrap {
-  position: relative;
-  display: inline-block;
-}
-.sun-blob-glow {
-  position: absolute;
-  inset: -40%;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
-  filter: blur(7px);
-  opacity: 0.45;
-  z-index: -1;
-  animation: blobGlowPulse 4.5s ease-in-out infinite;
-}
-.sun-blob {
-  position: absolute;
-  inset: 0;
-  box-shadow: var(--shadow-sun);
-}
 @keyframes blobMorph {
   0%,
   100% {
@@ -225,21 +206,154 @@
     transform: scale(1.045) rotate(4deg);
   }
 }
-@keyframes blobGlowPulse {
+@media (prefers-reduced-motion: reduce) {
+  .blob-shape,
+  .blob-breathe {
+    animation: none !important;
+  }
+}
+
+/* ===== Glass orb mark — the "Roshni" sun as a lit glass sphere ===== */
+.sun-orb-wrap {
+  position: relative;
+  display: inline-block;
+}
+.sun-orb-glow {
+  position: absolute;
+  inset: -45%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #e2661f 0%, transparent 70%);
+  filter: blur(7px);
+  opacity: 0.4;
+  z-index: -1;
+  animation: orbGlowPulse 5s ease-in-out infinite;
+}
+.sun-orb {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  animation: orbBreathe 6s ease-in-out infinite;
+  box-shadow:
+    inset -18% -22% 30% rgba(90, 45, 10, 0.55),
+    inset 10% 14% 22% rgba(255, 246, 225, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+.sun-orb-base {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 34% 30%,
+    #fff8e6 0%,
+    #ffcf6a 18%,
+    #f28a3c 40%,
+    #d9552a 62%,
+    #8a1f10 100%
+  );
+}
+.sun-orb-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(38% 32% at 62% 62%, rgba(150, 30, 10, 0.42), transparent 100%),
+    radial-gradient(circle at 68% 78%, transparent 32%, rgba(90, 18, 6, 0.55) 100%);
+}
+.sun-orb-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  mix-blend-mode: overlay;
+  opacity: 0.22;
+}
+.sun-orb-band {
+  position: absolute;
+  inset: -35%;
+  background: linear-gradient(
+    118deg,
+    transparent 34%,
+    rgba(140, 210, 255, 0.16) 40%,
+    rgba(255, 255, 255, 0.06) 44%,
+    rgba(255, 255, 255, 0.92) 49%,
+    rgba(255, 150, 110, 0.55) 52%,
+    rgba(255, 255, 255, 0.15) 56%,
+    rgba(255, 120, 150, 0.16) 60%,
+    transparent 66%
+  );
+  mix-blend-mode: screen;
+  filter: blur(1.8px);
+  animation: orbBandSweep 8s ease-in-out infinite;
+}
+.sun-orb-band.b2 {
+  inset: -45%;
+  opacity: 0.4;
+  background: linear-gradient(
+    156deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 200, 150, 0.3) 54%,
+    transparent 62%
+  );
+  animation-duration: 11s;
+  animation-delay: -3s;
+}
+.sun-orb-rim {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    transparent 84%,
+    rgba(255, 255, 255, 0.4) 91%,
+    rgba(255, 200, 140, 0.18) 96%,
+    transparent 100%
+  );
+}
+.sun-orb-spec {
+  position: absolute;
+  width: 26%;
+  height: 16%;
+  top: 16%;
+  left: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95), transparent 72%);
+  filter: blur(0.3px);
+}
+@keyframes orbGlowPulse {
   0%,
   100% {
-    opacity: 0.38;
+    opacity: 0.32;
     transform: scale(1);
   }
   50% {
-    opacity: 0.68;
-    transform: scale(1.18);
+    opacity: 0.55;
+    transform: scale(1.12);
+  }
+}
+@keyframes orbBreathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+@keyframes orbBandSweep {
+  0% {
+    transform: translate(-10%, 6%) rotate(-4deg);
+  }
+  50% {
+    transform: translate(9%, -6%) rotate(6deg);
+  }
+  100% {
+    transform: translate(-10%, 6%) rotate(-4deg);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .blob-shape,
-  .blob-breathe,
-  .sun-blob-glow {
+  .sun-orb,
+  .sun-orb-band,
+  .sun-orb-glow {
     animation: none !important;
   }
 }

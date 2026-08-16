@@ -1,20 +1,23 @@
 import { cn } from "@/lib/utils";
 
-/** The Roshni mark: a small glowing, gently morphing blob of light. Roshni means "light". */
+/** The Roshni mark: a warm glass orb, catching and slowly turning its own light. Roshni means "light". */
 export function SunMark({ className, size = 28 }: { className?: string; size?: number }) {
   return (
     <span
-      className={cn("sun-blob-wrap shrink-0", className)}
+      className={cn("sun-orb-wrap shrink-0", className)}
       style={{ width: size, height: size }}
       aria-hidden="true"
     >
-      <span className="sun-blob-glow" />
-      <span
-        className="sun-blob blob-shape blob-breathe"
-        style={{
-          background: `radial-gradient(circle at 32% 30%, var(--gold-soft), var(--gold) 55%, var(--gold-deep))`,
-        }}
-      />
+      <span className="sun-orb-glow" />
+      <span className="sun-orb">
+        <span className="sun-orb-base" />
+        <span className="sun-orb-band" />
+        <span className="sun-orb-band b2" />
+        <span className="sun-orb-shade" />
+        <span className="sun-orb-spec" />
+        <span className="sun-orb-rim" />
+        <span className="sun-orb-grain" />
+      </span>
     </span>
   );
 }
