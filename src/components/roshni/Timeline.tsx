@@ -98,7 +98,7 @@ export function Timeline({ noticings }: { noticings: Noticing[] }) {
         {FACETS.map((f) => (
           <span key={f.key} className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: FACET_VAR[f.key] }} />
-            {f.label}
+            {tr(`f_${f.key}`)}
           </span>
         ))}
       </div>
