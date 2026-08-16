@@ -178,14 +178,23 @@ function ClassRegister() {
           ))}
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
-          <span className="rounded-full bg-concern/10 px-2.5 py-1 font-medium text-concern">
+          <span
+            title={t("key_needs_help")}
+            className="cursor-help rounded-full bg-concern/10 px-2.5 py-1 font-medium text-concern"
+          >
             {fill(t("reg_needyou_n"), { n: needsCount })}
           </span>
-          <span className="rounded-full bg-gold-soft px-2.5 py-1 font-medium text-gold-deep">
+          <span
+            title={t("key_fading_help")}
+            className="cursor-help rounded-full bg-gold-soft px-2.5 py-1 font-medium text-gold-deep"
+          >
             {fill(t("reg_fading_n"), { n: fadingCount })}
           </span>
         </div>
       </div>
+
+      <p className="mt-2 text-xs text-faint">{t("key_needs_help")}</p>
+
 
       {/* Facet legend */}
       <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
@@ -247,15 +256,22 @@ function ClassRegister() {
                 <span className="font-medium text-concern">▼ {r.concerns}</span>
                 <span className="text-muted-foreground">{lastSeenLabelT(r.lastSeenDays, t)}</span>
                 {r.needsYou && (
-                  <span className="rounded-full bg-concern/10 px-2 py-0.5 text-xs font-semibold text-concern">
+                  <span
+                    title={t("key_needs_help")}
+                    className="cursor-help rounded-full bg-concern/10 px-2 py-0.5 text-xs font-semibold text-concern"
+                  >
                     {t("key_needs")}
                   </span>
                 )}
                 {!r.needsYou && r.fading && (
-                  <span className="rounded-full bg-gold-soft px-2 py-0.5 text-xs font-semibold text-gold-deep">
+                  <span
+                    title={t("key_fading_help")}
+                    className="cursor-help rounded-full bg-gold-soft px-2 py-0.5 text-xs font-semibold text-gold-deep"
+                  >
                     {t("key_fading")}
                   </span>
                 )}
+
               </div>
 
               <ChevronRight className="hidden h-4 w-4 text-faint md:block" />

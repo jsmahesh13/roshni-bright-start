@@ -2,7 +2,7 @@ import { useT } from "@/hooks/useLang";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
-import { DAY_MS, daysAgo, type StudentSummary } from "@/lib/roshni";
+import { DAY_MS, daysAgo, needsYouRule, type StudentSummary } from "@/lib/roshni";
 
 /**
  * The night-sky class view. Radius = recency of the last noticing,
