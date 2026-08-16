@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/hooks/useLang";
+import { lookupSchoolByCode } from "@/lib/school.functions";
+
 
 interface ClassOption {
   id: string;
