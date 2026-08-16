@@ -40,6 +40,11 @@ function AuthPage() {
   const t = useT();
   const [ready, setReady] = useState(false);
   const [signedInAs, setSignedInAs] = useState<string | null>(null);
+  // A click before React hydrates submits the form natively (page reloads to
+  // /auth? and no sign-in happens). Keep sign-in disabled until hydrated.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
