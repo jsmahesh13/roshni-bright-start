@@ -60,10 +60,11 @@ function ThisWeek() {
 
   return (
     <div className="mx-auto max-w-5xl px-5 py-8">
-      <h1 className="hand text-5xl text-foreground">{t("nav_home")}</h1>
+      <div className="text-[11px] uppercase tracking-wide text-faint">{t("tw_kicker")}</div>
+      <h1 className="hand mt-1 text-5xl text-foreground">{t("nav_home")}</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        {profile?.name ? `Good to see you, ${profile.name.split(" ")[0]}. ` : ""}
-        {className ? `Class ${className}.` : "All classes."}
+        {profile?.name ? `${t("tw_greet")} ${profile.name.split(" ")[0]}. ` : ""}
+        {className ? `${t("tw_class")} ${className}.` : t("tw_allclasses")}
       </p>
 
       {isLoading ? (
@@ -71,40 +72,43 @@ function ThisWeek() {
       ) : (
         <>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <Stat big={String(thisWeek.length)} label="noticings written in the last 7 days" />
-            <Stat big={String(rows.filter((r) => r.fading).length)} label="children not noticed in 6+ weeks" />
-            <Stat big={String(rows.filter((r) => r.nearlyInvisible).length)} label="children with almost nothing on record" />
+            <Stat big={String(thisWeek.length)} label={t("tw_stat_written")} />
+            <Stat big={String(rows.filter((r) => r.fading).length)} label={t("tw_stat_fading")} />
+            <Stat
+              big={String(rows.filter((r) => r.nearlyInvisible).length)}
+              label={t("tw_stat_invisible")}
+            />
           </div>
 
           <section className="mt-8 grid gap-5 md:grid-cols-2">
             <Panel
-              title="Might be fading"
-              blurb="Nobody has written about them for a while. That's about us, not about them."
+              title={t("tw_fading_title")}
+              blurb={t("tw_fading_blurb")}
               rows={fading.map((r) => ({
                 id: r.student.id,
                 name: r.student.name,
-                note: lastSeenLabel(r.lastSeenDays),
+                note: lastSeenLabelT(r.lastSeenDays, t),
               }))}
-              empty="Everyone has been noticed recently. Rare and lovely."
+              empty={t("tw_fading_empty")}
             />
             <Panel
-              title="A run of concern"
-              blurb="Three or more concerns written in the last three weeks."
+              title={t("tw_needs_title")}
+              blurb={t("tw_needs_blurb")}
               rows={needs.map((r) => ({
                 id: r.student.id,
                 name: r.student.name,
-                note: `${r.concerns} concerns on record`,
+                note: fill(t("tw_concerns_count"), { n: r.concerns }),
               }))}
-              empty="No recent runs of concern in this class."
+              empty={t("tw_needs_empty")}
             />
           </section>
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
-              <Link to="/notice">Write a noticing</Link>
+              <Link to="/notice">{t("btn_write")}</Link>
             </Button>
             <Button asChild variant="outline" className="bg-card">
-              <Link to="/class">Open the register</Link>
+              <Link to="/class">{t("btn_openregister")}</Link>
             </Button>
           </div>
         </>
