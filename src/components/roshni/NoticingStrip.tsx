@@ -1,4 +1,5 @@
-import { FACET_VAR, RETENTION_DAYS, daysAgo, type Noticing } from "@/lib/roshni";
+import { FACET_VAR, RETENTION_DAYS, daysAgo, lastSeenLabelT, type Noticing } from "@/lib/roshni";
+import { useT } from "@/hooks/useLang";
 
 /**
  * A two-year "noticing strip".
@@ -15,6 +16,7 @@ export function NoticingStrip({
   width?: number;
   height?: number;
 }) {
+  const t = useT();
   const mid = height / 2;
   const now = Date.now();
   const pad = 3;
@@ -54,8 +56,14 @@ export function NoticingStrip({
         const d = Math.min(daysAgo(n.created_at, now), RETENTION_DAYS);
         const x = pad + (1 - d / RETENTION_DAYS) * (width - pad * 2);
         const colour = FACET_VAR[n.facet] ?? "var(--facet-action)";
+        const when = lastSeenLabelT(d, t);
+        const facetLabel = t(`f_${n.facet}`);
         if (n.valence === 0) {
-          return <circle key={n.id} cx={x} cy={mid} r={2} fill={colour} opacity={0.75} />;
+          return (
+            <circle key={n.id} cx={x} cy={mid} r={2} fill={colour} opacity={0.75}>
+              <title>{`${facetLabel} · ${when}`}</title>
+            </circle>
+          );
         }
         const up = n.valence > 0;
         return (
@@ -69,7 +77,9 @@ export function NoticingStrip({
             strokeWidth={2}
             strokeLinecap="round"
             opacity={0.85}
-          />
+          >
+            <title>{`${facetLabel} ${up ? "▲" : "▼"} · ${when}`}</title>
+          </line>
         );
       })}
     </svg>

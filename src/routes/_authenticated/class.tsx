@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { ChevronRight } from "lucide-react";
 
-import { Constellation } from "@/components/roshni/Constellation";
+import { Constellation, skyMetrics } from "@/components/roshni/Constellation";
 import { NoticingStrip } from "@/components/roshni/NoticingStrip";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -74,11 +74,19 @@ function ClassRegister() {
       list.push(n);
       byStudent.set(n.student_id, list);
     }
-    return sortSummaries(
+    const sorted = sortSummaries(
       students.map((s) => summarise(s, byStudent.get(s.id) ?? [])),
       sort,
     );
-  }, [students, noticings, sort]);
+    // The strip always shows the full two-year arc — only the balance count
+    // narrows to the "Over" window, same windowing skyMetrics already does
+    // for the sky view. Badges and sort stay on the full record, so "needs
+    // you" never flickers just because someone changed the display window.
+    return sorted.map((r) => {
+      const windowed = skyMetrics(r, range);
+      return { ...r, windowStrengths: windowed.str, windowConcerns: windowed.con };
+    });
+  }, [students, noticings, sort, range]);
 
   const className = classes?.find((c) => c.id === activeClassId)?.name ?? "";
   const loading = loadingStudents || (ids.length > 0 && loadingNoticings);
@@ -201,18 +209,16 @@ function ClassRegister() {
         </div>
       </div>
 
-      <p className="mt-2 text-xs text-faint">{t("key_needs_help")}</p>
-
-
-      {/* Facet legend */}
-      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+      {/* Colour key — every facet the strip can mark, plus the strength/concern shape. */}
+      <div className="card-paper mt-5 flex flex-wrap items-center gap-x-5 gap-y-2.5 px-4 py-3 text-xs text-muted-foreground">
         {FACETS.map((f) => (
           <span key={f.key} className="inline-flex items-center gap-1.5">
-            <span className={cn("h-2.5 w-1 rounded-full", f.dot)} />
+            <span className={cn("h-2.5 w-2.5 shrink-0 rounded-full", f.dot)} />
             {t(`f_${f.key}`)}
           </span>
         ))}
-        <span className="text-faint">{t("reg_axis")}</span>
+        <span className="h-4 w-px shrink-0 bg-border" aria-hidden />
+        <span>{t("reg_axis")}</span>
       </div>
 
       {view === "register" && (
@@ -260,8 +266,8 @@ function ClassRegister() {
               </div>
 
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-                <span className="font-medium text-strength">▲ {r.strengths}</span>
-                <span className="font-medium text-concern">▼ {r.concerns}</span>
+                <span className="font-medium text-strength">▲ {r.windowStrengths}</span>
+                <span className="font-medium text-concern">▼ {r.windowConcerns}</span>
                 <span className="text-muted-foreground">{lastSeenLabelT(r.lastSeenDays, t)}</span>
                 {r.needsYou && (
                   <span
