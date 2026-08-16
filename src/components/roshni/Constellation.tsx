@@ -175,6 +175,11 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           z = -8;
         }
 
+        // Nudge the name clear of the boundary caption if it would land under it.
+        const nTop = y + sr / 2 + 3;
+        const collides =
+          x + 34 > lblBox.x1 && x - 34 < lblBox.x2 && nTop < lblBox.y2 && nTop + 13 > lblBox.y1;
+
         out.push({
           id: s.id,
           x,
@@ -183,7 +188,9 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           fill,
           glow,
           nameCol,
+          nameBottom: collides ? -30 : -14,
           op: needs ? 1 : dark ? 0.92 + neglect * 0.08 : 1,
+
           z,
           dx: cx - x,
           dy: cy - y,
