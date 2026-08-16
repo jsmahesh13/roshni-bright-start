@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
+import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -13,14 +15,16 @@ import {
   EXAMPLE_TEXT,
   detectFacet,
   detectValence,
+  draftsFromAISegments,
   makeDrafts,
   scan,
   suggestRewrite,
   type Draft,
 
 } from "@/lib/composer";
+import { structureNoticing } from "@/lib/structure.functions";
 import { FACETS, FACET_VAR, type Facet } from "@/lib/roshni";
-import { useT } from "@/hooks/useLang";
+import { useLang, useT } from "@/hooks/useLang";
 import { fill } from "@/lib/i18n";
 import { VoiceCapture } from "@/components/roshni/VoiceCapture";
 
@@ -47,6 +51,8 @@ const selectClass =
 
 function NoticePage() {
   const t = useT();
+  const { lang } = useLang();
+  const structureAI = useServerFn(structureNoticing);
   const { draft: incoming } = Route.useSearch();
   const navigate = useNavigate();
   const { user } = useUser();
@@ -72,6 +78,7 @@ function NoticePage() {
   const [raw, setRaw] = useState("");
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [editing, setEditing] = useState<Record<number, string>>({});
+  const [aiStructuring, setAiStructuring] = useState(false);
 
   useEffect(() => {
     if (incoming) {
@@ -87,6 +94,46 @@ function NoticePage() {
     }
     setEditing({});
     setDrafts(makeDrafts(raw, scope));
+  }
+
+  /**
+   * Opt-in second pass: only ever runs when a teacher explicitly clicks this
+   * button, since it's the only path in the composer that sends a note's
+   * text (and students' first names) to an external AI gateway. Every
+   * failure mode — and the mandatory local scan() re-check inside
+   * draftsFromAISegments — falls back to exactly what "Structure it" would
+   * have produced, so this can never leave a teacher with a worse result
+   * than the plain regex path.
+   */
+  async function structureWithAI() {
+    if (!raw.trim()) {
+      toast(t("nc_nothing_structure"));
+      return;
+    }
+    setEditing({});
+    setAiStructuring(true);
+    try {
+      const refMap = new Map(scope.map((s, i) => [`S${i}`, s] as const));
+      const res = await structureAI({
+        data: {
+          text: raw,
+          lang,
+          students: scope.map((s, i) => ({ ref: `S${i}`, firstName: s.name.split(" ")[0]! })),
+        },
+      });
+      if (res.ok) {
+        setDrafts(draftsFromAISegments(res.segments, refMap));
+        toast.success(t("nc_ai_used"));
+      } else {
+        setDrafts(makeDrafts(raw, scope));
+        toast(t("nc_ai_fallback"));
+      }
+    } catch {
+      setDrafts(makeDrafts(raw, scope));
+      toast(t("nc_ai_fallback"));
+    } finally {
+      setAiStructuring(false);
+    }
   }
 
   function patch(id: number, next: Partial<Draft>) {
@@ -181,6 +228,19 @@ function NoticePage() {
         />
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <Button onClick={structure}>{t("btn_structure")}</Button>
+          <Button
+            variant="outline"
+            className="bg-card"
+            onClick={() => void structureWithAI()}
+            disabled={aiStructuring}
+          >
+            {aiStructuring ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
+            ) : (
+              <Sparkles className="mr-2 h-4 w-4" aria-hidden />
+            )}
+            {t("btn_structure_ai")}
+          </Button>
           <Button variant="outline" className="bg-card" onClick={() => setRaw(EXAMPLE_TEXT)}>
             {t("useexample")}
           </Button>

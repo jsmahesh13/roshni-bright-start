@@ -10,6 +10,7 @@
  */
 
 import type { Facet, Student } from "@/lib/roshni";
+import type { AISegment } from "@/lib/structure.functions";
 
 export type BlockCategory = "clinical" | "character" | "home" | "identity" | "medical";
 
@@ -202,6 +203,34 @@ export function makeDrafts(raw: string, students: Student[]): Draft[] {
   });
 }
 
+/**
+ * Turn AI-structured segments into Drafts — the AI-assisted counterpart to
+ * makeDrafts. The AI is never trusted on its own: scan() still runs on every
+ * segment's text here, so its hits are a UNION of what the deterministic
+ * list catches plus whatever the AI additionally flagged. The AI can only
+ * ever add a block, never remove one the word list would have caught.
+ */
+export function draftsFromAISegments(
+  segments: AISegment[],
+  refToStudent: Map<string, Student>,
+): Draft[] {
+  return segments.map((seg, i) => {
+    const localHits = scan(seg.text);
+    const aiHits: Hit[] = seg.aiFlags.map((f) => ({ cat: f.category, word: f.phrase }));
+    const hits = [...localHits, ...aiHits];
+    const st = seg.studentRef ? (refToStudent.get(seg.studentRef) ?? null) : null;
+    return {
+      id: i,
+      text: seg.text,
+      facet: seg.facet,
+      valence: seg.valence,
+      studentId: st?.id ?? null,
+      hits,
+      suggestion: suggestRewrite(seg.text, hits),
+      approved: hits.length === 0 && !!st,
+    };
+  });
+}
 
 export const EXAMPLE_TEXT =
   "Fatima was quiet all morning, one-word answers. Arjun sat alone at lunch again, third time this week. Kabir is being lazy about homework, hasn't submitted for two weeks. I spoke to Arjun after class for five minutes.";
