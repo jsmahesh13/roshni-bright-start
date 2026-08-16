@@ -87,7 +87,30 @@ function AuthPage() {
             Roshni is for staff only. There is no student login, and there never will be.
           </p>
 
+          {signedInAs && (
+            <div className="mt-5 rounded-xl border border-gold/40 bg-gold-soft px-4 py-3 text-[13px] text-gold-deep">
+              You are still signed in as <b>{signedInAs}</b>.
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Button size="sm" onClick={() => navigate({ to: "/this-week", replace: true })}>
+                  Continue
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="bg-card"
+                  onClick={async () => {
+                    await supabase.auth.signOut();
+                    setSignedInAs(null);
+                  }}
+                >
+                  Sign out
+                </Button>
+              </div>
+            </div>
+          )}
+
           <Tabs defaultValue="signin" className="mt-6">
+
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">{t("signin")}</TabsTrigger>
               <TabsTrigger value="register">{t("register")}</TabsTrigger>
