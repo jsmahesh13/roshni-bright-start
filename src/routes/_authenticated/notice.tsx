@@ -184,6 +184,14 @@ function NoticePage() {
           </Button>
           <span className="text-xs text-faint">{fill(t("nc_chars"), { n: raw.length })}</span>
         </div>
+        <div className="mt-3 border-t border-dashed border-border pt-3">
+          <VoiceCapture
+            onTranscript={(text) =>
+              setRaw((prev) => (prev.trim() ? `${prev.trimEnd()} ${text}` : text))
+            }
+          />
+        </div>
+
       </div>
 
       <div className="mt-4 rounded-xl border border-strength/40 bg-strength/8 p-4 text-sm text-foreground">
