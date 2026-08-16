@@ -154,34 +154,9 @@ function AuthPage() {
             </TabsContent>
 
             <TabsContent value="register" className="mt-5">
-              <form
-                className="space-y-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  toast.success("Request noted — your head teacher will add you to the school.");
-                }}
-              >
-                <div className="space-y-2">
-                  <Label htmlFor="rname">Your name</Label>
-                  <Input id="rname" placeholder="Meena Rao" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="remail">School email</Label>
-                  <Input id="remail" type="email" placeholder="you@school.in" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="rschool">School / class</Label>
-                  <Input id="rschool" placeholder="GHS Kadugodi — 7B" />
-                </div>
-                <Button type="submit" variant="outline" className="w-full bg-card">
-                  Request access
-                </Button>
-                <p className="text-xs text-faint">
-                  Staff accounts are created by a head teacher, so that a school always knows who
-                  can read what its teachers notice.
-                </p>
-              </form>
+              <RegisterForm />
             </TabsContent>
+
           </Tabs>
         </div>
 
