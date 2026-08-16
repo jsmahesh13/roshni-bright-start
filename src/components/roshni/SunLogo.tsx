@@ -1,3 +1,7 @@
+import { Link } from "@tanstack/react-router";
+
+import { useUser } from "@/hooks/useSession";
+import { useT } from "@/hooks/useLang";
 import { cn } from "@/lib/utils";
 
 /** The Roshni mark: a warm glass orb, catching and slowly turning its own light. Roshni means "light". */
