@@ -13,6 +13,8 @@ import { useT } from "@/hooks/useLang";
 import { LanguageToggle } from "@/components/roshni/LanguageToggle";
 import { DEMO_STAFF, DEMO_PASSWORD } from "@/lib/demo-staff";
 import { ensureDemoStaff } from "@/lib/demo-staff.functions";
+import { RegisterForm } from "@/components/roshni/RegisterForm";
+
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
