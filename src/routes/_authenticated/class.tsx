@@ -136,6 +136,14 @@ function ClassRegister() {
             </button>
           ))}
         </div>
+        {view === "sky" && (
+          <Link
+            to="/constellation-test"
+            className="text-xs text-muted-foreground underline decoration-dotted hover:text-foreground"
+          >
+            Try the 3D version →
+          </Link>
+        )}
 
         <div className="flex items-center gap-2">
           <span className="hand text-lg text-faint">{t("over")}</span>

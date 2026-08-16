@@ -31,7 +31,7 @@ export function skyMetrics(row: StudentSummary, rangeDays: number, now = Date.no
   };
 }
 
-const isNeeds = (m: SkyMetrics) => m.recentCon >= 2 || (m.con >= 6 && m.con > m.str * 2);
+export const isNeeds = (m: SkyMetrics) => m.recentCon >= 2 || (m.con >= 6 && m.con > m.str * 2);
 
 interface Props {
   rows: StudentSummary[];
