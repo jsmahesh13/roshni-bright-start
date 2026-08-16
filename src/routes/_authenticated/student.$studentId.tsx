@@ -124,6 +124,11 @@ function StudentPage() {
   const strengths = notes.filter((n) => n.valence > 0);
   const concerns = notes.filter((n) => n.valence < 0);
   const actions = notes.filter((n) => n.valence === 0);
+  // One interleaved stream so a lopsided record never leaves an empty panel.
+  const stream = [...strengths, ...concerns].sort(
+    (a, b) => +new Date(b.created_at) - +new Date(a.created_at),
+  );
+
   const lastSeen = notes.length
     ? Math.min(...notes.map((n) => daysAgo(n.created_at)))
     : null;

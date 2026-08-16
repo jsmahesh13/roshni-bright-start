@@ -1,7 +1,8 @@
 import { useT } from "@/hooks/useLang";
 import { fill } from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+
 
 import { Button } from "@/components/ui/button";
 import { useProfile } from "@/hooks/useSession";
