@@ -66,7 +66,7 @@ export function WordmarkLink({
       aria-label={t("home_aria")}
       className="inline-flex cursor-pointer rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
     >
-      <Wordmark className={className} size={size} textClass={textClass} />
+      <Wordmark className={className ?? ""} size={size} textClass={textClass} />
     </Link>
   );
 }
