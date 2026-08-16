@@ -9,10 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProfile } from "@/hooks/useSession";
 import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
+import { fill } from "@/lib/i18n";
 import {
   FACETS,
   SORTS,
-  lastSeenLabel,
+  lastSeenLabelT,
   sortSummaries,
   summarise,
   type SortKey,
@@ -178,10 +179,10 @@ function ClassRegister() {
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
           <span className="rounded-full bg-concern/10 px-2.5 py-1 font-medium text-concern">
-            {needsCount} need you
+            {fill(t("reg_needyou_n"), { n: needsCount })}
           </span>
           <span className="rounded-full bg-gold-soft px-2.5 py-1 font-medium text-gold-deep">
-            {fadingCount} fading
+            {fill(t("reg_fading_n"), { n: fadingCount })}
           </span>
         </div>
       </div>
@@ -194,15 +195,15 @@ function ClassRegister() {
             {t(`f_${f.key}`)}
           </span>
         ))}
-        <span className="text-faint">▲ above the line = strength · ▼ below = concern</span>
+        <span className="text-faint">{t("reg_axis")}</span>
       </div>
 
       {view === "register" && (
       <div className="card-paper mt-5 overflow-hidden">
         <div className="hidden grid-cols-[minmax(0,1.4fr)_minmax(0,2fr)_minmax(0,1.3fr)_24px] gap-4 border-b border-border px-5 py-3 text-[11px] uppercase tracking-wide text-faint md:grid">
-          <span>Child</span>
-          <span>Two years of noticing</span>
-          <span>Balance &amp; last seen</span>
+          <span>{t("reg_child")}</span>
+          <span>{t("reg_twoyears")}</span>
+          <span>{t("reg_balance")}</span>
           <span />
         </div>
 
@@ -232,7 +233,7 @@ function ClassRegister() {
                 </div>
                 {r.nearlyInvisible && (
                   <span className="mt-1 inline-block text-xs text-gold-deep">
-                    almost nothing written here
+                    {t("reg_almostnothing")}
                   </span>
                 )}
               </div>
@@ -244,15 +245,15 @@ function ClassRegister() {
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
                 <span className="font-medium text-strength">▲ {r.strengths}</span>
                 <span className="font-medium text-concern">▼ {r.concerns}</span>
-                <span className="text-muted-foreground">{lastSeenLabel(r.lastSeenDays)}</span>
+                <span className="text-muted-foreground">{lastSeenLabelT(r.lastSeenDays, t)}</span>
                 {r.needsYou && (
                   <span className="rounded-full bg-concern/10 px-2 py-0.5 text-xs font-semibold text-concern">
-                    needs you
+                    {t("key_needs")}
                   </span>
                 )}
                 {!r.needsYou && r.fading && (
                   <span className="rounded-full bg-gold-soft px-2 py-0.5 text-xs font-semibold text-gold-deep">
-                    fading
+                    {t("key_fading")}
                   </span>
                 )}
               </div>
@@ -263,7 +264,7 @@ function ClassRegister() {
 
         {!loading && rows.length === 0 && (
           <div className="p-10 text-center text-sm text-muted-foreground">
-            No class is assigned to you yet. Ask your head teacher to add one.
+            {t("reg_noclass")}
           </div>
         )}
       </div>
@@ -274,12 +275,12 @@ function ClassRegister() {
       )}
 
       <p className="mt-4 text-xs text-faint">
-        These marks are counts, not scores. Roshni does not rank children, and never labels them.
+        {t("reg_notscores")}
       </p>
 
       <div className="mt-6">
         <Button asChild variant="outline" className="bg-card">
-          <Link to="/notice">Write a noticing</Link>
+          <Link to="/notice">{t("btn_write")}</Link>
         </Button>
       </div>
     </div>
