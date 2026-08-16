@@ -6,6 +6,7 @@ import { ConstellationThree } from "@/components/roshni/ConstellationThree";
 import { useProfile } from "@/hooks/useSession";
 import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
 import { sortSummaries, summarise } from "@/lib/roshni";
+import { useT } from "@/hooks/useLang";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/constellation-test")({
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/_authenticated/constellation-test")({
  * better, it replaces Constellation.tsx there.
  */
 function ConstellationTestPage() {
+  const t = useT();
   const { data: profile } = useProfile();
   const { data: classes } = useQuery(classesQuery);
   const [classId, setClassId] = useState<string | null>(null);
