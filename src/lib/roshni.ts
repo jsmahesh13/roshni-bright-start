@@ -89,12 +89,30 @@ export interface StudentSummary {
   concerns: number;
   total: number;
   lastSeenDays: number | null;
-  /** A recent run of concern — three or more concerns in the last three weeks. */
+  /** A recent run of concern, or a heavily one-sided record. */
   needsYou: boolean;
   /** Nobody has written anything for six weeks or more. */
   fading: boolean;
   /** Almost nothing on record at all. */
   nearlyInvisible: boolean;
+}
+
+/**
+ * The single "needs you" rule, shared by the register, the digest and the sky.
+ * Plain words: a recent run of concern, OR an overwhelmingly concern-weighted
+ * record that is still reasonably current. It is a statement about the record,
+ * never a judgement about the child.
+ */
+export function needsYouRule(o: {
+  recentConcerns: number;
+  concerns: number;
+  strengths: number;
+  total: number;
+  lastSeenDays: number | null;
+}): boolean {
+  if (o.recentConcerns >= 3) return true;
+  const seen = o.lastSeenDays ?? 9999;
+  return o.total >= 6 && o.concerns >= 5 && o.concerns >= 0.8 * o.total && seen <= 120;
 }
 
 export function summarise(student: Student, all: Noticing[], now = Date.now()): StudentSummary {
@@ -118,11 +136,18 @@ export function summarise(student: Student, all: Noticing[], now = Date.now()): 
     concerns,
     total: noticings.length,
     lastSeenDays,
-    needsYou: recentConcerns >= 3,
+    needsYou: needsYouRule({
+      recentConcerns,
+      concerns,
+      strengths,
+      total: noticings.length,
+      lastSeenDays,
+    }),
     fading: lastSeenDays === null || lastSeenDays >= 42,
     nearlyInvisible: noticings.length <= 3,
   };
 }
+
 
 export function lastSeenLabel(days: number | null): string {
   if (days === null) return "never noticed";
