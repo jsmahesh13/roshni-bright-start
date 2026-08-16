@@ -191,15 +191,6 @@ function Landing() {
                 </a>{" "}
                 <span className="text-faint">({t("ft_soon")})</span>
               </li>
-              <li>
-                {t("ft_contact")}:{" "}
-                <a
-                  className="underline underline-offset-4 hover:text-gold-deep"
-                  href="mailto:maheshjs@cricduel.com"
-                >
-                  maheshjs@cricduel.com
-                </a>
-              </li>
             </ul>
           </div>
         </div>
