@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { CalendarDays, PenLine, Users, Building2, LogOut, Menu, X } from "lucide-react";
 
-import { Wordmark } from "@/components/roshni/SunLogo";
+import { WordmarkLink } from "@/components/roshni/SunLogo";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useSession";
@@ -38,9 +38,9 @@ export function AppShell({ children }: { children: ReactNode }) {
   const sidebar = (
     <div className="flex h-full flex-col bg-sidebar">
       <div className="flex items-center justify-between px-5 py-6">
-        <Link to="/this-week" onClick={() => setOpen(false)}>
-          <Wordmark size={26} textClass="text-2xl" />
-        </Link>
+        <span onClick={() => setOpen(false)}>
+          <WordmarkLink size={26} textClass="text-2xl" />
+        </span>
         <button
           className="lg:hidden text-muted-foreground"
           onClick={() => setOpen(false)}
@@ -125,7 +125,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <button onClick={() => setOpen(true)} aria-label={t("openmenu")}>
             <Menu className="h-5 w-5 text-muted-foreground" />
           </button>
-          <Wordmark size={22} textClass="text-xl" />
+          <WordmarkLink size={22} textClass="text-xl" />
         </div>
         <main className="min-w-0">{children}</main>
       </div>

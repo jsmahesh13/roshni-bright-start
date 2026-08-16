@@ -440,7 +440,7 @@ export function ConstellationThree({ rows, rangeDays, classLabel }: Props) {
           </div>
         )}
         {needsL.length === 0 && darkL.length === 0 && (
-          <div className="text-sm text-muted-foreground">Everyone here has been seen recently. 🌞</div>
+          <div className="text-sm text-muted-foreground">{t("sky_allseen")} 🌞</div>
         )}
       </div>
 
