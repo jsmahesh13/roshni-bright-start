@@ -43,13 +43,13 @@ npm works too if you prefer it (`npm i && npm run dev`), but keep `bun.lock` as 
 
 ### Environment variables
 
-The app needs a Supabase project to talk to. Create a `.env` file in the project root with:
+The app needs a Supabase project to talk to, plus a Lovable AI gateway key for voice transcription and AI-assisted noticing structuring. Copy `.env.example` to `.env` and fill in your own values:
 
 ```sh
-VITE_SUPABASE_URL="https://<your-project>.supabase.co"
-VITE_SUPABASE_PUBLISHABLE_KEY="<your-publishable-key>"
-VITE_SUPABASE_PROJECT_ID="<your-project-id>"
+cp .env.example .env
 ```
+
+Both the plain and `VITE_`-prefixed Supabase variables are needed — the `VITE_` ones get inlined into the client bundle, the plain ones are read server-side. `.env` is gitignored; never commit real values.
 
 Other useful scripts:
 
