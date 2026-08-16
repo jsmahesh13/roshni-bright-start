@@ -7,7 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useProfile } from "@/hooks/useSession";
 import { useT } from "@/hooks/useLang";
 import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
-import { lastSeenLabel, sortSummaries, summarise } from "@/lib/roshni";
+import { lastSeenLabelT, sortSummaries, summarise } from "@/lib/roshni";
+import { fill } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/this-week")({
   head: () => ({
