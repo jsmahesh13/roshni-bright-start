@@ -15,7 +15,9 @@ import {
   detectValence,
   makeDrafts,
   scan,
+  suggestRewrite,
   type Draft,
+
 } from "@/lib/composer";
 import { FACETS, FACET_VAR, type Facet } from "@/lib/roshni";
 import { useT } from "@/hooks/useLang";
@@ -96,6 +98,7 @@ function NoticePage() {
     patch(d.id, {
       text,
       hits,
+      suggestion: suggestRewrite(text, hits),
       facet,
       valence: detectValence(text, facet),
       approved: hits.length === 0 && !!d.studentId,
@@ -107,6 +110,28 @@ function NoticePage() {
     });
     if (hits.length) toast(t("nc_stillflagged"));
   }
+
+  /** Accept the suggested neutral rewrite in one click. */
+  function useSuggestion(d: Draft) {
+    const text = d.suggestion!;
+    const hits = scan(text);
+    const facet = detectFacet(text);
+    patch(d.id, {
+      text,
+      hits,
+      suggestion: suggestRewrite(text, hits),
+      facet,
+      valence: detectValence(text, facet),
+      approved: hits.length === 0 && !!d.studentId,
+    });
+    setEditing((e) => {
+      const next = { ...e };
+      delete next[d.id];
+      return next;
+    });
+    toast.success(t("nc_used_suggestion"));
+  }
+
 
   const save = useMutation({
     mutationFn: async () => {
@@ -224,6 +249,24 @@ function NoticePage() {
                     <b>“{h.word}”</b> — {t(BLOCK_KEY[h.cat])}
                   </div>
                 ))}
+
+              {blocked && d.suggestion && (
+                <div className="mx-4 mb-3 rounded-lg border border-strength/40 bg-strength/8 px-3 py-2.5">
+                  <div className="text-[11px] font-semibold uppercase tracking-wide text-strength">
+                    {t("nc_suggest_title")}
+                  </div>
+                  <p className="mt-1 text-sm text-foreground">“{d.suggestion}”</p>
+                  <button
+                    type="button"
+                    onClick={() => useSuggestion(d)}
+                    className="mt-2 rounded-lg border border-strength/50 bg-card px-2.5 py-1 text-xs font-semibold text-strength hover:bg-strength/10"
+                  >
+                    {t("nc_use_this")}
+                  </button>
+                </div>
+              )}
+
+
 
               {!blocked && !d.studentId && (
                 <div className="mx-4 mb-3 rounded-lg bg-gold-soft px-3 py-2 text-xs text-foreground">

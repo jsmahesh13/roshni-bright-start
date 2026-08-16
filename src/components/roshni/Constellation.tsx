@@ -103,6 +103,13 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
     return g;
   }, [list]);
 
+  // The dashed boundary caption sits at the top of the outer ring; reserve that
+  // strip so no star's name can be printed underneath it.
+  const lblBox = useMemo(
+    () => ({ x1: cx - 165, x2: cx + 165, y1: cy - bDark - 30, y2: cy - bDark + 2 }),
+    [cx, cy, bDark],
+  );
+
   const stars = useMemo(() => {
     const out: {
       id: string;
@@ -112,6 +119,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       fill: string;
       glow: string;
       nameCol: string;
+      nameBottom: number;
       op: number;
       z: number;
       dx: number;
@@ -122,6 +130,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       first: string;
       tip: string[];
     }[] = [];
+
     let idx = 0;
     groups.forEach((arr, zi) => {
       const n = arr.length;
@@ -166,6 +175,11 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           z = -8;
         }
 
+        // Nudge the name clear of the boundary caption if it would land under it.
+        const nTop = y + sr / 2 + 3;
+        const collides =
+          x + 34 > lblBox.x1 && x - 34 < lblBox.x2 && nTop < lblBox.y2 && nTop + 13 > lblBox.y1;
+
         out.push({
           id: s.id,
           x,
@@ -174,7 +188,9 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
           fill,
           glow,
           nameCol,
+          nameBottom: collides ? -30 : -14,
           op: needs ? 1 : dark ? 0.92 + neglect * 0.08 : 1,
+
           z,
           dx: cx - x,
           dy: cy - y,
@@ -193,7 +209,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
       });
     });
     return out;
-  }, [groups, cx, cy, classLabel, zoneR]);
+  }, [groups, cx, cy, classLabel, zoneR, lblBox]);
 
   const needsL = list
     .filter((o) => o.m.days <= 42 && isNeeds(o.m))
@@ -264,7 +280,7 @@ export function Constellation({ rows, rangeDays, classLabel }: Props) {
                   <span className="star-beacon b2" aria-hidden />
                 </>
               )}
-              <span className="star-name" style={{ color: st.nameCol }}>
+              <span className="star-name" style={{ color: st.nameCol, bottom: st.nameBottom }}>
                 {st.first}
               </span>
             </button>

@@ -1,7 +1,8 @@
 import { useT } from "@/hooks/useLang";
 import { fill } from "@/lib/i18n";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+
 
 import { Button } from "@/components/ui/button";
 import { useProfile } from "@/hooks/useSession";
@@ -31,6 +32,16 @@ export function ObservationSummary({
   const { data: classes } = useQuery(classesQuery);
 
   const notes = useMemo(() => (allNotes ?? []).filter((n) => !n.retracted), [allNotes]);
+
+  // Lock the page behind the overlay so only the summary sheet scrolls.
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
 
   const recent = notes.filter((n) => Date.now() - new Date(n.created_at).getTime() < 180 * DAY_MS);
   const byDomain = DOMAIN_ORDER.map((d) => ({

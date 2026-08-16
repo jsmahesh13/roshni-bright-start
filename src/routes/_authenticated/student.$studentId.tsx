@@ -124,6 +124,11 @@ function StudentPage() {
   const strengths = notes.filter((n) => n.valence > 0);
   const concerns = notes.filter((n) => n.valence < 0);
   const actions = notes.filter((n) => n.valence === 0);
+  // One interleaved stream so a lopsided record never leaves an empty panel.
+  const stream = [...strengths, ...concerns].sort(
+    (a, b) => +new Date(b.created_at) - +new Date(a.created_at),
+  );
+
   const lastSeen = notes.length
     ? Math.min(...notes.map((n) => daysAgo(n.created_at)))
     : null;
@@ -253,20 +258,34 @@ function StudentPage() {
         </div>
       </section>
 
-      <div className="mt-5 grid gap-5 md:grid-cols-2">
-        <Column title={`▲ ${t("strengths")}`} count={strengths.length} accent="text-strength">
-          {strengths.map((n) => (
-            <Row key={n.id} n={n} />
+      <section className="card-paper mt-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border px-4 py-3">
+          <div>
+            <span className="text-sm font-semibold text-foreground">{t("sp_stream")}</span>{" "}
+            <span className="text-xs text-faint">{t("sp_stream_sub")}</span>
+          </div>
+          <div className="flex gap-3 text-sm font-semibold">
+            <span className="text-strength">▲ {strengths.length}</span>
+            <span className="text-concern">▼ {concerns.length}</span>
+          </div>
+        </div>
+        <div className="columns-1 gap-0 md:columns-2 md:gap-5 md:p-2">
+          {stream.map((n) => (
+            <div
+              key={n.id}
+              className={`mb-0 break-inside-avoid border-l-4 md:mb-2 md:rounded-lg md:border ${
+                n.valence > 0
+                  ? "border-l-strength bg-strength/6 md:border-strength/30"
+                  : "border-l-concern bg-concern/6 md:border-concern/30"
+              }`}
+            >
+              <Row n={n} />
+            </div>
           ))}
-          {strengths.length === 0 && <Empty text={t("sp_nothinghere")} />}
-        </Column>
-        <Column title={`▼ ${t("concerns")}`} count={concerns.length} accent="text-concern">
-          {concerns.map((n) => (
-            <Row key={n.id} n={n} />
-          ))}
-          {concerns.length === 0 && <Empty text={t("sp_nothinghere")} />}
-        </Column>
-      </div>
+          {stream.length === 0 && <Empty text={t("sp_nothinghere")} />}
+        </div>
+      </section>
+
 
       <section className="card-paper mt-5">
         <div className="border-b border-border px-4 py-3 text-sm font-semibold text-foreground">
@@ -298,26 +317,6 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Column({
-  title,
-  count,
-  accent,
-  children,
-}: {
-  title: string;
-  count: number;
-  accent: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="card-paper">
-      <div className={`border-b border-border px-4 py-3 text-sm font-semibold ${accent}`}>
-        {title} <span className="text-faint">· {count}</span>
-      </div>
-      {children}
-    </section>
-  );
-}
 
 function Empty({ text }: { text: string }) {
   return <div className="p-6 text-center text-sm text-muted-foreground">{text}</div>;
