@@ -37,12 +37,14 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
   const t = useT();
   const [ready, setReady] = useState(false);
+  const [signedInAs, setSignedInAs] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/this-week", replace: true });
+      setSignedInAs(data.user?.email ?? null);
     });
-  }, [navigate]);
+  }, []);
+
 
   useEffect(() => {
     seed()
