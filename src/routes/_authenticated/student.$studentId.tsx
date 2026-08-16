@@ -317,26 +317,6 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Column({
-  title,
-  count,
-  accent,
-  children,
-}: {
-  title: string;
-  count: number;
-  accent: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="card-paper">
-      <div className={`border-b border-border px-4 py-3 text-sm font-semibold ${accent}`}>
-        {title} <span className="text-faint">· {count}</span>
-      </div>
-      {children}
-    </section>
-  );
-}
 
 function Empty({ text }: { text: string }) {
   return <div className="p-6 text-center text-sm text-muted-foreground">{text}</div>;
