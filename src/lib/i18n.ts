@@ -324,7 +324,7 @@ export const DICTIONARY = {
   ft_links_h: {"en":"Project","hi":"परियोजना","kn":"ಯೋಜನೆ"},
   ft_source: {"en":"Source code","hi":"सोर्स कोड","kn":"ಮೂಲ ಕೋಡ್"},
   ft_screencast: {"en":"How we built it (screencast)","hi":"हमने इसे कैसे बनाया (स्क्रीनकास्ट)","kn":"ನಾವು ಇದನ್ನು ಹೇಗೆ ನಿರ್ಮಿಸಿದೆವು (ಸ್ಕ್ರೀನ್‌ಕಾಸ್ಟ್)"},
-  ft_contact: {"en":"Contact","hi":"संपर्क","kn":"ಸಂಪರ್ಕ"},
+  
   ft_demo: {"en":"Demo build · seeded records are fictional children.","hi":"डेमो बिल्ड · सीड किए गए रिकॉर्ड काल्पनिक बच्चों के हैं।","kn":"ಡೆಮೊ ಬಿಲ್ಡ್ · ಬಿತ್ತಿದ ದಾಖಲೆಗಳು ಕಾಲ್ಪನಿಕ ಮಕ್ಕಳವು."},
   ft_license: {"en":"MIT Licensed · open source","hi":"MIT लाइसेंस · ओपन सोर्स","kn":"MIT ಪರವಾನಗಿ · ಓಪನ್ ಸೋರ್ಸ್"},
   ft_soon: {"en":"link coming soon","hi":"लिंक जल्द ही","kn":"ಲಿಂಕ್ ಶೀಘ್ರದಲ್ಲೇ"},
