@@ -1,0 +1,1 @@
+DELETE FROM public.noticings WHERE text ILIKE '%QCPROBE%' OR text = 'Ananya helped a classmate with the board work today.';
