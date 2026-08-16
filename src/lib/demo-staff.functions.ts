@@ -35,16 +35,21 @@ export const ensureDemoStaff = createServerFn({ method: "POST" }).handler(async 
       userId = created.user.id;
     }
 
-    await supabaseAdmin.from("profiles").upsert(
-      {
+    // Insert only. Never upsert: a returning staff member's own profile
+    // (and therefore their class scope and their noticings) must never be
+    // rewritten by the demo seed on a later sign-in.
+    await supabaseAdmin
+      .from("profiles")
+      .insert({
         id: userId,
         name: staff.name,
         email: staff.email,
         role: staff.role,
         class_id: staff.className ? (classIdByName.get(staff.className) ?? null) : null,
-      },
-      { onConflict: "id" },
-    );
+      })
+      .select("id")
+      .maybeSingle();
+
   }
 
   return { ok: true };

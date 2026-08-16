@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 
@@ -34,6 +34,11 @@ export function RegisterForm() {
   const [classId, setClassId] = useState<string>("");
   const [codeError, setCodeError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Until React has hydrated, a click on a submit button posts the form
+  // natively and the account is never created. Keep it disabled till then.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
 
   async function checkCode() {
     if (!code.trim()) return;
@@ -205,9 +210,10 @@ export function RegisterForm() {
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={busy}>
+      <Button type="submit" className="w-full" disabled={busy || !hydrated}>
         {busy ? t("su_creating") : t("su_create")}
       </Button>
+
 
       <p className="text-xs text-faint">{t("su_scope")}</p>
       <p className="text-xs text-faint">{t("su_governance")}</p>
