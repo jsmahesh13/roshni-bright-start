@@ -22,6 +22,8 @@ import {
 import { FACETS, FACET_VAR, type Facet } from "@/lib/roshni";
 import { useT } from "@/hooks/useLang";
 import { fill } from "@/lib/i18n";
+import { VoiceCapture } from "@/components/roshni/VoiceCapture";
+
 
 export const Route = createFileRoute("/_authenticated/notice")({
   validateSearch: (search: Record<string, unknown>): { draft?: string } =>
