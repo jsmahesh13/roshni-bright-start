@@ -22,6 +22,8 @@ import {
 import { FACETS, FACET_VAR, type Facet } from "@/lib/roshni";
 import { useT } from "@/hooks/useLang";
 import { fill } from "@/lib/i18n";
+import { VoiceCapture } from "@/components/roshni/VoiceCapture";
+
 
 export const Route = createFileRoute("/_authenticated/notice")({
   validateSearch: (search: Record<string, unknown>): { draft?: string } =>
@@ -184,6 +186,14 @@ function NoticePage() {
           </Button>
           <span className="text-xs text-faint">{fill(t("nc_chars"), { n: raw.length })}</span>
         </div>
+        <div className="mt-3 border-t border-dashed border-border pt-3">
+          <VoiceCapture
+            onTranscript={(text) =>
+              setRaw((prev) => (prev.trim() ? `${prev.trimEnd()} ${text}` : text))
+            }
+          />
+        </div>
+
       </div>
 
       <div className="mt-4 rounded-xl border border-strength/40 bg-strength/8 p-4 text-sm text-foreground">
