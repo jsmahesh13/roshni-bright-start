@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProfile, useUser } from "@/hooks/useSession";
 import { classesQuery, studentsQuery } from "@/lib/queries";
 import {
-  BLOCK_MSG,
+  BLOCK_KEY,
   EXAMPLE_TEXT,
   detectFacet,
   detectValence,
@@ -19,6 +19,7 @@ import {
 } from "@/lib/composer";
 import { FACETS, FACET_VAR, type Facet } from "@/lib/roshni";
 import { useT } from "@/hooks/useLang";
+import { fill } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/notice")({
   validateSearch: (search: Record<string, unknown>): { draft?: string } =>
@@ -61,8 +62,8 @@ function NoticePage() {
   );
   const studentLabel = (s: (typeof scope)[number]) =>
     classId === null && classNameById[s.class_id]
-      ? `${s.name} — ${classNameById[s.class_id]} · Roll ${s.roll}`
-      : `${s.name} — Roll ${s.roll}`;
+      ? `${s.name} — ${classNameById[s.class_id]} · ${t("nc_roll")} ${s.roll}`
+      : `${s.name} — ${t("nc_roll")} ${s.roll}`;
 
   const [raw, setRaw] = useState("");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -77,7 +78,7 @@ function NoticePage() {
 
   function structure() {
     if (!raw.trim()) {
-      toast("Nothing to structure");
+      toast(t("nc_nothing_structure"));
       return;
     }
     setEditing({});
@@ -104,13 +105,13 @@ function NoticePage() {
       delete next[d.id];
       return next;
     });
-    if (hits.length) toast("Still flagged — describe what you saw.");
+    if (hits.length) toast(t("nc_stillflagged"));
   }
 
   const save = useMutation({
     mutationFn: async () => {
       const ok = drafts.filter((d) => d.approved && d.studentId && d.hits.length === 0);
-      if (!ok.length) throw new Error("Nothing approved yet");
+      if (!ok.length) throw new Error(t("nc_nothing_approved"));
       const { error } = await supabase.from("noticings").insert(
         ok.map((d) => ({
           student_id: d.studentId!,
@@ -129,7 +130,7 @@ function NoticePage() {
       setRaw("");
       void queryClient.invalidateQueries({ queryKey: ["noticings"] });
       void queryClient.invalidateQueries({ queryKey: ["student-noticings"] });
-      toast.success(`${n} noticing${n > 1 ? "s" : ""} saved`);
+      toast.success(fill(t("nc_saved"), { n }));
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -140,8 +141,7 @@ function NoticePage() {
     <div className="mx-auto max-w-3xl px-5 py-8">
       <h1 className="hand text-5xl text-foreground">{t("h_notice")}</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Type it the way you'd say it. Roshni will split it into clean, dated observations —
-        nothing is saved until you approve every word.
+        {t("nc_sub")}
       </p>
 
       <div className="card-paper mt-6 p-5">
@@ -149,7 +149,7 @@ function NoticePage() {
           value={raw}
           onChange={(e) => setRaw(e.target.value)}
           rows={6}
-          placeholder="Fatima was quiet all morning, one-word answers. Arjun sat alone at lunch again…"
+          placeholder={t("nc_placeholder")}
           className="resize-y bg-background text-[15px]"
         />
         <div className="mt-3 flex flex-wrap items-center gap-3">
@@ -157,20 +157,18 @@ function NoticePage() {
           <Button variant="outline" className="bg-card" onClick={() => setRaw(EXAMPLE_TEXT)}>
             {t("useexample")}
           </Button>
-          <span className="text-xs text-faint">{raw.length} chars</span>
+          <span className="text-xs text-faint">{fill(t("nc_chars"), { n: raw.length })}</span>
         </div>
       </div>
 
       <div className="mt-4 rounded-xl border border-strength/40 bg-strength/8 p-4 text-sm text-foreground">
-        <b>The one rule: observation, not interpretation.</b> Describe what a child did, and when.
-        Roshni will not save a character label, a diagnosis, a theory about a home, an identity
-        remark, or medical detail.
+        <b>{t("nc_rule_b")}</b> {t("nc_rule_rest")}
       </div>
 
       <div className="mt-6 space-y-4">
         {drafts.length === 0 && (
           <div className="card-paper p-8 text-center text-sm text-muted-foreground">
-            Nothing parsed yet.
+            {t("nc_nothingparsed")}
           </div>
         )}
 
@@ -187,7 +185,9 @@ function NoticePage() {
                     blocked ? "border-concern text-concern" : "border-border text-muted-foreground"
                   }`}
                 >
-                  {blocked ? "Needs a rewrite" : `Noticing ${String(d.id + 1).padStart(2, "0")}`}
+                  {blocked
+                    ? t("nc_needsrewrite")
+                    : fill(t("nc_noticing_n"), { n: String(d.id + 1).padStart(2, "0") })}
                 </span>
                 {!blocked && (
                   <label className="flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
@@ -197,7 +197,7 @@ function NoticePage() {
                       checked={d.approved}
                       onChange={(e) => patch(d.id, { approved: e.target.checked })}
                     />
-                    Approve
+                    {t("nc_approve")}
                   </label>
                 )}
               </div>
@@ -221,13 +221,13 @@ function NoticePage() {
                     key={h.word}
                     className="mx-4 mb-3 rounded-lg bg-concern/10 px-3 py-2 text-xs text-foreground"
                   >
-                    <b>“{h.word}”</b> — {BLOCK_MSG[h.cat]}
+                    <b>“{h.word}”</b> — {t(BLOCK_KEY[h.cat])}
                   </div>
                 ))}
 
               {!blocked && !d.studentId && (
                 <div className="mx-4 mb-3 rounded-lg bg-gold-soft px-3 py-2 text-xs text-foreground">
-                  No student matched. Pick one below, or add a first name.
+                  {t("nc_nostudent")}
                 </div>
               )}
 
@@ -242,7 +242,7 @@ function NoticePage() {
                     })
                   }
                 >
-                  <option value="">— student —</option>
+                  <option value="">{t("nc_studentopt")}</option>
                   {scope.map((s) => (
                     <option key={s.id} value={s.id}>
                       {studentLabel(s)}
@@ -260,7 +260,7 @@ function NoticePage() {
                 >
                   {FACETS.map((f) => (
                     <option key={f.key} value={f.key}>
-                      {f.label}
+                      {t(`f_${f.key}`)}
                     </option>
                   ))}
                 </select>
@@ -270,7 +270,7 @@ function NoticePage() {
                     className="h-2 w-2 rounded-full"
                     style={{ backgroundColor: FACET_VAR[d.facet] }}
                   />
-                  {d.valence > 0 ? "Strength" : d.valence < 0 ? "Concern" : "Neutral"}
+                  {d.valence > 0 ? t("nc_strength") : d.valence < 0 ? t("nc_concern") : t("nc_neutral")}
                 </span>
 
                 {blocked && (
@@ -283,8 +283,8 @@ function NoticePage() {
                     }
                   >
                     {editing[d.id] !== undefined
-                      ? "Recheck"
-                      : "I've rewritten it — recheck"}
+                      ? t("nc_recheck")
+                      : t("nc_rewritten")}
                   </button>
                 )}
               </div>
@@ -299,14 +299,13 @@ function NoticePage() {
             {t("btn_save")}
           </Button>
           <Button asChild variant="outline" className="bg-card">
-            <Link to="/class">Open the register</Link>
+            <Link to="/class">{t("btn_openregister")}</Link>
           </Button>
         </div>
       )}
 
       <p className="mt-6 text-xs text-faint">
-        Raw noticings are removed automatically after 24 months. Roshni never speaks to a child and
-        never holds a diagnosis.
+        {t("nc_retention")}
       </p>
     </div>
   );

@@ -45,6 +45,15 @@ export const BLOCK_MSG: Record<BlockCategory, string> = {
   medical: "Health and medical detail is out of scope by design. That belongs with the school office.",
 };
 
+/** Translation keys for the same messages, used by the composer UI. */
+export const BLOCK_KEY: Record<BlockCategory, string> = {
+  clinical: "block_clinical",
+  character: "block_character",
+  home: "block_home",
+  identity: "block_identity",
+  medical: "block_medical",
+};
+
 const FKEY: Record<Facet, string[]> = {
   strength: [
     "helped", "explained", "presented", "volunteered", "stayed back", "unprompted",

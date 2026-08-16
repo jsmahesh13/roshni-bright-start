@@ -27,10 +27,10 @@ export const Route = createFileRoute("/")({
 });
 
 const STATS = [
-  { big: "30–35 : 1", key: "stat1" },
-  { big: "~40 lakh", key: "stat2" },
-  { big: "1 in 7", key: "stat3" },
-  { big: "~0", key: "stat4" },
+  { bigKey: "stat1v", key: "stat1" },
+  { bigKey: "stat2v", key: "stat2" },
+  { bigKey: "stat3v", key: "stat3" },
+  { bigKey: "stat4v", key: "stat4" },
 ];
 
 const STEPS = [
@@ -103,7 +103,7 @@ function Landing() {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {STATS.map((s) => (
               <div key={s.key} className="card-paper p-6">
-                <div className="hand text-4xl text-gold-deep">{s.big}</div>
+                <div className="hand text-4xl text-gold-deep">{t(s.bigKey)}</div>
                 <div className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {t(s.key)}
                 </div>

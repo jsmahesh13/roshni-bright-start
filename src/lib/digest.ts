@@ -9,6 +9,8 @@ export interface DigestItem {
   studentId: string;
   studentName: string;
   tag: string;
+  /** i18n key for the tag label. */
+  tagKey: string;
   question: string;
   evidence: string[];
 }
@@ -54,6 +56,7 @@ export function buildDigest(
       studentId: quiet.s.id,
       studentName: quiet.s.name,
       tag: "The quiet one",
+      tagKey: "tag_quiet",
       question: `You haven't written anything about ${quiet.s.name} in ${
         quiet.d > 900 ? "this record at all" : `${quiet.d} days`
       }. Is that because there's nothing to say, or because they're easy to miss?`,
@@ -81,6 +84,7 @@ export function buildDigest(
       studentId: lop.s.id,
       studentName: lop.s.name,
       tag: "Lopsided",
+      tagKey: "tag_lopsided",
       question: `${lop.s.name}'s record is ${Math.round(
         lop.ratio * 100,
       )}% concern. When did anyone last write down something they did well?`,
@@ -108,6 +112,7 @@ export function buildDigest(
       studentId: cluster.s.id,
       studentName: cluster.s.name,
       tag: "A cluster",
+      tagKey: "tag_cluster",
       question: `Three weeks, ${cluster.ns.length} concerns for ${cluster.s.name}, across ${facets.join(
         " and ",
       )}. Is this a stretch of bad weeks or a change of direction?`,
@@ -134,6 +139,7 @@ export function buildDigest(
       studentId: shine.s.id,
       studentName: shine.s.name,
       tag: "Worth sending",
+      tagKey: "tag_worth",
       question: `${shine.s.name} has had ${shine.ns.length} good weeks in a row that nobody outside this room knows about. Worth a note home?`,
       evidence: shine.ns
         .slice()

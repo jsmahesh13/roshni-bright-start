@@ -8,6 +8,8 @@
  *    wrote anything about this child.
  */
 
+import { fill } from "@/lib/i18n";
+
 export type Facet = "engagement" | "social" | "academic" | "affect" | "strength" | "action";
 
 export const FACETS: { key: Facet; label: string; className: string; dot: string }[] = [
@@ -130,6 +132,20 @@ export function lastSeenLabel(days: number | null): string {
   const months = Math.round(days / 30);
   if (months < 24) return `${months} month${months === 1 ? "" : "s"} ago`;
   return "over 2 years ago";
+}
+
+/** Localized variant — pass the t() from useT(). */
+export function lastSeenLabelT(
+  days: number | null,
+  t: (key: string) => string,
+): string {
+  if (days === null) return t("ls_never");
+  if (days === 0) return t("ls_today");
+  if (days === 1) return t("ls_yesterday");
+  if (days < 30) return fill(t("ls_days"), { n: days });
+  const months = Math.round(days / 30);
+  if (months < 24) return fill(t(months === 1 ? "ls_month" : "ls_months"), { n: months });
+  return t("ls_over2y");
 }
 
 export type SortKey = "needs" | "fading" | "most" | "roll";
