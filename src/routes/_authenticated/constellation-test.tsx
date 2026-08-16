@@ -53,11 +53,11 @@ function ConstellationTestPage() {
     <div className="mx-auto max-w-6xl px-5 py-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="hand text-5xl text-foreground">Constellation, in 3D</h1>
+          <h1 className="hand text-5xl text-foreground">{t("ct_title")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Test page — drag to orbit the class, scroll to zoom. Not linked from the sidebar.{" "}
+            {t("ct_sub")}{" "}
             <Link to="/class" className="underline hover:text-foreground">
-              Back to the class register
+              {t("ct_back")}
             </Link>
           </p>
         </div>
@@ -83,12 +83,12 @@ function ConstellationTestPage() {
       </div>
 
       <div className="mt-4 flex items-center gap-2">
-        <span className="hand text-lg text-faint">Over</span>
+        <span className="hand text-lg text-faint">{t("over")}</span>
         <div className="flex flex-wrap gap-1 rounded-xl border border-border bg-card p-1">
           {([
-            { d: 90, label: "Term" },
-            { d: 365, label: "Year" },
-            { d: 730, label: "All" },
+            { d: 90, label: t("term") },
+            { d: 365, label: t("year") },
+            { d: 730, label: t("all") },
           ] as const).map((r) => (
             <button
               key={r.d}
@@ -110,7 +110,7 @@ function ConstellationTestPage() {
         <ConstellationThree rows={rows} rangeDays={range} classLabel={className} />
       ) : (
         <div className="card-paper mt-5 p-10 text-center text-sm text-muted-foreground">
-          No class assigned yet.
+          {t("ct_noclass")}
         </div>
       )}
     </div>
