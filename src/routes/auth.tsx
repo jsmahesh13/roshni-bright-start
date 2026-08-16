@@ -40,6 +40,11 @@ function AuthPage() {
   const t = useT();
   const [ready, setReady] = useState(false);
   const [signedInAs, setSignedInAs] = useState<string | null>(null);
+  // A click before React hydrates submits the form natively (page reloads to
+  // /auth? and no sign-in happens). Keep sign-in disabled until hydrated.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -149,7 +154,7 @@ function AuthPage() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={busy}>
+                <Button type="submit" className="w-full" disabled={busy || !hydrated}>
                   {busy ? "…" : t("enter")}
                 </Button>
               </form>
@@ -173,7 +178,7 @@ function AuthPage() {
                 <li key={s.email}>
                   <button
                     type="button"
-                    disabled={busy}
+                    disabled={busy || !hydrated}
                     onClick={() => {
                       setEmail(s.email);
                       setPassword(s.password);

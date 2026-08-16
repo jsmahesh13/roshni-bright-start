@@ -186,28 +186,43 @@ function NoticePage() {
     mutationFn: async () => {
       const ok = drafts.filter((d) => d.approved && d.studentId && d.hits.length === 0);
       if (!ok.length) throw new Error(t("nc_nothing_approved"));
-      const { error } = await supabase.from("noticings").insert(
-        ok.map((d) => ({
-          student_id: d.studentId!,
-          author_id: user!.id,
-          facet: d.facet,
-          valence: d.valence,
-          text: d.text,
-          retracted: false,
-        })),
-      );
+      if (!user?.id) throw new Error("Not signed in");
+      // Insert and read the rows back: if RLS silently filters a row, or the
+      // write never lands, we must not clear the composer as if it saved.
+      const { data, error } = await supabase
+        .from("noticings")
+        .insert(
+          ok.map((d) => ({
+            student_id: d.studentId!,
+            author_id: user.id,
+            facet: d.facet,
+            valence: d.valence,
+            text: d.text,
+            retracted: false,
+            created_at: new Date().toISOString(),
+          })),
+        )
+        .select("id");
       if (error) throw error;
-      return ok.length;
+      if (!data || data.length !== ok.length) {
+        throw new Error("The save did not complete. Nothing was recorded — please try again.");
+      }
+      return data.length;
     },
-    onSuccess: (n) => {
+    onSuccess: async (n) => {
       setDrafts([]);
       setRaw("");
-      void queryClient.invalidateQueries({ queryKey: ["noticings"] });
-      void queryClient.invalidateQueries({ queryKey: ["student-noticings"] });
+      // Refetch (not just mark stale) so the register, student page,
+      // constellation and digest show the new noticing immediately.
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["noticings"], refetchType: "all" }),
+        queryClient.invalidateQueries({ queryKey: ["student-noticings"], refetchType: "all" }),
+      ]);
       toast.success(fill(t("nc_saved"), { n }));
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
 
   const savable = drafts.some((d) => d.hits.length === 0);
 
