@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 
 import { supabase } from "@/integrations/supabase/client";
-import type { Profile } from "@/lib/roshni";
+import type { TeacherProfile } from "@/lib/roshni";
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
@@ -29,14 +29,18 @@ export function useProfile() {
   return useQuery({
     queryKey: ["profile", user?.id],
     enabled: !!user?.id,
-    queryFn: async (): Promise<Profile | null> => {
+    queryFn: async (): Promise<TeacherProfile | null> => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, name, email, role, class_id")
+        .select("id, name, email, role, class_id, school_id, grade, section, schools(id, name)")
         .eq("id", user!.id)
         .maybeSingle();
       if (error) throw error;
-      return data as Profile | null;
+      if (!data) return null;
+      const { schools, ...rest } = data as typeof data & {
+        schools: { id: string; name: string } | null;
+      };
+      return { ...(rest as unknown as TeacherProfile), school: schools ?? null };
     },
   });
 }

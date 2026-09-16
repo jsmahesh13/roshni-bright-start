@@ -58,11 +58,21 @@ export interface Noticing {
   created_at: string;
 }
 
+export interface School {
+  id: string;
+  name: string;
+  code: string;
+  is_sandbox?: boolean;
+}
+
 export interface Student {
   id: string;
   class_id: string;
   name: string;
   roll: number;
+  school_id?: string;
+  grade?: string;
+  section?: string;
 }
 
 export interface Profile {
@@ -71,7 +81,18 @@ export interface Profile {
   email: string | null;
   role: "teacher" | "admin";
   class_id: string | null;
+  school_id?: string | null;
+  grade?: string | null;
+  section?: string | null;
 }
+
+/** The signed-in teacher plus the school they belong to. */
+export interface TeacherProfile extends Profile {
+  school?: { id: string; name: string } | null;
+}
+
+export type { CSVStudentRow } from "@/lib/csv";
+
 
 /** Raw noticings are kept for 24 months, then forgotten on purpose. */
 export const RETENTION_DAYS = 730;
