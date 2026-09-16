@@ -14,7 +14,6 @@ import { useT } from "@/hooks/useLang";
 import { classesQuery, studentsQuery } from "@/lib/queries";
 import { CSV_TEMPLATE, parseStudentCSV, type ParsedRow } from "@/lib/csv";
 import { fill } from "@/lib/i18n";
-import { useLang } from "@/hooks/useLang";
 
 export const Route = createFileRoute("/_authenticated/roster")({
   component: RosterPage,
@@ -24,7 +23,6 @@ export const Route = createFileRoute("/_authenticated/roster")({
 
 function RosterPage() {
   const t = useT();
-  const { lang } = useLang();
   const queryClient = useQueryClient();
   const { data: profile } = useProfile();
   const { data: classes = [] } = useQuery(classesQuery);
@@ -297,7 +295,6 @@ function RosterPage() {
             )}
           </>
         )}
-        <span className="sr-only">{lang}</span>
       </div>
     </AppShell>
   );
