@@ -124,7 +124,7 @@ function RosterPage() {
   const bad = (rows ?? []).filter((r) => r.error);
 
   return (
-    <AppShell>
+    <>
       <div className="mx-auto w-full max-w-3xl space-y-6 p-4 sm:p-6">
         <header className="space-y-1">
           <h1 className="font-display text-3xl text-foreground">{t("ro_title")}</h1>
@@ -301,6 +301,6 @@ function RosterPage() {
           </>
         )}
       </div>
-    </AppShell>
+    </>
   );
 }

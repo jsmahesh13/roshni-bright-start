@@ -84,7 +84,9 @@ function PreviewPage() {
                 <span className="min-w-0 flex-1 truncate text-[15px] text-foreground">
                   {student.name}
                 </span>
-                <NoticingStrip noticings={summary.noticings} />
+                <div className="w-[120px] shrink-0 sm:w-[240px]">
+                  <NoticingStrip noticings={summary.noticings} />
+                </div>
               </li>
             ))}
           </ul>
