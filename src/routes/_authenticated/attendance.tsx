@@ -174,7 +174,7 @@ function AttendancePage() {
               mode="attendance"
               big
               recordKey="at_record"
-              hintKey="at_voice_help"
+              hintKey=""
               onTranscript={applyTranscript}
             />
           </div>
