@@ -21,7 +21,7 @@ export const SAMPLE_STUDENTS: Student[] = [
   { id: "s2", class_id: SAMPLE_CLASS.id, name: "Suresh Patil", roll: 7, grade: "6", section: "B" },
   { id: "s3", class_id: SAMPLE_CLASS.id, name: "Nandini Shetty", roll: 12, grade: "6", section: "B" },
   { id: "s4", class_id: SAMPLE_CLASS.id, name: "Imran Bagewadi", roll: 18, grade: "6", section: "B" },
-  { id: "s5", class_id: SAMPLE_CLASS.id, name: "Kavya Hегde".replace("е", "e"), roll: 21, grade: "6", section: "B" },
+  { id: "s5", class_id: SAMPLE_CLASS.id, name: "Kavya Hegde", roll: 21, grade: "6", section: "B" },
 ];
 
 interface SampleNoticing extends Noticing {
