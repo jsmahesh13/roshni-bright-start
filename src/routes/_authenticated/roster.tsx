@@ -17,8 +17,8 @@ import { fill } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/roster")({
   component: RosterPage,
-  errorComponent: () => <AppShell><p className="p-6">…</p></AppShell>,
-  notFoundComponent: () => <AppShell><p className="p-6">…</p></AppShell>,
+  errorComponent: () => <p className="p-6">…</p>,
+  notFoundComponent: () => <p className="p-6">…</p>,
 });
 
 function RosterPage() {
