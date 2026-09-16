@@ -166,44 +166,62 @@ function AuthPage() {
         </div>
 
         <div>
-          <div className="sticky-note p-6">
-            <h2 className="hand text-3xl text-foreground">{t("au_tryas")}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {t("orstaff")}
-            </p>
-            <ul className="mt-5 space-y-3">
-              {DEMO_STAFF.map((s) => (
-                <li key={s.email}>
-                  <button
-                    type="button"
-                    disabled={busy || !hydrated}
-                    onClick={() => {
-                      setEmail(s.email);
-                      setPassword(s.password);
-                      void signIn(s.email, s.password);
-                    }}
-                    className="w-full rounded-xl border border-border bg-card p-4 text-left transition-shadow hover:shadow-lift focus:outline-none focus:ring-2 focus:ring-ring"
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <div>
-                        <div className="font-semibold text-foreground">{s.name}</div>
-                        <div className="text-sm text-muted-foreground">{s.blurb}</div>
-                      </div>
-                      <span className="hand shrink-0 text-xl text-gold-deep">
-                        {s.role === "admin" ? t("au_head") : (s.className ?? "")}
-                      </span>
-                    </div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 text-xs text-faint">
-              {t("au_demopw")}{" "}
-              <span className="font-mono">{DEMO_PASSWORD}</span>.{" "}
-              {ready ? t("demonote") : "…"}
-            </p>
+          <div className="rounded-2xl border border-dashed border-border p-5">
+            <p className="text-sm text-muted-foreground">{t("au_demoquiet")}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button asChild variant="outline" size="sm" className="bg-card">
+                <Link to="/preview">{t("seehow")}</Link>
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowDemo((v) => !v)}
+              >
+                {showDemo ? t("au_hidedemo") : t("au_showdemo")}
+              </Button>
+            </div>
+
+            {showDemo && (
+              <>
+                <h2 className="hand mt-5 text-2xl text-foreground">{t("au_tryas")}</h2>
+                <p className="mt-1 text-sm text-muted-foreground">{t("orstaff")}</p>
+                <ul className="mt-4 space-y-3">
+                  {DEMO_STAFF.map((s) => (
+                    <li key={s.email}>
+                      <button
+                        type="button"
+                        disabled={busy || !hydrated}
+                        onClick={() => {
+                          setEmail(s.email);
+                          setPassword(s.password);
+                          void signIn(s.email, s.password);
+                        }}
+                        className="w-full rounded-xl border border-border bg-card p-4 text-left transition-shadow hover:shadow-lift focus:outline-none focus:ring-2 focus:ring-ring"
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <div>
+                            <div className="font-semibold text-foreground">{s.name}</div>
+                            <div className="text-sm text-muted-foreground">{s.blurb}</div>
+                          </div>
+                          <span className="hand shrink-0 text-xl text-gold-deep">
+                            {s.role === "admin" ? t("au_head") : (s.className ?? "")}
+                          </span>
+                        </div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-4 text-xs text-faint">
+                  {t("au_demopw")}{" "}
+                  <span className="font-mono">{DEMO_PASSWORD}</span>.{" "}
+                  {ready ? t("demonote") : "…"}
+                </p>
+              </>
+            )}
           </div>
         </div>
+
       </main>
     </div>
   );
