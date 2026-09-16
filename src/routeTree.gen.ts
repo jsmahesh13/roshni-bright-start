@@ -16,6 +16,7 @@ import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authentic
 import { Route as AuthenticatedClassRouteImport } from './routes/_authenticated/class'
 import { Route as AuthenticatedConstellationTestRouteImport } from './routes/_authenticated/constellation-test'
 import { Route as AuthenticatedNoticeRouteImport } from './routes/_authenticated/notice'
+import { Route as AuthenticatedRosterRouteImport } from './routes/_authenticated/roster'
 import { Route as AuthenticatedSchoolRouteImport } from './routes/_authenticated/school'
 import { Route as AuthenticatedThisWeekRouteImport } from './routes/_authenticated/this-week'
 import { Route as AuthenticatedStudentStudentIdRouteImport } from './routes/_authenticated/student.$studentId'
@@ -55,6 +56,11 @@ const AuthenticatedNoticeRoute = AuthenticatedNoticeRouteImport.update({
   path: '/notice',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRosterRoute = AuthenticatedRosterRouteImport.update({
+  id: '/roster',
+  path: '/roster',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSchoolRoute = AuthenticatedSchoolRouteImport.update({
   id: '/school',
   path: '/school',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/class': typeof AuthenticatedClassRoute
   '/constellation-test': typeof AuthenticatedConstellationTestRoute
   '/notice': typeof AuthenticatedNoticeRoute
+  '/roster': typeof AuthenticatedRosterRoute
   '/school': typeof AuthenticatedSchoolRoute
   '/this-week': typeof AuthenticatedThisWeekRoute
   '/student/$studentId': typeof AuthenticatedStudentStudentIdRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/class': typeof AuthenticatedClassRoute
   '/constellation-test': typeof AuthenticatedConstellationTestRoute
   '/notice': typeof AuthenticatedNoticeRoute
+  '/roster': typeof AuthenticatedRosterRoute
   '/school': typeof AuthenticatedSchoolRoute
   '/this-week': typeof AuthenticatedThisWeekRoute
   '/student/$studentId': typeof AuthenticatedStudentStudentIdRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/_authenticated/class': typeof AuthenticatedClassRoute
   '/_authenticated/constellation-test': typeof AuthenticatedConstellationTestRoute
   '/_authenticated/notice': typeof AuthenticatedNoticeRoute
+  '/_authenticated/roster': typeof AuthenticatedRosterRoute
   '/_authenticated/school': typeof AuthenticatedSchoolRoute
   '/_authenticated/this-week': typeof AuthenticatedThisWeekRoute
   '/_authenticated/student/$studentId': typeof AuthenticatedStudentStudentIdRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/class'
     | '/constellation-test'
     | '/notice'
+    | '/roster'
     | '/school'
     | '/this-week'
     | '/student/$studentId'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/class'
     | '/constellation-test'
     | '/notice'
+    | '/roster'
     | '/school'
     | '/this-week'
     | '/student/$studentId'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/_authenticated/class'
     | '/_authenticated/constellation-test'
     | '/_authenticated/notice'
+    | '/_authenticated/roster'
     | '/_authenticated/school'
     | '/_authenticated/this-week'
     | '/_authenticated/student/$studentId'
@@ -201,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNoticeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/roster': {
+      id: '/_authenticated/roster'
+      path: '/roster'
+      fullPath: '/roster'
+      preLoaderRoute: typeof AuthenticatedRosterRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/school': {
       id: '/_authenticated/school'
       path: '/school'
@@ -230,6 +249,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedClassRoute: typeof AuthenticatedClassRoute
   AuthenticatedConstellationTestRoute: typeof AuthenticatedConstellationTestRoute
   AuthenticatedNoticeRoute: typeof AuthenticatedNoticeRoute
+  AuthenticatedRosterRoute: typeof AuthenticatedRosterRoute
   AuthenticatedSchoolRoute: typeof AuthenticatedSchoolRoute
   AuthenticatedThisWeekRoute: typeof AuthenticatedThisWeekRoute
   AuthenticatedStudentStudentIdRoute: typeof AuthenticatedStudentStudentIdRoute
@@ -240,6 +260,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClassRoute: AuthenticatedClassRoute,
   AuthenticatedConstellationTestRoute: AuthenticatedConstellationTestRoute,
   AuthenticatedNoticeRoute: AuthenticatedNoticeRoute,
+  AuthenticatedRosterRoute: AuthenticatedRosterRoute,
   AuthenticatedSchoolRoute: AuthenticatedSchoolRoute,
   AuthenticatedThisWeekRoute: AuthenticatedThisWeekRoute,
   AuthenticatedStudentStudentIdRoute: AuthenticatedStudentStudentIdRoute,
