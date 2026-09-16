@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
-import { CalendarDays, PenLine, Users, Building2, LogOut, Menu, X } from "lucide-react";
+import { CalendarDays, PenLine, Users, Building2, ClipboardCheck, LogOut, Menu, X } from "lucide-react";
 
 import { WordmarkLink } from "@/components/roshni/SunLogo";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,8 @@ export function AppShell({ children }: { children: ReactNode }) {
     { to: "/this-week", label: t("nav_home"), icon: CalendarDays },
     { to: "/notice", label: t("nav_notice"), icon: PenLine },
     { to: "/class", label: t("nav_class"), icon: Users },
+    { to: "/attendance", label: t("nav_attendance"), icon: ClipboardCheck },
+
     ...(profile?.role === "admin"
       ? [{ to: "/school", label: t("nav_school"), icon: Building2 as typeof Users }]
       : []),

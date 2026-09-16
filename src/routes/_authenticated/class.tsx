@@ -8,8 +8,10 @@ import { NoticingStrip } from "@/components/roshni/NoticingStrip";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProfile } from "@/hooks/useSession";
-import { classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
+import { attendanceForDateQuery, classesQuery, noticingsQuery, studentsQuery } from "@/lib/queries";
+import { todayISO } from "@/lib/attendance";
 import { fill } from "@/lib/i18n";
+
 import {
   FACETS,
   SORTS,
@@ -93,6 +95,9 @@ function ClassRegister() {
 
   const needsCount = rows.filter((r) => r.needsYou).length;
   const fadingCount = rows.filter((r) => r.fading).length;
+  const { data: todayAttendance } = useQuery(attendanceForDateQuery(activeClassId, todayISO()));
+  const todayRows = todayAttendance ?? [];
+
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-8">
@@ -124,6 +129,22 @@ function ClassRegister() {
           </div>
         )}
       </header>
+
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card px-4 py-3 shadow-sm">
+        <p className="text-sm text-muted-foreground">
+          <span className="hand mr-2 text-lg text-faint">{t("at_today")}</span>
+          {todayRows.length > 0
+            ? fill(t("at_summary"), {
+                p: todayRows.filter((r) => r.status === "present").length,
+                a: todayRows.filter((r) => r.status === "absent").length,
+              })
+            : t("at_nottaken")}
+        </p>
+        <Button asChild variant="outline" className="bg-card">
+          <Link to="/attendance">{t("at_take")}</Link>
+        </Button>
+      </div>
+
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap gap-1 rounded-xl border border-border bg-card p-1">

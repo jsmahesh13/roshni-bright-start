@@ -403,6 +403,37 @@ export const DICTIONARY = {
   ct_sub: {"en":"Test page — drag to orbit the class, scroll to zoom. Not linked from the sidebar.","hi":"परीक्षण पृष्ठ — कक्षा को घुमाने के लिए खींचें, ज़ूम के लिए स्क्रॉल करें। साइडबार से जुड़ा नहीं है।","kn":"ಪರೀಕ್ಷಾ ಪುಟ — ತರಗತಿಯನ್ನು ತಿರುಗಿಸಲು ಎಳೆಯಿರಿ, ಜೂಮ್‌ಗೆ ಸ್ಕ್ರಾಲ್ ಮಾಡಿ. ಸೈಡ್‌ಬಾರ್‌ನಿಂದ ಜೋಡಿಸಿಲ್ಲ."},
   ct_back: {"en":"Back to the class register","hi":"कक्षा रजिस्टर पर वापस","kn":"ತರಗತಿ ರಿಜಿಸ್ಟರ್‌ಗೆ ಹಿಂತಿರುಗಿ"},
   ct_noclass: {"en":"No class assigned yet.","hi":"अभी कोई कक्षा नहीं सौंपी गई।","kn":"ಇನ್ನೂ ಯಾವ ತರಗತಿಯನ್ನೂ ನಿಯೋಜಿಸಿಲ್ಲ."},
+
+  // ---- attendance ----------------------------------------------------------
+  nav_attendance: {"en":"Attendance","hi":"उपस्थिति","kn":"ಹಾಜರಾತಿ"},
+  at_title: {"en":"Take attendance","hi":"उपस्थिति लीजिए","kn":"ಹಾಜರಾತಿ ತೆಗೆದುಕೊಳ್ಳಿ"},
+  at_sub: {"en":"Speak the names of the children who are away, or simply tap each child. You always confirm the list before it is saved.","hi":"जो बच्चे अनुपस्थित हैं उनके नाम बोलिए, या हर बच्चे पर टैप कीजिए। सहेजने से पहले सूची की पुष्टि आप ही करते हैं।","kn":"ಗೈರುಹಾಜರಾದ ಮಕ್ಕಳ ಹೆಸರುಗಳನ್ನು ಹೇಳಿ, ಅಥವಾ ಪ್ರತಿ ಮಗುವನ್ನೂ ಟ್ಯಾಪ್ ಮಾಡಿ. ಉಳಿಸುವ ಮೊದಲು ಪಟ್ಟಿಯನ್ನು ನೀವೇ ಖಚಿತಪಡಿಸುತ್ತೀರಿ."},
+  at_voice_way: {"en":"By voice","hi":"बोलकर","kn":"ಧ್ವನಿಯಿಂದ"},
+  at_manual_way: {"en":"By tapping","hi":"टैप करके","kn":"ಟ್ಯಾಪ್ ಮಾಡಿ"},
+  at_voice_help: {"en":"Name only the absent children — “Aarti and Suresh are absent today”.","hi":"केवल अनुपस्थित बच्चों के नाम लीजिए — “आरती और सुरेश आज अनुपस्थित हैं”।","kn":"ಗೈರುಹಾಜರಾದ ಮಕ್ಕಳ ಹೆಸರುಗಳನ್ನು ಮಾತ್ರ ಹೇಳಿ — “ಆರತಿ ಮತ್ತು ಸುರೇಶ್ ಇಂದು ಗೈರುಹಾಜರು”."},
+  at_manual_help: {"en":"No microphone? Tap Present or Absent for each child and save. Everyone starts as present.","hi":"माइक नहीं है? हर बच्चे के लिए उपस्थित या अनुपस्थित पर टैप कीजिए और सहेजिए। शुरुआत में सभी उपस्थित हैं।","kn":"ಮೈಕ್ ಇಲ್ಲವೇ? ಪ್ರತಿ ಮಗುವಿಗೂ ಹಾಜರು ಅಥವಾ ಗೈರು ಟ್ಯಾಪ್ ಮಾಡಿ ಉಳಿಸಿ. ಆರಂಭದಲ್ಲಿ ಎಲ್ಲರೂ ಹಾಜರು."},
+  at_record: {"en":"Speak who is absent","hi":"बोलिए कौन अनुपस्थित है","kn":"ಯಾರು ಗೈರು ಎಂದು ಹೇಳಿ"},
+  at_heard: {"en":"Heard","hi":"सुना गया","kn":"ಕೇಳಿಸಿತು"},
+  at_matched: {"en":"Marked absent from your voice","hi":"आपकी आवाज़ से अनुपस्थित चिह्नित","kn":"ನಿಮ್ಮ ಧ್ವನಿಯಿಂದ ಗೈರು ಎಂದು ಗುರುತಿಸಲಾಗಿದೆ"},
+  at_unmatched: {"en":"Heard but not found in this class — please tap them yourself","hi":"सुना गया पर इस कक्षा में नहीं मिला — कृपया स्वयं टैप कीजिए","kn":"ಕೇಳಿಸಿತು ಆದರೆ ಈ ತರಗತಿಯಲ್ಲಿ ಸಿಗಲಿಲ್ಲ — ದಯವಿಟ್ಟು ನೀವೇ ಟ್ಯಾಪ್ ಮಾಡಿ"},
+  at_roster: {"en":"Confirm the roster","hi":"सूची की पुष्टि कीजिए","kn":"ಪಟ್ಟಿಯನ್ನು ಖಚಿತಪಡಿಸಿ"},
+  at_present: {"en":"Present","hi":"उपस्थित","kn":"ಹಾಜರು"},
+  at_absent: {"en":"Absent","hi":"अनुपस्थित","kn":"ಗೈರು"},
+  at_allpresent: {"en":"Mark all present","hi":"सभी को उपस्थित करें","kn":"ಎಲ್ಲರನ್ನೂ ಹಾಜರು ಮಾಡಿ"},
+  at_save: {"en":"Save attendance","hi":"उपस्थिति सहेजें","kn":"ಹಾಜರಾತಿ ಉಳಿಸಿ"},
+  at_saving: {"en":"Saving…","hi":"सहेजा जा रहा है…","kn":"ಉಳಿಸಲಾಗುತ್ತಿದೆ…"},
+  at_saved: {"en":"Attendance saved for today.","hi":"आज की उपस्थिति सहेज दी गई।","kn":"ಇಂದಿನ ಹಾಜರಾತಿ ಉಳಿಸಲಾಗಿದೆ."},
+  at_savefail: {"en":"Could not save attendance. Please try again.","hi":"उपस्थिति सहेजी नहीं जा सकी। कृपया फिर कोशिश कीजिए।","kn":"ಹಾಜರಾತಿ ಉಳಿಸಲಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."},
+  at_already: {"en":"Attendance was already taken today — saving again will replace it.","hi":"आज उपस्थिति पहले ही ली जा चुकी है — फिर सहेजने पर वह बदल जाएगी।","kn":"ಇಂದು ಈಗಾಗಲೇ ಹಾಜರಾತಿ ತೆಗೆದುಕೊಳ್ಳಲಾಗಿದೆ — ಮತ್ತೆ ಉಳಿಸಿದರೆ ಅದು ಬದಲಾಗುತ್ತದೆ."},
+  at_today: {"en":"Today","hi":"आज","kn":"ಇಂದು"},
+  at_summary: {"en":"{p} present · {a} absent","hi":"{p} उपस्थित · {a} अनुपस्थित","kn":"{p} ಹಾಜರು · {a} ಗೈರು"},
+  at_nottaken: {"en":"Attendance not taken today","hi":"आज उपस्थिति नहीं ली गई","kn":"ಇಂದು ಹಾಜರಾತಿ ತೆಗೆದುಕೊಂಡಿಲ್ಲ"},
+  at_take: {"en":"Take attendance","hi":"उपस्थिति लें","kn":"ಹಾಜರಾತಿ ತೆಗೆದುಕೊಳ್ಳಿ"},
+  at_history: {"en":"Recent attendance","hi":"हाल की उपस्थिति","kn":"ಇತ್ತೀಚಿನ ಹಾಜರಾತಿ"},
+  at_history_none: {"en":"No attendance recorded yet.","hi":"अभी कोई उपस्थिति दर्ज नहीं।","kn":"ಇನ್ನೂ ಹಾಜರಾತಿ ದಾಖಲಾಗಿಲ್ಲ."},
+  at_history_days: {"en":"{a} of the last {n} recorded days absent","hi":"पिछले {n} दर्ज दिनों में से {a} दिन अनुपस्थित","kn":"ಕಳೆದ {n} ದಾಖಲಿತ ದಿನಗಳಲ್ಲಿ {a} ದಿನ ಗೈರು"},
+  at_noclass: {"en":"No class assigned yet.","hi":"अभी कोई कक्षा नहीं सौंपी गई।","kn":"ಇನ್ನೂ ಯಾವ ತರಗತಿಯನ್ನೂ ನಿಯೋಜಿಸಿಲ್ಲ."},
+
 } as const satisfies Record<string, { en: string; hi: string; kn: string }>;
 
 

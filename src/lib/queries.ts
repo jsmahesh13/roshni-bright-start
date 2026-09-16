@@ -109,3 +109,47 @@ export const staffQuery = queryOptions({
     return data ?? [];
   },
 });
+
+export interface AttendanceRow {
+  id: string;
+  student_id: string;
+  class_id: string;
+  date: string;
+  status: "present" | "absent";
+  marked_by: string | null;
+}
+
+/** One class, one day — what is already saved. */
+export function attendanceForDateQuery(classId: string | null, date: string) {
+  return queryOptions({
+    queryKey: ["attendance", classId ?? "none", date],
+    enabled: !!classId,
+    queryFn: async (): Promise<AttendanceRow[]> => {
+      const { data, error } = await supabase
+        .from("attendance")
+        .select("id, student_id, class_id, date, status, marked_by")
+        .eq("class_id", classId!)
+        .eq("date", date);
+      if (error) throw error;
+      return (data ?? []) as AttendanceRow[];
+    },
+  });
+}
+
+/** One child's recent attendance, newest first. */
+export function studentAttendanceQuery(studentId: string, limit = 30) {
+  return queryOptions({
+    queryKey: ["attendance-student", studentId, limit],
+    queryFn: async (): Promise<AttendanceRow[]> => {
+      const { data, error } = await supabase
+        .from("attendance")
+        .select("id, student_id, class_id, date, status, marked_by")
+        .eq("student_id", studentId)
+        .order("date", { ascending: false })
+        .limit(limit);
+      if (error) throw error;
+      return (data ?? []) as AttendanceRow[];
+    },
+  });
+}
+
