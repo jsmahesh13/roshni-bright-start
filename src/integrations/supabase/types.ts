@@ -21,6 +21,7 @@ export type Database = {
           date: string
           id: string
           marked_by: string | null
+          school_id: string
           status: string
           student_id: string
           updated_at: string
@@ -31,6 +32,7 @@ export type Database = {
           date?: string
           id?: string
           marked_by?: string | null
+          school_id: string
           status?: string
           student_id: string
           updated_at?: string
@@ -41,6 +43,7 @@ export type Database = {
           date?: string
           id?: string
           marked_by?: string | null
+          school_id?: string
           status?: string
           student_id?: string
           updated_at?: string
@@ -58,6 +61,13 @@ export type Database = {
             columns: ["marked_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
             referencedColumns: ["id"]
           },
           {
@@ -111,21 +121,27 @@ export type Database = {
       classes: {
         Row: {
           created_at: string
+          grade: string
           id: string
           name: string
-          school_id: string | null
+          school_id: string
+          section: string
         }
         Insert: {
           created_at?: string
+          grade: string
           id?: string
           name: string
-          school_id?: string | null
+          school_id: string
+          section: string
         }
         Update: {
           created_at?: string
+          grade?: string
           id?: string
           name?: string
-          school_id?: string | null
+          school_id?: string
+          section?: string
         }
         Relationships: [
           {
@@ -144,6 +160,7 @@ export type Database = {
           facet: string
           id: string
           retracted: boolean
+          school_id: string
           student_id: string
           text: string
           valence: number
@@ -154,6 +171,7 @@ export type Database = {
           facet: string
           id?: string
           retracted?: boolean
+          school_id: string
           student_id: string
           text: string
           valence?: number
@@ -164,6 +182,7 @@ export type Database = {
           facet?: string
           id?: string
           retracted?: boolean
+          school_id?: string
           student_id?: string
           text?: string
           valence?: number
@@ -174,6 +193,13 @@ export type Database = {
             columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "noticings_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
             referencedColumns: ["id"]
           },
           {
@@ -190,28 +216,34 @@ export type Database = {
           class_id: string | null
           created_at: string
           email: string | null
+          grade: string | null
           id: string
           name: string
           role: string
-          school_id: string | null
+          school_id: string
+          section: string | null
         }
         Insert: {
           class_id?: string | null
           created_at?: string
           email?: string | null
+          grade?: string | null
           id: string
           name: string
           role?: string
-          school_id?: string | null
+          school_id: string
+          section?: string | null
         }
         Update: {
           class_id?: string | null
           created_at?: string
           email?: string | null
+          grade?: string | null
           id?: string
           name?: string
           role?: string
-          school_id?: string | null
+          school_id?: string
+          section?: string | null
         }
         Relationships: [
           {
@@ -232,20 +264,26 @@ export type Database = {
       }
       schools: {
         Row: {
+          code: string
           created_at: string
           id: string
+          is_sandbox: boolean
           join_code: string
           name: string
         }
         Insert: {
+          code: string
           created_at?: string
           id?: string
+          is_sandbox?: boolean
           join_code: string
           name: string
         }
         Update: {
+          code?: string
           created_at?: string
           id?: string
+          is_sandbox?: boolean
           join_code?: string
           name?: string
         }
@@ -255,23 +293,32 @@ export type Database = {
         Row: {
           class_id: string
           created_at: string
+          grade: string
           id: string
           name: string
           roll: number
+          school_id: string
+          section: string
         }
         Insert: {
           class_id: string
           created_at?: string
+          grade: string
           id?: string
           name: string
           roll: number
+          school_id: string
+          section: string
         }
         Update: {
           class_id?: string
           created_at?: string
+          grade?: string
           id?: string
           name?: string
           roll?: number
+          school_id?: string
+          section?: string
         }
         Relationships: [
           {
@@ -279,6 +326,13 @@ export type Database = {
             columns: ["class_id"]
             isOneToOne: false
             referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "students_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
             referencedColumns: ["id"]
           },
         ]
@@ -290,6 +344,8 @@ export type Database = {
     Functions: {
       current_staff_class: { Args: never; Returns: string }
       current_staff_role: { Args: never; Returns: string }
+      get_user_class: { Args: never; Returns: string }
+      get_user_school_id: { Args: never; Returns: string }
       join_school: {
         Args: { p_class_id: string; p_code: string; p_name: string }
         Returns: undefined
@@ -301,6 +357,16 @@ export type Database = {
           class_name: string
           school_id: string
           school_name: string
+        }[]
+      }
+      verify_school_code: {
+        Args: { p_code: string }
+        Returns: {
+          class_id: string
+          grade: string
+          school_id: string
+          school_name: string
+          section: string
         }[]
       }
     }
