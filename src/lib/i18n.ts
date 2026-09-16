@@ -434,6 +434,69 @@ export const DICTIONARY = {
   at_history_days: {"en":"{a} of the last {n} recorded days absent","hi":"पिछले {n} दर्ज दिनों में से {a} दिन अनुपस्थित","kn":"ಕಳೆದ {n} ದಾಖಲಿತ ದಿನಗಳಲ್ಲಿ {a} ದಿನ ಗೈರು"},
   at_noclass: {"en":"No class assigned yet.","hi":"अभी कोई कक्षा नहीं सौंपी गई।","kn":"ಇನ್ನೂ ಯಾವ ತರಗತಿಯನ್ನೂ ನಿಯೋಜಿಸಿಲ್ಲ."},
 
+  // ---- school code signup --------------------------------------------------
+  su_grade: {"en":"Grade","hi":"कक्षा","kn":"ತರಗತಿ"},
+  su_section: {"en":"Section","hi":"सेक्शन","kn":"ವಿಭಾಗ"},
+  su_gradeph: {"en":"e.g. 6","hi":"जैसे 6","kn":"ಉದಾ. 6"},
+  su_sectionph: {"en":"e.g. B","hi":"जैसे B","kn":"ಉದಾ. B"},
+  su_needclass: {"en":"Enter the grade and section you teach","hi":"आप जो कक्षा और सेक्शन पढ़ाते हैं वह भरें","kn":"ನೀವು ಕಲಿಸುವ ತರಗತಿ ಮತ್ತು ವಿಭಾಗ ನಮೂದಿಸಿ"},
+  su_emailtaken: {"en":"That email is already registered — sign in instead.","hi":"यह ईमेल पहले से पंजीकृत है — इसके बजाय साइन इन कीजिए।","kn":"ಈ ಇಮೇಲ್ ಈಗಾಗಲೇ ನೋಂದಾಯಿತವಾಗಿದೆ — ಬದಲಿಗೆ ಸೈನ್ ಇನ್ ಮಾಡಿ."},
+  su_profilefail: {"en":"Your account was created but your school profile could not be saved. Please try again.","hi":"खाता बन गया पर आपका विद्यालय प्रोफ़ाइल सहेजा नहीं जा सका। कृपया फिर कोशिश कीजिए।","kn":"ಖಾತೆ ರಚನೆಯಾಯಿತು ಆದರೆ ನಿಮ್ಮ ಶಾಲಾ ಪ್ರೊಫೈಲ್ ಉಳಿಸಲಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."},
+  su_codeok: {"en":"School code accepted","hi":"विद्यालय कोड स्वीकृत","kn":"ಶಾಲಾ ಕೋಡ್ ಸ್ವೀಕೃತ"},
+  su_existing: {"en":"Existing classes:","hi":"मौजूदा कक्षाएँ:","kn":"ಇರುವ ತರಗತಿಗಳು:"},
+  su_newclass: {"en":"This will be a new class in your school.","hi":"यह आपके विद्यालय में एक नई कक्षा होगी।","kn":"ಇದು ನಿಮ್ಮ ಶಾಲೆಯಲ್ಲಿ ಹೊಸ ತರಗತಿ ಆಗಲಿದೆ."},
+  su_testcode: {"en":"Testing Roshni? Use the code DEMO-GOV-01.","hi":"रोशनी आज़मा रहे हैं? कोड DEMO-GOV-01 इस्तेमाल कीजिए।","kn":"ರೋಶ್ನಿಯನ್ನು ಪರೀಕ್ಷಿಸುತ್ತಿದ್ದೀರಾ? DEMO-GOV-01 ಕೋಡ್ ಬಳಸಿ."},
+  su_primary: {"en":"Teachers: create your account","hi":"शिक्षक: अपना खाता बनाइए","kn":"ಶಿಕ್ಷಕರೇ: ನಿಮ್ಮ ಖಾತೆ ರಚಿಸಿ"},
+
+  // ---- roster --------------------------------------------------------------
+  nav_roster: {"en":"Roster","hi":"नामावली","kn":"ಪಟ್ಟಿ"},
+  ro_title: {"en":"Your class roster","hi":"आपकी कक्षा की नामावली","kn":"ನಿಮ್ಮ ತರಗತಿಯ ಪಟ್ಟಿ"},
+  ro_sub: {"en":"The children enrolled in your class. Add them one by one, or bring the whole list in from a sheet.","hi":"आपकी कक्षा में दर्ज बच्चे। एक-एक करके जोड़िए, या पूरी सूची शीट से लाइए।","kn":"ನಿಮ್ಮ ತರಗತಿಯಲ್ಲಿ ದಾಖಲಾದ ಮಕ್ಕಳು. ಒಬ್ಬೊಬ್ಬರಾಗಿ ಸೇರಿಸಿ, ಅಥವಾ ಪೂರ್ಣ ಪಟ್ಟಿಯನ್ನು ಶೀಟ್‌ನಿಂದ ತನ್ನಿ."},
+  ro_empty: {"en":"No children yet. Add your first student to begin noticing.","hi":"अभी कोई बच्चा नहीं। टिप्पणी शुरू करने के लिए पहला छात्र जोड़िए।","kn":"ಇನ್ನೂ ಮಕ್ಕಳಿಲ್ಲ. ಟಿಪ್ಪಣಿ ಆರಂಭಿಸಲು ಮೊದಲ ವಿದ್ಯಾರ್ಥಿಯನ್ನು ಸೇರಿಸಿ."},
+  ro_add: {"en":"Add a student","hi":"छात्र जोड़ें","kn":"ವಿದ್ಯಾರ್ಥಿ ಸೇರಿಸಿ"},
+  ro_name: {"en":"Full name","hi":"पूरा नाम","kn":"ಪೂರ್ಣ ಹೆಸರು"},
+  ro_roll: {"en":"Roll number","hi":"रोल नंबर","kn":"ರೋಲ್ ಸಂಖ್ಯೆ"},
+  ro_save: {"en":"Add to class","hi":"कक्षा में जोड़ें","kn":"ತರಗತಿಗೆ ಸೇರಿಸಿ"},
+  ro_saving: {"en":"Adding…","hi":"जोड़ा जा रहा है…","kn":"ಸೇರಿಸಲಾಗುತ್ತಿದೆ…"},
+  ro_added: {"en":"Student added.","hi":"छात्र जोड़ दिया गया।","kn":"ವಿದ್ಯಾರ್ಥಿ ಸೇರಿಸಲಾಗಿದೆ."},
+  ro_addfail: {"en":"Could not add that student. Please check the roll number and try again.","hi":"वह छात्र जोड़ा नहीं जा सका। रोल नंबर जाँचकर फिर कोशिश कीजिए।","kn":"ಆ ವಿದ್ಯಾರ್ಥಿಯನ್ನು ಸೇರಿಸಲಾಗಲಿಲ್ಲ. ರೋಲ್ ಸಂಖ್ಯೆ ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."},
+  ro_cancel: {"en":"Cancel","hi":"रद्द करें","kn":"ರದ್ದುಮಾಡಿ"},
+  ro_count: {"en":"{n} children","hi":"{n} बच्चे","kn":"{n} ಮಕ್ಕಳು"},
+  ro_noclass: {"en":"You don’t have a class yet. Ask your head teacher to assign one.","hi":"अभी आपकी कोई कक्षा नहीं है। प्रधान शिक्षक से कक्षा सौंपने को कहिए।","kn":"ನಿಮಗೆ ಇನ್ನೂ ತರಗತಿ ಇಲ್ಲ. ಮುಖ್ಯ ಶಿಕ್ಷಕರನ್ನು ತರಗತಿ ನಿಯೋಜಿಸಲು ಕೇಳಿ."},
+
+  // ---- CSV import ----------------------------------------------------------
+  csv_title: {"en":"Bring in a class list","hi":"कक्षा सूची लाइए","kn":"ತರಗತಿ ಪಟ್ಟಿ ತನ್ನಿ"},
+  csv_pick: {"en":"Choose a CSV file","hi":"CSV फ़ाइल चुनिए","kn":"CSV ಕಡತ ಆರಿಸಿ"},
+  csv_template: {"en":"Download a sample sheet","hi":"नमूना शीट डाउनलोड करें","kn":"ಮಾದರಿ ಶೀಟ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ"},
+  csv_headers: {"en":"Columns: Full Name, Roll Number, Grade, Section. Grade and section fill in from your class if left blank.","hi":"कॉलम: Full Name, Roll Number, Grade, Section। खाली छोड़ने पर कक्षा और सेक्शन आपकी कक्षा से भर जाएँगे।","kn":"ಕಾಲಮ್‌ಗಳು: Full Name, Roll Number, Grade, Section. ಖಾಲಿ ಬಿಟ್ಟರೆ ತರಗತಿ ಮತ್ತು ವಿಭಾಗ ನಿಮ್ಮ ತರಗತಿಯಿಂದ ತುಂಬುತ್ತವೆ."},
+  csv_preview: {"en":"Check this before saving","hi":"सहेजने से पहले जाँचिए","kn":"ಉಳಿಸುವ ಮೊದಲು ಪರಿಶೀಲಿಸಿ"},
+  csv_ready: {"en":"{n} ready to add","hi":"{n} जोड़ने के लिए तैयार","kn":"{n} ಸೇರಿಸಲು ಸಿದ್ಧ"},
+  csv_skipped: {"en":"{n} will be skipped","hi":"{n} छोड़ दिए जाएँगे","kn":"{n} ಬಿಟ್ಟುಬಿಡಲಾಗುವುದು"},
+  csv_import: {"en":"Add these children","hi":"इन बच्चों को जोड़ें","kn":"ಈ ಮಕ್ಕಳನ್ನು ಸೇರಿಸಿ"},
+  csv_importing: {"en":"Adding…","hi":"जोड़ा जा रहा है…","kn":"ಸೇರಿಸಲಾಗುತ್ತಿದೆ…"},
+  csv_done: {"en":"{n} children added to your class.","hi":"{n} बच्चे आपकी कक्षा में जोड़े गए।","kn":"{n} ಮಕ್ಕಳನ್ನು ನಿಮ್ಮ ತರಗತಿಗೆ ಸೇರಿಸಲಾಗಿದೆ."},
+  csv_fail: {"en":"The list could not be saved. Nothing was added.","hi":"सूची सहेजी नहीं जा सकी। कुछ भी नहीं जोड़ा गया।","kn":"ಪಟ್ಟಿ ಉಳಿಸಲಾಗಲಿಲ್ಲ. ಏನನ್ನೂ ಸೇರಿಸಿಲ್ಲ."},
+  csv_emptyfile: {"en":"That file had no rows we could read.","hi":"उस फ़ाइल में पढ़ने योग्य कोई पंक्ति नहीं थी।","kn":"ಆ ಕಡತದಲ್ಲಿ ಓದಬಹುದಾದ ಸಾಲುಗಳಿಲ್ಲ."},
+  csv_e_name: {"en":"Name is missing","hi":"नाम नहीं है","kn":"ಹೆಸರು ಇಲ್ಲ"},
+  csv_e_roll: {"en":"Roll number must be a whole number","hi":"रोल नंबर पूर्ण संख्या होनी चाहिए","kn":"ರೋಲ್ ಸಂಖ್ಯೆ ಪೂರ್ಣ ಸಂಖ್ಯೆಯಾಗಿರಬೇಕು"},
+  csv_e_duproll: {"en":"Repeated roll number in this file","hi":"इस फ़ाइल में रोल नंबर दोहराया गया","kn":"ಈ ಕಡತದಲ್ಲಿ ರೋಲ್ ಸಂಖ್ಯೆ ಪುನರಾವರ್ತನೆ"},
+  csv_e_exists: {"en":"A child with this roll number is already in the class","hi":"इस रोल नंबर का बच्चा पहले से कक्षा में है","kn":"ಈ ರೋಲ್ ಸಂಖ್ಯೆಯ ಮಗು ಈಗಾಗಲೇ ತರಗತಿಯಲ್ಲಿದೆ"},
+  csv_e_dupname: {"en":"Repeated name in this file","hi":"इस फ़ाइल में नाम दोहराया गया","kn":"ಈ ಕಡತದಲ್ಲಿ ಹೆಸರು ಪುನರಾವರ್ತನೆ"},
+  csv_e_class: {"en":"Grade or section is missing","hi":"कक्षा या सेक्शन नहीं है","kn":"ತರಗತಿ ಅಥವಾ ವಿಭಾಗ ಇಲ್ಲ"},
+
+  // ---- sample classroom ----------------------------------------------------
+  pv_title: {"en":"A sample classroom","hi":"एक नमूना कक्षा","kn":"ಒಂದು ಮಾದರಿ ತರಗತಿ"},
+  pv_sub: {"en":"Five invented children in Grade 6B, with a few weeks of noticings. Nothing here is a real child.","hi":"कक्षा 6B के पाँच काल्पनिक बच्चे, कुछ हफ़्तों की टिप्पणियों के साथ। यहाँ कोई असली बच्चा नहीं है।","kn":"6B ತರಗತಿಯ ಐದು ಕಲ್ಪಿತ ಮಕ್ಕಳು, ಕೆಲವು ವಾರಗಳ ಟಿಪ್ಪಣಿಗಳೊಂದಿಗೆ. ಇಲ್ಲಿ ಯಾವುದೂ ನಿಜವಾದ ಮಗು ಅಲ್ಲ."},
+  pv_banner: {"en":"Sample data — read only. Create an account to keep your own class.","hi":"नमूना डेटा — केवल पढ़ने के लिए। अपनी कक्षा रखने के लिए खाता बनाइए।","kn":"ಮಾದರಿ ಮಾಹಿತಿ — ಓದಲು ಮಾತ್ರ. ನಿಮ್ಮದೇ ತರಗತಿಗೆ ಖಾತೆ ರಚಿಸಿ."},
+  pv_cta: {"en":"Create a teacher account","hi":"शिक्षक खाता बनाएँ","kn":"ಶಿಕ್ಷಕ ಖಾತೆ ರಚಿಸಿ"},
+  pv_stream: {"en":"Recent noticings","hi":"हाल की टिप्पणियाँ","kn":"ಇತ್ತೀಚಿನ ಟಿಪ್ಪಣಿಗಳು"},
+  au_demoquiet: {"en":"Just looking? See a sample classroom or sign in as a demo teacher.","hi":"बस देख रहे हैं? नमूना कक्षा देखिए या डेमो शिक्षक के रूप में साइन इन कीजिए।","kn":"ಕೇವಲ ನೋಡುತ್ತಿದ್ದೀರಾ? ಮಾದರಿ ತರಗತಿ ನೋಡಿ ಅಥವಾ ಡೆಮೊ ಶಿಕ್ಷಕರಾಗಿ ಸೈನ್ ಇನ್ ಮಾಡಿ."},
+  au_showdemo: {"en":"Show demo accounts","hi":"डेमो खाते दिखाएँ","kn":"ಡೆಮೊ ಖಾತೆಗಳನ್ನು ತೋರಿಸಿ"},
+  au_hidedemo: {"en":"Hide demo accounts","hi":"डेमो खाते छिपाएँ","kn":"ಡೆಮೊ ಖಾತೆಗಳನ್ನು ಮರೆಮಾಡಿ"},
+
+} as const satisfies Record<string, { en: string; hi: string; kn: string }>;
+
+
 } as const satisfies Record<string, { en: string; hi: string; kn: string }>;
 
 
