@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/roshni/LanguageToggle";
 import { NoticingStrip } from "@/components/roshni/NoticingStrip";
 import { useT } from "@/hooks/useLang";
-import { summarise, FACETS } from "@/lib/roshni";
+import { summarise, FACET_VAR } from "@/lib/roshni";
 import { SAMPLE_CLASS, SAMPLE_NOTICINGS, SAMPLE_STUDENTS } from "@/lib/sample-classroom";
 
 export const Route = createFileRoute("/preview")({
@@ -96,7 +96,7 @@ function PreviewPage() {
             {stream.map((n) => {
               const student = SAMPLE_STUDENTS.find((s) => s.id === n.student_id);
               return (
-                <li key={n.id} className="border-l-2 pl-3" style={{ borderColor: FACETS[n.facet].color }}>
+                <li key={n.id} className="border-l-2 pl-3" style={{ borderColor: FACET_VAR[n.facet] }}>
                   <p className="text-[15px] text-foreground">{n.text}</p>
                   <p className="text-xs text-faint">
                     {student?.name} · {new Date(n.created_at).toLocaleDateString()}
