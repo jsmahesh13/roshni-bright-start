@@ -5,7 +5,9 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { useLang, useT } from "@/hooks/useLang";
+import { cn } from "@/lib/utils";
 import { transcribeNoticing } from "@/lib/transcribe.functions";
+
 
 type State = "idle" | "recording" | "transcribing";
 
@@ -67,10 +69,23 @@ function blobToBase64(blob: Blob): Promise<string> {
  * textarea. Nothing is stored — the audio lives only in memory until the
  * transcript comes back.
  */
-export function VoiceCapture({ onTranscript }: { onTranscript: (text: string) => void }) {
+export function VoiceCapture({
+  onTranscript,
+  mode = "noticing",
+  recordKey = "vc_record",
+  hintKey = "vc_hint",
+  big = false,
+}: {
+  onTranscript: (text: string) => void;
+  mode?: "noticing" | "attendance";
+  recordKey?: string;
+  hintKey?: string;
+  big?: boolean;
+}) {
   const t = useT();
   const { lang } = useLang();
   const transcribe = useServerFn(transcribeNoticing);
+
 
   const [state, setState] = useState<State>("idle");
   const [seconds, setSeconds] = useState(0);
@@ -148,7 +163,7 @@ export function VoiceCapture({ onTranscript }: { onTranscript: (text: string) =>
 
     try {
       const audio = await blobToBase64(blob);
-      const { text } = await transcribe({ data: { audio, mime: "audio/wav", lang } });
+      const { text } = await transcribe({ data: { audio, mime: "audio/wav", lang, mode } });
       if (!text) {
         setNotice(t("vc_empty"));
         setState("idle");
@@ -164,13 +179,19 @@ export function VoiceCapture({ onTranscript }: { onTranscript: (text: string) =>
   }
 
   const mmss = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+  const btn = big ? "h-16 w-full justify-center text-base sm:w-auto sm:px-10" : "";
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className={cn("flex flex-wrap items-center gap-3", big && "w-full")}>
       {state === "idle" && (
-        <Button type="button" variant="outline" className="bg-card" onClick={() => void start()}>
-          <Mic className="mr-2 h-4 w-4" aria-hidden />
-          {t("vc_record")}
+        <Button
+          type="button"
+          variant="outline"
+          className={cn("bg-card", btn)}
+          onClick={() => void start()}
+        >
+          <Mic className={cn("mr-2", big ? "h-6 w-6" : "h-4 w-4")} aria-hidden />
+          {t(recordKey)}
         </Button>
       )}
 
@@ -178,7 +199,10 @@ export function VoiceCapture({ onTranscript }: { onTranscript: (text: string) =>
         <Button
           type="button"
           variant="outline"
-          className="border-concern/60 bg-concern/10 text-concern hover:bg-concern/15"
+          className={cn(
+            "border-concern/60 bg-concern/10 text-concern hover:bg-concern/15",
+            btn,
+          )}
           onClick={() => void stop()}
         >
           <span className="relative mr-2 flex h-3 w-3" aria-hidden>
@@ -191,16 +215,17 @@ export function VoiceCapture({ onTranscript }: { onTranscript: (text: string) =>
       )}
 
       {state === "transcribing" && (
-        <Button type="button" variant="outline" className="bg-card" disabled>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
+        <Button type="button" variant="outline" className={cn("bg-card", btn)} disabled>
+          <Loader2 className={cn("mr-2 animate-spin", big ? "h-6 w-6" : "h-4 w-4")} aria-hidden />
           {t("vc_transcribing")}
         </Button>
       )}
 
       {notice && <span className="text-xs text-concern">{notice}</span>}
       {!notice && state === "idle" && (
-        <span className="text-xs text-faint">{t("vc_hint")}</span>
+        <span className="text-xs text-faint">{t(hintKey)}</span>
       )}
+
     </div>
   );
 }

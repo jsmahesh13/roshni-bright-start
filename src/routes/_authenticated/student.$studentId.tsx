@@ -15,11 +15,14 @@ import {
   badgesQuery,
   classesQuery,
   staffQuery,
+  studentAttendanceQuery,
   studentNoticingsQuery,
   studentQuery,
 } from "@/lib/queries";
+import { cn } from "@/lib/utils";
 import { fill } from "@/lib/i18n";
 import { thresholdReasons } from "@/lib/summary";
+
 import {
   FACET_VAR,
   daysAgo,
@@ -63,6 +66,9 @@ function StudentPage() {
   const { data: classes } = useQuery(classesQuery);
   const { data: staff } = useQuery(staffQuery);
   const { data: badges } = useQuery(badgesQuery(studentId, user?.id));
+  const { data: attendanceRows } = useQuery(studentAttendanceQuery(studentId));
+  const attendance = attendanceRows ?? [];
+
 
   const [summaryOpen, setSummaryOpen] = useState(false);
 
@@ -257,6 +263,37 @@ function StudentPage() {
           <Timeline noticings={notes} />
         </div>
       </section>
+
+      <section className="card-paper mt-5 p-5">
+        <div className="text-[11px] uppercase tracking-wide text-faint">{t("at_history")}</div>
+        {attendance.length === 0 ? (
+          <p className="mt-2 text-sm text-muted-foreground">{t("at_history_none")}</p>
+        ) : (
+          <>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {[...attendance].reverse().map((a) => (
+                <span
+                  key={a.id}
+                  title={`${a.date} · ${a.status === "absent" ? t("at_absent") : t("at_present")}`}
+                  className={cn(
+                    "h-6 w-6 rounded-md border",
+                    a.status === "absent"
+                      ? "border-concern/50 bg-concern/25"
+                      : "border-strength/40 bg-strength/15",
+                  )}
+                />
+              ))}
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {fill(t("at_history_days"), {
+                a: attendance.filter((a) => a.status === "absent").length,
+                n: attendance.length,
+              })}
+            </p>
+          </>
+        )}
+      </section>
+
 
       <section className="card-paper mt-5">
         <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border px-4 py-3">
