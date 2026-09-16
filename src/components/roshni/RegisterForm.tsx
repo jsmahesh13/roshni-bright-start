@@ -143,7 +143,7 @@ export function RegisterForm() {
       }}
     >
       <div className="rounded-xl border border-dashed border-gold/60 bg-gold-soft px-3 py-2 text-[12px] text-gold-deep">
-        {t("su_democode")}
+        {t("su_testcode")}
       </div>
 
       <div className="space-y-2">
