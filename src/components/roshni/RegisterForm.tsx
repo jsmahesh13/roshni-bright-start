@@ -210,28 +210,45 @@ export function RegisterForm() {
         </div>
         {codeError && <p className="text-xs text-concern">{codeError}</p>}
         {school && (
-          <p className="text-xs font-semibold text-strength">{school.name} ✓</p>
+          <p className="text-xs font-semibold text-strength">
+            {t("su_codeok")} — {school.name} ✓
+          </p>
         )}
       </div>
 
       {school && (
         <div className="space-y-2">
-          <Label htmlFor="rclass">{t("su_class")}</Label>
-          <select
-            id="rclass"
-            value={classId}
-            onChange={(e) => setClassId(e.target.value)}
-            className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            <option value="">{t("su_noclass")}</option>
-            {classes.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+          <Label>{t("su_class")}</Label>
+          <div className="flex gap-2">
+            <Input
+              aria-label={t("su_grade")}
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+              placeholder={t("su_gradeph")}
+              maxLength={16}
+              required
+            />
+            <Input
+              aria-label={t("su_section")}
+              value={section}
+              onChange={(e) => setSection(e.target.value.toUpperCase())}
+              placeholder={t("su_sectionph")}
+              maxLength={8}
+              className="w-24"
+              required
+            />
+          </div>
+          {classes.length > 0 && (
+            <p className="text-xs text-faint">
+              {t("su_existing")} {classes.map((c) => c.name).join(", ")}
+            </p>
+          )}
+          {grade.trim() && section.trim() && !matchesExisting && (
+            <p className="text-xs text-faint">{t("su_newclass")}</p>
+          )}
         </div>
       )}
+
 
       <Button type="submit" className="w-full" disabled={busy || !hydrated}>
         {busy ? t("su_creating") : t("su_create")}
