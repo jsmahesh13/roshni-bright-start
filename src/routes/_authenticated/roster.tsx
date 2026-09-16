@@ -45,6 +45,7 @@ function RosterPage() {
   const [rows, setRows] = useState<ParsedRow[] | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const schoolId = profile?.school_id ?? activeClass?.school_id ?? "";
   const existingRolls = useMemo(() => students.map((s) => s.roll), [students]);
 
   const addOne = useMutation({
@@ -54,6 +55,9 @@ function RosterPage() {
         class_id: activeClassId,
         name: newName.trim(),
         roll: Number(newRoll),
+        school_id: schoolId,
+        grade: activeClass?.grade ?? profile?.grade ?? "",
+        section: activeClass?.section ?? profile?.section ?? "",
       });
       if (error) throw error;
     },
@@ -75,6 +79,7 @@ function RosterPage() {
           class_id: activeClassId,
           name: r.fullName,
           roll: Number(r.rollNumber),
+          school_id: schoolId,
           grade: r.grade,
           section: r.section,
         })),

@@ -10,7 +10,8 @@ import { DEMO_STAFF } from "./demo-staff";
 export const ensureDemoStaff = createServerFn({ method: "POST" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const { data: classes } = await supabaseAdmin.from("classes").select("id, name");
+  const { data: classes } = await supabaseAdmin.from("classes").select("id, name, school_id");
+  const sandboxSchoolId = (classes ?? [])[0]?.school_id ?? "";
   const classIdByName = new Map((classes ?? []).map((c) => [c.name, c.id]));
 
   const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers({
@@ -45,6 +46,7 @@ export const ensureDemoStaff = createServerFn({ method: "POST" }).handler(async 
         name: staff.name,
         email: staff.email,
         role: staff.role,
+        school_id: sandboxSchoolId,
         class_id: staff.className ? (classIdByName.get(staff.className) ?? null) : null,
       })
       .select("id")

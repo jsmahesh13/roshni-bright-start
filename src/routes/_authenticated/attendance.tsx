@@ -93,6 +93,7 @@ function AttendancePage() {
         class_id: activeClassId,
         date,
         status: marks[s.id] ?? "present",
+        school_id: s.school_id ?? profile?.school_id ?? "",
         marked_by: user.id,
         updated_at: new Date().toISOString(),
       }));
