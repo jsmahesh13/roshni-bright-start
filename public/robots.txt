@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# build: production env rebind 2026-09-16
