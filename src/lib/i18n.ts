@@ -497,7 +497,6 @@ export const DICTIONARY = {
 } as const satisfies Record<string, { en: string; hi: string; kn: string }>;
 
 
-} as const satisfies Record<string, { en: string; hi: string; kn: string }>;
 
 
 export type TKey = keyof typeof DICTIONARY;
