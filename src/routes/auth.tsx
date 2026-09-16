@@ -42,6 +42,7 @@ function AuthPage() {
   const [signedInAs, setSignedInAs] = useState<string | null>(null);
   // A click before React hydrates submits the form natively (page reloads to
   // /auth? and no sign-in happens). Keep sign-in disabled until hydrated.
+  const [showDemo, setShowDemo] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
 
