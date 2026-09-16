@@ -33,7 +33,7 @@ export const SAMPLE_NOTICINGS: SampleNoticing[] = [
   { id: "n2", student_id: "s1", author_id: "sample", facet: "strength", valence: 1, text: "Led the morning assembly reading without being asked twice.", retracted: false, created_at: daysAgo(11) },
   { id: "n3", student_id: "s2", author_id: "sample", facet: "engagement", valence: -1, text: "Head on the desk for most of second period again.", retracted: false, created_at: daysAgo(1) },
   { id: "n4", student_id: "s2", author_id: "sample", facet: "academic", valence: -1, text: "Homework not brought for the third day this week.", retracted: false, created_at: daysAgo(4) },
-  { id: "n5", student_id: "s2", author_id: "sample", facet: "emotion", valence: -1, text: "Went very quiet when the class talked about the sports day fees.", retracted: false, created_at: daysAgo(9) },
+  { id: "n5", student_id: "s2", author_id: "sample", facet: "affect", valence: -1, text: "Went very quiet when the class talked about the sports day fees.", retracted: false, created_at: daysAgo(9) },
   { id: "n6", student_id: "s3", author_id: "sample", facet: "social", valence: 1, text: "Sat with the new boy at lunch and showed him where the water tap is.", retracted: false, created_at: daysAgo(6) },
   { id: "n7", student_id: "s4", author_id: "sample", facet: "engagement", valence: 0, text: "Answered when called on, did not put his hand up all week.", retracted: false, created_at: daysAgo(40) },
   { id: "n8", student_id: "s5", author_id: "sample", facet: "strength", valence: 1, text: "Drew the water cycle on the board for the whole class.", retracted: false, created_at: daysAgo(14) },
