@@ -93,7 +93,7 @@ function Landing() {
             <Link to="/auth">{t("getstarted")}</Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="bg-card">
-            <a href="#how">{t("seehow")}</a>
+            <Link to="/preview">{t("seehow")}</Link>
           </Button>
         </div>
       </section>

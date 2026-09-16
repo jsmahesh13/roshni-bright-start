@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/hooks/useLang";
-import { lookupSchoolByCode } from "@/lib/school.functions";
+import { lookupSchoolByCode, completeTeacherSignup } from "@/lib/school.functions";
 
 
 interface ClassOption {
   id: string;
   name: string;
+  grade: string;
+  section: string;
 }
 
 /**
@@ -28,10 +30,11 @@ export function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
+  const [grade, setGrade] = useState("");
+  const [section, setSection] = useState("");
   const [checking, setChecking] = useState(false);
   const [school, setSchool] = useState<{ id: string; name: string } | null>(null);
   const [classes, setClasses] = useState<ClassOption[]>([]);
-  const [classId, setClassId] = useState<string>("");
   const [codeError, setCodeError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   // Until React has hydrated, a click on a submit button posts the form
@@ -39,6 +42,11 @@ export function RegisterForm() {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
 
+  const matchesExisting = classes.some(
+    (c) =>
+      c.grade.trim() === grade.trim() &&
+      c.section.trim().toUpperCase() === section.trim().toUpperCase(),
+  );
 
   async function checkCode() {
     if (!code.trim()) return;
@@ -54,13 +62,11 @@ export function RegisterForm() {
     if (!result?.found) {
       setSchool(null);
       setClasses([]);
-      setClassId("");
       setCodeError(t("su_badcode"));
       return;
     }
     setSchool(result.school);
     setClasses(result.classes);
-    setClassId("");
   }
 
 
@@ -73,6 +79,10 @@ export function RegisterForm() {
       toast.error(t("su_pwshort"));
       return;
     }
+    if (!grade.trim() || !section.trim()) {
+      toast.error(t("su_needclass"));
+      return;
+    }
     setBusy(true);
     const { error: signUpError } = await supabase.auth.signUp({
       email: email.trim(),
@@ -81,12 +91,16 @@ export function RegisterForm() {
     });
     if (signUpError) {
       setBusy(false);
-      toast.error(signUpError.message);
+      toast.error(
+        /already|registered/i.test(signUpError.message)
+          ? t("su_emailtaken")
+          : signUpError.message,
+      );
       return;
     }
 
-    // Auto-confirm is on for the demo, but sign in explicitly so we always
-    // hold a session before creating the staff profile.
+    // Auto-confirm is on, but sign in explicitly so we always hold a session
+    // before the server function creates the staff profile.
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email: email.trim(),
       password,
@@ -97,19 +111,28 @@ export function RegisterForm() {
       return;
     }
 
-    const { error: joinError } = await supabase.rpc("join_school", {
-      p_name: name.trim(),
-      p_code: code.trim(),
-      p_class_id: classId || (null as unknown as string),
-    });
+    let result: Awaited<ReturnType<typeof completeTeacherSignup>> | null = null;
+    try {
+      result = await completeTeacherSignup({
+        data: {
+          fullName: name.trim(),
+          code: code.trim(),
+          grade: grade.trim(),
+          section: section.trim().toUpperCase(),
+        },
+      });
+    } catch {
+      result = null;
+    }
     setBusy(false);
-    if (joinError) {
-      toast.error(joinError.message);
+    if (!result?.ok) {
+      toast.error(result?.reason === "badcode" ? t("su_badcode") : t("su_profilefail"));
       return;
     }
     toast.success(t("su_welcome"));
     navigate({ to: "/this-week", replace: true });
   }
+
 
   return (
     <form
@@ -120,7 +143,7 @@ export function RegisterForm() {
       }}
     >
       <div className="rounded-xl border border-dashed border-gold/60 bg-gold-soft px-3 py-2 text-[12px] text-gold-deep">
-        {t("su_democode")}
+        {t("su_testcode")}
       </div>
 
       <div className="space-y-2">
@@ -187,28 +210,45 @@ export function RegisterForm() {
         </div>
         {codeError && <p className="text-xs text-concern">{codeError}</p>}
         {school && (
-          <p className="text-xs font-semibold text-strength">{school.name} ✓</p>
+          <p className="text-xs font-semibold text-strength">
+            {t("su_codeok")} — {school.name} ✓
+          </p>
         )}
       </div>
 
       {school && (
         <div className="space-y-2">
-          <Label htmlFor="rclass">{t("su_class")}</Label>
-          <select
-            id="rclass"
-            value={classId}
-            onChange={(e) => setClassId(e.target.value)}
-            className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            <option value="">{t("su_noclass")}</option>
-            {classes.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+          <Label>{t("su_class")}</Label>
+          <div className="flex gap-2">
+            <Input
+              aria-label={t("su_grade")}
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+              placeholder={t("su_gradeph")}
+              maxLength={16}
+              required
+            />
+            <Input
+              aria-label={t("su_section")}
+              value={section}
+              onChange={(e) => setSection(e.target.value.toUpperCase())}
+              placeholder={t("su_sectionph")}
+              maxLength={8}
+              className="w-24"
+              required
+            />
+          </div>
+          {classes.length > 0 && (
+            <p className="text-xs text-faint">
+              {t("su_existing")} {classes.map((c) => c.name).join(", ")}
+            </p>
+          )}
+          {grade.trim() && section.trim() && !matchesExisting && (
+            <p className="text-xs text-faint">{t("su_newclass")}</p>
+          )}
         </div>
       )}
+
 
       <Button type="submit" className="w-full" disabled={busy || !hydrated}>
         {busy ? t("su_creating") : t("su_create")}

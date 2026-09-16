@@ -8,6 +8,20 @@
       "when": 1789577443741,
       "tag": "0000_create_attendance",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789583606575,
+      "tag": "0001_multi_tenant_school_code",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789583623221,
+      "tag": "0002_autofill_school_id_on_write",
+      "breakpoints": true
     }
   ]
 }

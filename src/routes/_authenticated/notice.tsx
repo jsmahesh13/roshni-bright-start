@@ -196,6 +196,10 @@ function NoticePage() {
             student_id: d.studentId!,
             author_id: user.id,
             facet: d.facet,
+            school_id:
+              students?.find((s) => s.id === d.studentId)?.school_id ??
+              profile?.school_id ??
+              "",
             valence: d.valence,
             text: d.text,
             retracted: false,
