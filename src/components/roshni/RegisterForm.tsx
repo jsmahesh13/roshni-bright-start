@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/hooks/useLang";
-import { lookupSchoolByCode } from "@/lib/school.functions";
+import { lookupSchoolByCode, completeTeacherSignup } from "@/lib/school.functions";
 
 
 interface ClassOption {
   id: string;
   name: string;
+  grade: string;
+  section: string;
 }
 
 /**
@@ -28,10 +30,11 @@ export function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
+  const [grade, setGrade] = useState("");
+  const [section, setSection] = useState("");
   const [checking, setChecking] = useState(false);
   const [school, setSchool] = useState<{ id: string; name: string } | null>(null);
   const [classes, setClasses] = useState<ClassOption[]>([]);
-  const [classId, setClassId] = useState<string>("");
   const [codeError, setCodeError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   // Until React has hydrated, a click on a submit button posts the form
@@ -39,6 +42,11 @@ export function RegisterForm() {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
 
+  const matchesExisting = classes.some(
+    (c) =>
+      c.grade.trim() === grade.trim() &&
+      c.section.trim().toUpperCase() === section.trim().toUpperCase(),
+  );
 
   async function checkCode() {
     if (!code.trim()) return;
@@ -54,13 +62,11 @@ export function RegisterForm() {
     if (!result?.found) {
       setSchool(null);
       setClasses([]);
-      setClassId("");
       setCodeError(t("su_badcode"));
       return;
     }
     setSchool(result.school);
     setClasses(result.classes);
-    setClassId("");
   }
 
 
@@ -73,6 +79,10 @@ export function RegisterForm() {
       toast.error(t("su_pwshort"));
       return;
     }
+    if (!grade.trim() || !section.trim()) {
+      toast.error(t("su_needclass"));
+      return;
+    }
     setBusy(true);
     const { error: signUpError } = await supabase.auth.signUp({
       email: email.trim(),
@@ -81,12 +91,16 @@ export function RegisterForm() {
     });
     if (signUpError) {
       setBusy(false);
-      toast.error(signUpError.message);
+      toast.error(
+        /already|registered/i.test(signUpError.message)
+          ? t("su_emailtaken")
+          : signUpError.message,
+      );
       return;
     }
 
-    // Auto-confirm is on for the demo, but sign in explicitly so we always
-    // hold a session before creating the staff profile.
+    // Auto-confirm is on, but sign in explicitly so we always hold a session
+    // before the server function creates the staff profile.
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email: email.trim(),
       password,
@@ -97,19 +111,28 @@ export function RegisterForm() {
       return;
     }
 
-    const { error: joinError } = await supabase.rpc("join_school", {
-      p_name: name.trim(),
-      p_code: code.trim(),
-      p_class_id: classId || (null as unknown as string),
-    });
+    let result: Awaited<ReturnType<typeof completeTeacherSignup>> | null = null;
+    try {
+      result = await completeTeacherSignup({
+        data: {
+          fullName: name.trim(),
+          code: code.trim(),
+          grade: grade.trim(),
+          section: section.trim().toUpperCase(),
+        },
+      });
+    } catch {
+      result = null;
+    }
     setBusy(false);
-    if (joinError) {
-      toast.error(joinError.message);
+    if (!result?.ok) {
+      toast.error(result?.reason === "badcode" ? t("su_badcode") : t("su_profilefail"));
       return;
     }
     toast.success(t("su_welcome"));
     navigate({ to: "/this-week", replace: true });
   }
+
 
   return (
     <form
