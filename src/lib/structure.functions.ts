@@ -40,7 +40,7 @@ const AIResponseSchema = z.object({
 
 const InputSchema = z.object({
   text: z.string().trim().min(1).max(4000),
-  lang: z.enum(["en", "hi", "kn"]).default("en"),
+  lang: z.enum(["en", "hi", "kn", "mr"]).default("en"),
   students: z
     .array(z.object({ ref: StudentRefSchema, firstName: z.string().min(1).max(60) }))
     .max(80),
@@ -117,7 +117,7 @@ export const structureNoticing = createServerFn({ method: "POST" })
     if (!apiKey) return { ok: false, reason: "unconfigured" };
 
     const roster = data.students.map((s) => `${s.ref}: ${s.firstName}`).join("\n");
-    const userMessage = `Roster:\n${roster || "(no students in scope)"}\n\nTeacher's note (raw, possibly code-mixed English/Hindi/Kannada):\n"""\n${data.text}\n"""`;
+    const userMessage = `Roster:\n${roster || "(no students in scope)"}\n\nTeacher's note (raw, possibly code-mixed English/Hindi/Marathi/Kannada):\n"""\n${data.text}\n"""`;
 
     let res: Response;
     try {

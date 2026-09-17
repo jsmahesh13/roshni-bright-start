@@ -14,7 +14,7 @@ export const transcribeNoticing = createServerFn({ method: "POST" })
     (input: {
       audio: string;
       mime: string;
-      lang: "en" | "hi" | "kn";
+      lang: "en" | "hi" | "kn" | "mr";
       mode?: "noticing" | "attendance";
     }) => {
       if (typeof input?.audio !== "string" || input.audio.length < 100) {
@@ -25,7 +25,7 @@ export const transcribeNoticing = createServerFn({ method: "POST" })
       return {
         audio: input.audio,
         mime: typeof input.mime === "string" ? input.mime : "audio/wav",
-        lang: (["en", "hi", "kn"] as const).includes(input.lang) ? input.lang : "en",
+        lang: (["en", "hi", "kn", "mr"] as const).includes(input.lang) ? input.lang : "en",
         mode: input.mode === "attendance" ? ("attendance" as const) : ("noticing" as const),
       };
     },
@@ -53,8 +53,8 @@ export const transcribeNoticing = createServerFn({ method: "POST" })
     form.append(
       "prompt",
       data.mode === "attendance"
-        ? "A schoolteacher in India calling out the names of the students who are absent today. Speech may mix English with Hindi or Kannada. Write the student names in English (Latin) letters, separated by commas."
-        : "A schoolteacher in India speaking a short observation about a student. Speech may mix English with Hindi or Kannada. Keep names as spoken.",
+        ? "A schoolteacher in India calling out the names of the students who are absent today. Speech may mix English with Hindi, Marathi or Kannada. Write the student names in English (Latin) letters, separated by commas."
+        : "A schoolteacher in India speaking a short observation about a student. Speech may mix English with Hindi, Marathi or Kannada. Keep names as spoken.",
     );
 
 

@@ -615,3 +615,7 @@
 .lang-kn {
   font-family: "Noto Sans Kannada", Inter, sans-serif;
 }
+.lang-mr body,
+.lang-mr {
+  font-family: "Noto Sans Devanagari", Inter, sans-serif;
+}
