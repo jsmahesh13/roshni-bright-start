@@ -18,12 +18,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // Read after hydration — a localStorage read during render mismatches SSR.
   useEffect(() => {
     const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "hi" || stored === "kn" || stored === "en") setLangState(stored);
+    if (stored === "hi" || stored === "kn" || stored === "mr" || stored === "en")
+      setLangState(stored);
   }, []);
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove("lang-hi", "lang-kn");
+    root.classList.remove("lang-hi", "lang-kn", "lang-mr");
     if (lang !== "en") root.classList.add(`lang-${lang}`);
     root.setAttribute("lang", lang);
   }, [lang]);
