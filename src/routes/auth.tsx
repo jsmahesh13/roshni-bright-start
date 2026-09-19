@@ -14,6 +14,7 @@ import { LanguageToggle } from "@/components/roshni/LanguageToggle";
 import { DEMO_STAFF, DEMO_PASSWORD } from "@/lib/demo-staff";
 import { ensureDemoStaff } from "@/lib/demo-staff.functions";
 import { RegisterForm } from "@/components/roshni/RegisterForm";
+import { clearOwnReadonlyFlag, resolveUsername } from "@/lib/admin.functions";
 
 
 export const Route = createFileRoute("/auth")({
@@ -34,6 +35,9 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const navigate = useNavigate();
   const seed = useServerFn(ensureDemoStaff);
+  const resolveUsernameFn = useServerFn(resolveUsername);
+  const clearOwnReadonlyFlagFn = useServerFn(clearOwnReadonlyFlag);
+  void clearOwnReadonlyFlagFn;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -60,18 +64,38 @@ function AuthPage() {
       .catch(() => setReady(true));
   }, [seed]);
 
-  async function signIn(withEmail: string, withPassword: string) {
+  async function signIn(identifier: string, withPassword: string) {
     setBusy(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: withEmail,
-      password: withPassword,
-    });
-    setBusy(false);
-    if (error) {
-      toast.error(error.message);
-      return;
+    try {
+      // Identifier may be an email or a teacher username.
+      let loginEmail = identifier.trim();
+      if (!loginEmail.includes("@")) {
+        const res = await resolveUsernameFn({ data: { username: loginEmail } });
+        if (!res.found) {
+          toast.error(t("au_badcreds"));
+          return;
+        }
+        loginEmail = res.email;
+      }
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: withPassword,
+      });
+      if (error) {
+        toast.error(t("au_badcreds"));
+        return;
+      }
+      // Fail-safe: a real teacher must never stay flagged read-only after a normal sign-in.
+      await clearOwnReadonlyFlag().catch(() => {});
+      const { data: isSA } = await supabase.rpc("is_super_admin");
+      if (isSA === true) {
+        navigate({ to: "/admin", replace: true });
+        return;
+      }
+      navigate({ to: "/this-week", replace: true });
+    } finally {
+      setBusy(false);
     }
-    navigate({ to: "/this-week", replace: true });
   }
 
   return (
@@ -131,11 +155,11 @@ function AuthPage() {
                 }}
               >
                 <div className="space-y-2">
-                  <Label htmlFor="email">{t("email")}</Label>
+                  <Label htmlFor="email">{t("au_email_or_username")}</Label>
                   <Input
                     id="email"
-                    type="email"
-                    autoComplete="email"
+                    type="text"
+                    autoComplete="username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@school.in"
