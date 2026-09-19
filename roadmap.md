@@ -9,3 +9,10 @@
   - [x] Phase 4: demote demo personas, static sample classroom at /preview
   - [x] i18n en/hi/kn for all new strings
   - [x] Verify counts (110 students / 1326 noticings), publish
+- [ ] Two-tier admin console (.lovable/plan.md)
+  - [ ] Migration: platform_owners, audit_log, archived_at/archived_by, username, helpers, RLS OR-in + readonly guard
+  - [ ] Create + confirm jsmahesh.iitb@gmail.com super_admin account
+  - [ ] admin.functions.ts (create school/admin/teacher, archive/restore, impersonation, username resolve)
+  - [ ] Admin console UI (/admin/*, /manage, ImpersonationBanner), username login in auth
+  - [ ] i18n en/hi/kn/mr for all new strings
+  - [ ] Tests: counts intact, cross-school negative, readonly-write rejected; publish

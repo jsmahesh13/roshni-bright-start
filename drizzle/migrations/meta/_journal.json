@@ -22,6 +22,13 @@
       "when": 1789583623221,
       "tag": "0002_autofill_school_id_on_write",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789816509749,
+      "tag": "0003_two_tier_admin_console",
+      "breakpoints": true
     }
   ]
 }
