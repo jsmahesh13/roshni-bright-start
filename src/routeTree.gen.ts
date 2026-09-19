@@ -22,7 +22,10 @@ import { Route as AuthenticatedRosterRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedSchoolRouteImport } from './routes/_authenticated/school'
 import { Route as AuthenticatedThisWeekRouteImport } from './routes/_authenticated/this-week'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authenticated/admin/audit'
 import { Route as AuthenticatedAdminSchoolsRouteImport } from './routes/_authenticated/admin/schools'
+import { Route as AuthenticatedAdminStudentsRouteImport } from './routes/_authenticated/admin/students'
+import { Route as AuthenticatedAdminTeachersRouteImport } from './routes/_authenticated/admin/teachers'
 import { Route as AuthenticatedStudentStudentIdRouteImport } from './routes/_authenticated/student.$studentId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -90,10 +93,27 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminAuditRoute = AuthenticatedAdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
 const AuthenticatedAdminSchoolsRoute =
   AuthenticatedAdminSchoolsRouteImport.update({
     id: '/schools',
     path: '/schools',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminStudentsRoute =
+  AuthenticatedAdminStudentsRouteImport.update({
+    id: '/students',
+    path: '/students',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminTeachersRoute =
+  AuthenticatedAdminTeachersRouteImport.update({
+    id: '/teachers',
+    path: '/teachers',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedStudentStudentIdRoute =
@@ -115,7 +135,10 @@ export interface FileRoutesByFullPath {
   '/roster': typeof AuthenticatedRosterRoute
   '/school': typeof AuthenticatedSchoolRoute
   '/this-week': typeof AuthenticatedThisWeekRoute
+  '/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/admin/schools': typeof AuthenticatedAdminSchoolsRoute
+  '/admin/students': typeof AuthenticatedAdminStudentsRoute
+  '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
   '/student/$studentId': typeof AuthenticatedStudentStudentIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -130,7 +153,10 @@ export interface FileRoutesByTo {
   '/roster': typeof AuthenticatedRosterRoute
   '/school': typeof AuthenticatedSchoolRoute
   '/this-week': typeof AuthenticatedThisWeekRoute
+  '/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/admin/schools': typeof AuthenticatedAdminSchoolsRoute
+  '/admin/students': typeof AuthenticatedAdminStudentsRoute
+  '/admin/teachers': typeof AuthenticatedAdminTeachersRoute
   '/student/$studentId': typeof AuthenticatedStudentStudentIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
@@ -148,7 +174,10 @@ export interface FileRoutesById {
   '/_authenticated/roster': typeof AuthenticatedRosterRoute
   '/_authenticated/school': typeof AuthenticatedSchoolRoute
   '/_authenticated/this-week': typeof AuthenticatedThisWeekRoute
+  '/_authenticated/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/_authenticated/admin/schools': typeof AuthenticatedAdminSchoolsRoute
+  '/_authenticated/admin/students': typeof AuthenticatedAdminStudentsRoute
+  '/_authenticated/admin/teachers': typeof AuthenticatedAdminTeachersRoute
   '/_authenticated/student/$studentId': typeof AuthenticatedStudentStudentIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -166,7 +195,10 @@ export interface FileRouteTypes {
     | '/roster'
     | '/school'
     | '/this-week'
+    | '/admin/audit'
     | '/admin/schools'
+    | '/admin/students'
+    | '/admin/teachers'
     | '/student/$studentId'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -181,7 +213,10 @@ export interface FileRouteTypes {
     | '/roster'
     | '/school'
     | '/this-week'
+    | '/admin/audit'
     | '/admin/schools'
+    | '/admin/students'
+    | '/admin/teachers'
     | '/student/$studentId'
     | '/admin'
   id:
@@ -198,7 +233,10 @@ export interface FileRouteTypes {
     | '/_authenticated/roster'
     | '/_authenticated/school'
     | '/_authenticated/this-week'
+    | '/_authenticated/admin/audit'
     | '/_authenticated/admin/schools'
+    | '/_authenticated/admin/students'
+    | '/_authenticated/admin/teachers'
     | '/_authenticated/student/$studentId'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
@@ -303,11 +341,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/audit': {
+      id: '/_authenticated/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AuthenticatedAdminAuditRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/schools': {
       id: '/_authenticated/admin/schools'
       path: '/schools'
       fullPath: '/admin/schools'
       preLoaderRoute: typeof AuthenticatedAdminSchoolsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/students': {
+      id: '/_authenticated/admin/students'
+      path: '/students'
+      fullPath: '/admin/students'
+      preLoaderRoute: typeof AuthenticatedAdminStudentsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/teachers': {
+      id: '/_authenticated/admin/teachers'
+      path: '/teachers'
+      fullPath: '/admin/teachers'
+      preLoaderRoute: typeof AuthenticatedAdminTeachersRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/student/$studentId': {
@@ -321,13 +380,19 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminAuditRoute: typeof AuthenticatedAdminAuditRoute
   AuthenticatedAdminSchoolsRoute: typeof AuthenticatedAdminSchoolsRoute
+  AuthenticatedAdminStudentsRoute: typeof AuthenticatedAdminStudentsRoute
+  AuthenticatedAdminTeachersRoute: typeof AuthenticatedAdminTeachersRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminAuditRoute: AuthenticatedAdminAuditRoute,
     AuthenticatedAdminSchoolsRoute: AuthenticatedAdminSchoolsRoute,
+    AuthenticatedAdminStudentsRoute: AuthenticatedAdminStudentsRoute,
+    AuthenticatedAdminTeachersRoute: AuthenticatedAdminTeachersRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   }
 
