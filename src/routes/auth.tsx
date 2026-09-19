@@ -14,7 +14,8 @@ import { LanguageToggle } from "@/components/roshni/LanguageToggle";
 import { DEMO_STAFF, DEMO_PASSWORD } from "@/lib/demo-staff";
 import { ensureDemoStaff } from "@/lib/demo-staff.functions";
 import { RegisterForm } from "@/components/roshni/RegisterForm";
-import { clearOwnReadonlyFlag, resolveUsername } from "@/lib/admin.functions";
+import { resolveUsername } from "@/lib/admin.functions";
+import { clearOwnReadonlyFlag } from "@/lib/admin.functions";
 
 
 export const Route = createFileRoute("/auth")({
@@ -86,7 +87,7 @@ function AuthPage() {
         return;
       }
       // Fail-safe: a real teacher must never stay flagged read-only after a normal sign-in.
-      await clearOwnReadonlyFlag().catch(() => {});
+      await clearOwnReadonlyFlagFn().catch(() => {});
       const { data: isSA } = await supabase.rpc("is_super_admin");
       if (isSA === true) {
         navigate({ to: "/admin", replace: true });
