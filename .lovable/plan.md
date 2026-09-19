@@ -1,109 +1,118 @@
-# Roshni: multi-tenant school-code model
+# Two-tier admin console for Roshni
 
-Move from open demo personas to real schools joined by a code, without losing any existing data.
+A platform-owner console above the existing school+class model, plus a principal panel per school. Everything is additive: no drops, no renames, no hard deletes.
 
-## What's in the database today (verified)
+One deviation from the brief, on purpose: this app has no Supabase Edge Functions — all privileged work runs through TanStack server functions (`src/lib/*.functions.ts`) with the service-role client, exactly like the existing signup flow. Same security model, same verification duty, one less moving part.
 
-- 1 school: "GHS Kadugodi" (code KADUGODI-2026)
-- 5 classes: 6A, 6B, 7A, 7B, 8A — all already linked to that school
-- 110 students, 1,326 noticings, 44 attendance rows, 6 staff profiles, 0 badges
-- No student is missing a class; no profile is missing a school
+## Roles
 
-So the migration has a clean starting point: everything existing already belongs to one school, which becomes the **sandbox/example school**.
-
-## Decision on the existing schema (constraint 2)
-
-**Keep `classes` and `class_id`. Add `grade` + `section` alongside, never rename or drop.**
-
-Reason: every shipped screen (attendance, class register, constellation, student page, noticings, RLS helper `current_staff_class()`) reads `class_id`. Renaming `name`→`full_name` or `roll`→`roll_number` would break live code for zero functional gain.
-
-So:
-- `classes` gains `grade text` and `section text`, backfilled from the class name ("6A" → grade 6, section A).
-- `students`, `profiles`, `noticings`, `attendance` gain `grade`/`section` (students, profiles) and `school_id` (noticings, attendance) as **nullable**, get backfilled, then flip to NOT NULL.
-- `students.full_name` / `roll_number` are **not** introduced. The TS type `Student` maps `name`→`fullName` in the type layer only if wanted; database columns stay `name`/`roll`.
-- Class assignment stays `class_id`. Grade+section are derived, kept in sync by a trigger on insert (if grade+section given and class_id missing, resolve the class; if class_id given, copy its grade+section).
-
-Net effect: voice attendance and manual attendance keep working untouched, because they key off `class_id`.
-
-## Phase 1 — SQL migration (one idempotent migration, additive only)
-
-Step by step:
-
-1. `schools`: add `code text` (uppercase, unique via a unique index on `upper(btrim(code))`), backfilled from the existing `join_code`. `join_code` is kept so nothing breaks.
-2. Mark the existing GHS Kadugodi row as the sandbox: add `is_sandbox boolean not null default false`, set true for id `596eff92-…`.
-3. Insert the real test school "Roshni Test School" with code `DEMO-GOV-01` (idempotent `on conflict do nothing`).
-4. `classes`: add nullable `grade text`, `section text`; backfill by parsing `name` (leading digits → grade, trailing letters → section); then NOT NULL.
-5. `students`: add nullable `school_id`, `grade`, `section`. Backfill:
-   `update students s set school_id = c.school_id, grade = c.grade, section = c.section from classes c where c.id = s.class_id` → covers all 110.
-   Then NOT NULL on all three + FK to `schools(id)` + `UNIQUE(school_id, grade, section, roll)`.
-   (A pre-check query reports duplicate roll numbers before the unique index is created; if any exist the migration is adjusted rather than failing.)
-6. `noticings`: add nullable `school_id`, backfill from the student's school (1,326 rows), then NOT NULL + FK.
-7. `attendance`: already has `class_id` + FK to students; add nullable `school_id`, backfill the 44 rows the same way, then NOT NULL + FK.
-8. `profiles`: `school_id` already exists and is populated; add nullable `grade`/`section` backfilled from `class_id`→`classes` (staying nullable, since the head teacher/admin has no class). Add a check constraint `role in ('teacher','admin')`.
-9. `badges`: no school column needed (reachable via student); left untouched.
-10. Verification block at the end of the migration: raises an exception if any row in students/noticings/attendance has a null school_id, so a bad backfill rolls the whole thing back rather than half-applying.
-
-Note on auth users: the 5 auth users are already tied to profiles with `school_id` set to the sandbox school, so they need no separate migration — they simply become sandbox-school teachers.
-
-## Phase 1b — RLS, helpers, RPC
-
-- Helpers (SECURITY DEFINER, `search_path = public`, EXECUTE revoked from anon/public per the existing hardening):
-  - `get_user_school_id()` → profiles.school_id for auth.uid()
-  - `get_user_class()` → profiles.class_id (wraps existing `current_staff_class()`)
-  - keep `current_staff_role()` as-is
-- `verify_school_code(code text)` SECURITY DEFINER RPC: returns `{school_id, school_name, classes[]}` for an exact case-insensitive code match, nothing otherwise. Called only through a server function (`src/lib/school.functions.ts`), matching the existing pattern where these functions are service-role-only.
-- Policy rewrite (same fail-closed spirit as today):
-  - students/noticings/attendance: `school_id = get_user_school_id() AND (current_staff_role() = 'admin' OR class_id = get_user_class())`
-  - students gain INSERT/UPDATE for teachers within their own school+grade+section, and for admins anywhere in their school — this is new (students is read-only today) and needed for the roster feature.
-  - classes: readable within own school.
-
-## Phase 1c — Sandbox preview vs strict RLS (constraint 3)
-
-The unauthenticated "See how it works" uses a **static in-frontend sample**: a small hardcoded Grade 6B classroom (5 invented children, ~12 sample noticings, one week of attendance) in `src/lib/sample-classroom.ts`, rendered by the existing components in read-only mode.
-
-No public-read policy is added, so there is zero chance of leaking a real school's rows, and the demo works even when signed out or offline. The real sandbox school stays behind normal auth for the existing demo staff logins.
-
-## Phase 2 — Auth
-
-- `RegisterForm.tsx`: fields become Full name, Email, Password, School code, Grade, Section. Code is validated through the server function; on success a `join_school`-style RPC upserts the profile with school_id + class (resolved from grade+section, created if the admin allows, otherwise "no class yet").
-- Error states: invalid code, email already registered, weak password — all surfaced as inline text + toast.
-- `useProfile()` extended to select `school_id, grade, section` and join the school name; exposed through app context so the shell can show "GHS Kadugodi · 7B".
-
-## Phase 3 — Roster + CSV
-
-New route `src/routes/_authenticated/roster.tsx`:
-- Class-scoped list (teacher: own grade+section; admin: class switcher across the school), with an empty state for brand-new schools.
-- "Add student" modal: name + roll, grade/section prefilled.
-- CSV import: headers `Full Name, Roll Number, Grade, Section`; missing grade/section auto-filled from the teacher's class; sample template download; client-side preview table flagging empty names, non-numeric/duplicate rolls, and clashes with existing rows; batch insert only after the teacher confirms.
-
-## Phase 4 — Demote the demo
-
-- Landing + `/auth`: teacher sign-up / sign-in becomes the primary CTA; the persona list moves into a collapsed "See how it works" secondary link that opens the static sample classroom at `/preview` (no auth).
-- The existing demo staff logins still work for the sandbox school, just not front-and-centre.
-
-## Files to change
-
-| File | Change |
+| Role | Scope |
 |---|---|
-| `src/lib/queries.ts` | add school/grade/section to selects; roster queries; student insert helpers |
-| `src/hooks/useSession.ts` | profile now carries school_id, school name, grade, section |
-| `src/lib/roshni.ts` | types: `School`, `TeacherProfile`, `Student`, `CSVStudentRow` |
-| `src/components/roshni/RegisterForm.tsx` | new signup fields + code validation |
-| `src/lib/school.functions.ts` | `verify_school_code` wrapper |
-| `src/routes/auth.tsx` | primary sign-up CTA, demo demoted |
-| `src/routes/index.tsx` | landing CTA change |
-| `src/routes/_authenticated/roster.tsx` | new |
-| `src/routes/_authenticated/class.tsx` | link to roster, empty state |
-| `src/components/roshni/AppShell.tsx` | nav entry + school name in header |
-| `src/routes/preview.tsx` + `src/lib/sample-classroom.ts` | new, unauthenticated sample |
-| `src/lib/i18n.ts` | en/hi/kn strings for every new label, error and toast |
+| `super_admin` | Only jsmahesh.iitb@gmail.com. All schools, all data. Create schools + admins, archive/restore, read-only "log in as". |
+| `admin` (school admin / principal) | Existing role, unchanged in name. Their own school only: teachers, classes, students, join code. |
+| `teacher` | Unchanged. Own class. Can now sign in with username **or** email. |
 
-Untouched: `attendance.tsx`, `notice.tsx`, `student.$studentId.tsx`, `this-week.tsx`, `Constellation.tsx`, `VoiceCapture.tsx`, `transcribe.functions.ts`, `vite.config.ts`.
+**Fail-closed super_admin designation.** A `platform_owners` table holding one row (the email). `is_super_admin()` is SECURITY DEFINER and returns true only when the caller's `auth.users.email`, lowercased, matches a row there **and** the user is email-confirmed. No self-service path writes to that table — it is seeded by the migration and has no INSERT/UPDATE/DELETE policy at all, so even the service role must go through a migration to change it. If the table is empty, every check returns false.
+
+## Phase 1 — SQL migration (additive, idempotent)
+
+1. `platform_owners(email citext primary key, created_at)`; seed the one email. RLS on, zero policies (helper reads it as SECURITY DEFINER).
+2. Archive columns on `schools`, `classes`, `students`, `profiles`: `archived_at timestamptz null`, `archived_by uuid null references profiles(id)`. Nullable by nature — no backfill needed, `NULL` means live.
+3. `audit_log(id, actor_id uuid, actor_role text, action text check in ('archive','restore','create_school','create_admin','create_teacher','impersonate_view'), entity_type text, entity_id uuid, details jsonb default '{}', created_at timestamptz default now())`. Insert-only; no UPDATE/DELETE policy.
+4. `profiles.username citext null` + partial unique index `where username is not null`. Existing rows stay null.
+5. Helpers (SECURITY DEFINER, `search_path = public`, EXECUTE revoked from anon/public per existing hardening): `is_super_admin()`, `is_acting_readonly()` (reads the JWT claim, below).
+6. Indexes on `archived_at` for the four tables and on `audit_log(created_at desc)`.
+7. Verification block at the end: counts of students/noticings/attendance/profiles before and after must match, and no row may gain an unexpected null; `RAISE EXCEPTION` aborts the whole migration otherwise.
+
+No NOT NULL flips are needed this time — every new column is legitimately nullable — so the migration is reversible in practice.
+
+## Phase 2 — RLS
+
+Every existing policy keeps its current expression and gains two modifiers:
+
+```
+USING (
+  archived_at IS NULL
+  AND ( <existing school+class expression> )
+  OR public.is_super_admin()          -- read across schools
+)
+```
+
+For write policies:
+
+```
+WITH CHECK (
+  NOT public.is_acting_readonly()
+  AND ( <existing expression> OR public.is_super_admin() )
+)
+```
+
+Points that matter:
+
+- `is_super_admin()` is OR-ed in, never replacing the scoped clause, so a teacher's or principal's reach is byte-for-byte what it is today.
+- Archived rows drop out of every normal read. Super-admin reads ignore `archived_at` (the archive views need them) — that is the only place archived rows surface.
+- `noticings` and `attendance` keep their author/marked_by checks on top; super_admin gets read-only there by design (its writes are additionally blocked by the read-only claim whenever impersonating, and the console never writes noticings).
+- `audit_log`: SELECT for super_admin only; INSERT via server functions with service role.
+- GRANTs for every new table (`authenticated` SELECT where a policy allows it, `service_role` ALL).
+
+## Phase 3 — Server functions (service role, caller verified first)
+
+New `src/lib/admin.functions.ts`, all with `.middleware([requireSupabaseAuth])`, all Zod-validated, each one re-checking authority against `context.supabase` (the caller's own RLS-scoped client) **before** importing `supabaseAdmin`:
+
+- `createSchool` — super_admin only. School + code + first classes.
+- `createSchoolAdmin` — super_admin only. `auth.admin.createUser` (email + password, confirmed) then the `admin` profile in that school.
+- `createTeacher` — super_admin, or `admin` for their **own** school (school_id taken from the caller's profile, never from the request body). Accepts email **or** username.
+- `archiveEntity` / `restoreEntity` — sets/clears `archived_at` + `archived_by`; super_admin anywhere, `admin` within their school; writes an audit row.
+- `startImpersonation` — super_admin only; writes the `impersonate_view` audit row and returns the read-only view token.
+- `resolveUsername` — public, rate-limited by input shape: username → the internal auth email. Returns a generic failure for unknown usernames so it can't be used to enumerate accounts.
+
+Every one of these writes an `audit_log` row before returning.
+
+## Phase 4 — Username login
+
+At creation, a teacher without an email gets a synthetic auth identity: `<username>@teachers.roshniapp.in`, stored on `auth.users` and mirrored in `profiles.username`; `profiles.email` stays null so the UI never shows a fake address. The domain has no MX record and is reserved, so it can never collide with a real address or receive mail. Sign-in: if the entered identifier has no `@`, the client calls `resolveUsername` and then does the normal `signInWithPassword` with the resolved address. Password verification stays entirely inside Supabase Auth — nothing custom.
+
+Password reset for username accounts is not possible by email; the principal or super admin resets it from the console (a `resetTeacherPassword` server function, same authority check).
+
+## Phase 5 — Read-only impersonation
+
+- Super admin picks a teacher → `startImpersonation` verifies, audits, and mints a short-lived (15 min) session for that teacher **with an extra app metadata claim** `acting_readonly: true`.
+- `is_acting_readonly()` reads that claim from the JWT. Every INSERT/UPDATE policy on `noticings`, `attendance`, `students`, `badges`, `profiles`, `classes` and `schools` carries `NOT public.is_acting_readonly()` in its `WITH CHECK`. The database refuses the write even if the UI is bypassed entirely.
+- Server functions add the same guard at the top, so RPC paths are covered too.
+- The app shows a persistent amber banner: "Viewing as Meena Rao — read only. Exit." Exiting restores the super admin's own session.
+
+## Phase 6 — Frontend
+
+New routes, all inside the existing `_authenticated` gate plus a role check in `beforeLoad` that redirects non-owners to `/this-week`:
+
+| Route | Contents |
+|---|---|
+| `src/routes/_authenticated/admin/route.tsx` | Gate + admin shell (cream/gold, Caveat headings — same tokens as today) |
+| `.../admin/index.tsx` | Overview KPIs across all schools |
+| `.../admin/schools.tsx` | List, create, archive/restore |
+| `.../admin/teachers.tsx` | All teachers, add, archive, "Log in as" |
+| `.../admin/students.tsx` | Classrooms + students browser, archive |
+| `.../admin/audit.tsx` | Audit trail |
+| `src/routes/_authenticated/manage.tsx` | School-admin panel: own school's teachers, classes, students, join code |
+
+Components: `AdminShell`, `KpiCard`, `EntityTable`, `ArchiveButton`, `CreateSchoolDialog`, `CreateUserDialog`, `ImpersonationBanner`, `GlobalSearch`. Existing teacher screens are untouched apart from mounting `ImpersonationBanner` in `AppShell` and adding a nav entry visible only to the two admin roles.
+
+Data layer: `src/lib/admin-queries.ts` (new). `src/lib/queries.ts` gains `.is("archived_at", null)` filters — the only change to existing query code.
+
+i18n: every new label, error and toast added to `src/lib/i18n.ts` in all four languages (en/hi/kn/mr).
+
+## How existing things stay intact
+
+- No column renamed or dropped; `classes`/`class_id`/`name`/`roll` untouched.
+- Existing policies extended, never replaced — the teacher and principal expressions stay identical.
+- Attendance (voice + manual), noticings, roster, CSV import, signup and the four languages are unaffected; the only behavioural change is that archived rows stop appearing.
+- `vite.config.ts` fallbacks untouched.
+- Post-build checks: 110 students, 1,326 noticings, 44 attendance rows, and a signed-in teacher spot check plus a cross-school negative test.
 
 ## Risks
 
-- **Duplicate roll numbers** could block the new unique index — checked before the index is created; if present, we report them and scope the constraint accordingly.
-- **Class-name parsing** assumes the "6A" pattern; all 5 current classes match, but the parser falls back to grade = full name / section = 'A' rather than failing.
-- **Students becoming writable** is a real widening of RLS; policies are written school+class scoped and reviewed before apply.
-- **NOT NULL flips** are the only irreversible step; each is preceded by its backfill and the final verification block aborts the migration if any null remains.
-- New schools start with **no classes**, so signup must tolerate "grade/section not found" by creating the class for the school rather than erroring.
+- **Super-admin RLS leak.** The OR-in must be additive; a typo turning it into a replacement would widen or break teacher scope. Mitigation: policy-by-policy review plus an automated negative test that signs in as a teacher of school A and asserts zero rows from school B.
+- **`is_super_admin()` drift.** If the helper ever returned true on an empty table or a null email, everyone becomes owner. It is written to return false on null/empty and is covered by a direct test.
+- **Read-only enforcement.** The claim must survive session refresh; if it were dropped, an impersonated session becomes a writable teacher session. Mitigation: guard at both RLS and server-function level, short session lifetime, and a test that attempts a noticing insert while impersonating and expects a policy violation.
+- **Username collisions / reserved domain.** Partial unique index plus a reserved-word denylist; usernames are lowercased at creation.
+- **Archive filters missed.** A query left without `archived_at IS NULL` would show archived rows. Mitigation: the filter lives in the policies, not only the queries, so the database is the backstop.
