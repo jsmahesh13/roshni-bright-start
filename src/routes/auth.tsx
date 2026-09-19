@@ -143,6 +143,58 @@ function AuthPage() {
 
       <main className="mx-auto grid w-full max-w-5xl flex-1 gap-8 px-5 pb-16 lg:grid-cols-2">
         <div className="card-paper p-7">
+          {view === "reset" ? (
+            <div>
+              <h1 className="hand text-4xl text-foreground">{t("au_reset_title")}</h1>
+              <p className="mt-1 text-sm text-muted-foreground">{t("au_reset_sub")}</p>
+              {resetDone ? (
+                <div className="mt-6 space-y-4">
+                  <p className="rounded-xl border border-gold/40 bg-gold-soft px-4 py-3 text-[13px] text-gold-deep">
+                    {t("au_reset_sent")}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setView("signin")}
+                    className="text-sm font-medium text-gold-deep underline underline-offset-2 hover:text-foreground"
+                  >
+                    {t("au_back_signin")}
+                  </button>
+                </div>
+              ) : (
+                <form
+                  className="mt-6 space-y-4"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void sendReset();
+                  }}
+                >
+                  <div className="space-y-2">
+                    <Label htmlFor="reset-email">{t("au_email")}</Label>
+                    <Input
+                      id="reset-email"
+                      type="email"
+                      autoComplete="email"
+                      value={resetEmail}
+                      onChange={(e) => setResetEmail(e.target.value)}
+                      placeholder="you@school.in"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={resetBusy || !hydrated}>
+                    {resetBusy ? "…" : t("au_send_reset")}
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={() => setView("signin")}
+                    className="block w-full text-center text-sm font-medium text-gold-deep underline underline-offset-2 hover:text-foreground"
+                  >
+                    {t("au_back_signin")}
+                  </button>
+                </form>
+              )}
+            </div>
+          ) : (
+            <>
           <h1 className="hand text-4xl text-foreground">{t("au_welcome")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {t("au_staffonly")}
