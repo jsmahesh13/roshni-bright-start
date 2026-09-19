@@ -32,7 +32,7 @@ export function ImpersonationBanner() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       const am = (data.user?.app_metadata ?? {}) as Record<string, unknown>;
-      if (am.acting_readonly === true) {
+      if (am["acting_readonly"] === true) {
         const saved = sessionStorage.getItem(SAVED_KEY);
         let name = data.user?.email ?? "";
         if (saved) {

@@ -6,6 +6,7 @@ export interface AdminSchool {
   id: string;
   name: string;
   code: string;
+  join_code: string;
   is_sandbox: boolean;
   archived_at: string | null;
   created_at: string;
@@ -67,7 +68,7 @@ export const adminSchoolsQuery = queryOptions({
   queryFn: async (): Promise<AdminSchool[]> => {
     const { data, error } = await supabase
       .from("schools")
-      .select("id, name, code, is_sandbox, archived_at, created_at")
+      .select("id, name, code, join_code, is_sandbox, archived_at, created_at")
       .order("name");
     if (error) throw error;
     return (data ?? []) as AdminSchool[];

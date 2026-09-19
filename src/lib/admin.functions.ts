@@ -234,8 +234,8 @@ async function setArchived(
   if (!caller.owner && schoolId !== caller.schoolId) throw new Error("Forbidden");
   if (input.entityType === "school" && !caller.owner) throw new Error("Forbidden");
   const cfg = ARCHIVABLE[input.entityType]!;
-  const { error } = await supabaseAdmin
-    .from(cfg.table)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabaseAdmin.from(cfg.table as any) as any)
     .update(
       archived
         ? { archived_at: new Date().toISOString(), archived_by: context.userId }
@@ -346,7 +346,7 @@ export const clearOwnReadonlyFlag = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(context.userId);
-    if (authUser.user?.app_metadata?.acting_readonly === true) {
+    if (authUser.user?.app_metadata?.["acting_readonly"] === true) {
       await supabaseAdmin.auth.admin.updateUserById(context.userId, {
         app_metadata: { ...authUser.user.app_metadata, acting_readonly: false },
       });
