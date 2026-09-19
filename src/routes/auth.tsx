@@ -50,6 +50,37 @@ function AuthPage() {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
 
+  // Inline "forgot password" view state.
+  const [view, setView] = useState<"signin" | "reset">("signin");
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetBusy, setResetBusy] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
+
+  function openReset() {
+    // Pre-fill only if what's typed looks like an email, not a username.
+    setResetEmail(email.includes("@") ? email.trim() : "");
+    setResetDone(false);
+    setView("reset");
+  }
+
+  async function sendReset() {
+    const value = resetEmail.trim();
+    if (!value.includes("@")) {
+      toast.message(t("au_reset_username_note"));
+      return;
+    }
+    setResetBusy(true);
+    try {
+      await supabase.auth.resetPasswordForEmail(value, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      // Neutral confirmation either way — never reveal whether the email exists.
+      setResetDone(true);
+    } finally {
+      setResetBusy(false);
+    }
+  }
+
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
