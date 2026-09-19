@@ -79,6 +79,39 @@ export type Database = {
           },
         ]
       }
+      audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_role: string | null
+          created_at: string
+          details: Json
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_role?: string | null
+          created_at?: string
+          details?: Json
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_role?: string | null
+          created_at?: string
+          details?: Json
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
       badges: {
         Row: {
           created_at: string
@@ -120,6 +153,8 @@ export type Database = {
       }
       classes: {
         Row: {
+          archived_at: string | null
+          archived_by: string | null
           created_at: string
           grade: string
           id: string
@@ -128,6 +163,8 @@ export type Database = {
           section: string
         }
         Insert: {
+          archived_at?: string | null
+          archived_by?: string | null
           created_at?: string
           grade: string
           id?: string
@@ -136,6 +173,8 @@ export type Database = {
           section: string
         }
         Update: {
+          archived_at?: string | null
+          archived_by?: string | null
           created_at?: string
           grade?: string
           id?: string
@@ -211,8 +250,25 @@ export type Database = {
           },
         ]
       }
+      platform_owners: {
+        Row: {
+          created_at: string
+          email: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          archived_at: string | null
+          archived_by: string | null
           class_id: string | null
           created_at: string
           email: string | null
@@ -222,8 +278,11 @@ export type Database = {
           role: string
           school_id: string
           section: string | null
+          username: string | null
         }
         Insert: {
+          archived_at?: string | null
+          archived_by?: string | null
           class_id?: string | null
           created_at?: string
           email?: string | null
@@ -233,8 +292,11 @@ export type Database = {
           role?: string
           school_id: string
           section?: string | null
+          username?: string | null
         }
         Update: {
+          archived_at?: string | null
+          archived_by?: string | null
           class_id?: string | null
           created_at?: string
           email?: string | null
@@ -244,6 +306,7 @@ export type Database = {
           role?: string
           school_id?: string
           section?: string | null
+          username?: string | null
         }
         Relationships: [
           {
@@ -264,6 +327,8 @@ export type Database = {
       }
       schools: {
         Row: {
+          archived_at: string | null
+          archived_by: string | null
           code: string
           created_at: string
           id: string
@@ -272,6 +337,8 @@ export type Database = {
           name: string
         }
         Insert: {
+          archived_at?: string | null
+          archived_by?: string | null
           code: string
           created_at?: string
           id?: string
@@ -280,6 +347,8 @@ export type Database = {
           name: string
         }
         Update: {
+          archived_at?: string | null
+          archived_by?: string | null
           code?: string
           created_at?: string
           id?: string
@@ -291,6 +360,8 @@ export type Database = {
       }
       students: {
         Row: {
+          archived_at: string | null
+          archived_by: string | null
           class_id: string
           created_at: string
           grade: string
@@ -301,6 +372,8 @@ export type Database = {
           section: string
         }
         Insert: {
+          archived_at?: string | null
+          archived_by?: string | null
           class_id: string
           created_at?: string
           grade: string
@@ -311,6 +384,8 @@ export type Database = {
           section: string
         }
         Update: {
+          archived_at?: string | null
+          archived_by?: string | null
           class_id?: string
           created_at?: string
           grade?: string
@@ -346,6 +421,8 @@ export type Database = {
       current_staff_role: { Args: never; Returns: string }
       get_user_class: { Args: never; Returns: string }
       get_user_school_id: { Args: never; Returns: string }
+      is_acting_readonly: { Args: never; Returns: boolean }
+      is_super_admin: { Args: never; Returns: boolean }
       join_school: {
         Args: { p_class_id: string; p_code: string; p_name: string }
         Returns: undefined

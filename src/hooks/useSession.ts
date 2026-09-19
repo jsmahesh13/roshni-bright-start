@@ -23,6 +23,19 @@ export function useUser() {
   return { user, loading };
 }
 
+export function useIsSuperAdmin() {
+  const { user } = useUser();
+  return useQuery({
+    queryKey: ["is-super-admin", user?.id],
+    enabled: !!user?.id,
+    staleTime: 60_000,
+    queryFn: async (): Promise<boolean> => {
+      const { data } = await supabase.rpc("is_super_admin");
+      return data === true;
+    },
+  });
+}
+
 export function useProfile() {
   const { user } = useUser();
 
