@@ -17,6 +17,7 @@ import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
 import { Route as AuthenticatedClassRouteImport } from './routes/_authenticated/class'
 import { Route as AuthenticatedConstellationTestRouteImport } from './routes/_authenticated/constellation-test'
+import { Route as AuthenticatedManageRouteImport } from './routes/_authenticated/manage'
 import { Route as AuthenticatedNoticeRouteImport } from './routes/_authenticated/notice'
 import { Route as AuthenticatedRosterRouteImport } from './routes/_authenticated/roster'
 import { Route as AuthenticatedSchoolRouteImport } from './routes/_authenticated/school'
@@ -68,6 +69,11 @@ const AuthenticatedConstellationTestRoute =
     path: '/constellation-test',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedManageRoute = AuthenticatedManageRouteImport.update({
+  id: '/manage',
+  path: '/manage',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedNoticeRoute = AuthenticatedNoticeRouteImport.update({
   id: '/notice',
   path: '/notice',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/class': typeof AuthenticatedClassRoute
   '/constellation-test': typeof AuthenticatedConstellationTestRoute
+  '/manage': typeof AuthenticatedManageRoute
   '/notice': typeof AuthenticatedNoticeRoute
   '/roster': typeof AuthenticatedRosterRoute
   '/school': typeof AuthenticatedSchoolRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/class': typeof AuthenticatedClassRoute
   '/constellation-test': typeof AuthenticatedConstellationTestRoute
+  '/manage': typeof AuthenticatedManageRoute
   '/notice': typeof AuthenticatedNoticeRoute
   '/roster': typeof AuthenticatedRosterRoute
   '/school': typeof AuthenticatedSchoolRoute
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
   '/_authenticated/class': typeof AuthenticatedClassRoute
   '/_authenticated/constellation-test': typeof AuthenticatedConstellationTestRoute
+  '/_authenticated/manage': typeof AuthenticatedManageRoute
   '/_authenticated/notice': typeof AuthenticatedNoticeRoute
   '/_authenticated/roster': typeof AuthenticatedRosterRoute
   '/_authenticated/school': typeof AuthenticatedSchoolRoute
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/attendance'
     | '/class'
     | '/constellation-test'
+    | '/manage'
     | '/notice'
     | '/roster'
     | '/school'
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/attendance'
     | '/class'
     | '/constellation-test'
+    | '/manage'
     | '/notice'
     | '/roster'
     | '/school'
@@ -229,6 +240,7 @@ export interface FileRouteTypes {
     | '/_authenticated/attendance'
     | '/_authenticated/class'
     | '/_authenticated/constellation-test'
+    | '/_authenticated/manage'
     | '/_authenticated/notice'
     | '/_authenticated/roster'
     | '/_authenticated/school'
@@ -304,6 +316,13 @@ declare module '@tanstack/react-router' {
       path: '/constellation-test'
       fullPath: '/constellation-test'
       preLoaderRoute: typeof AuthenticatedConstellationTestRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/manage': {
+      id: '/_authenticated/manage'
+      path: '/manage'
+      fullPath: '/manage'
+      preLoaderRoute: typeof AuthenticatedManageRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/notice': {
@@ -406,6 +425,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
   AuthenticatedClassRoute: typeof AuthenticatedClassRoute
   AuthenticatedConstellationTestRoute: typeof AuthenticatedConstellationTestRoute
+  AuthenticatedManageRoute: typeof AuthenticatedManageRoute
   AuthenticatedNoticeRoute: typeof AuthenticatedNoticeRoute
   AuthenticatedRosterRoute: typeof AuthenticatedRosterRoute
   AuthenticatedSchoolRoute: typeof AuthenticatedSchoolRoute
@@ -418,6 +438,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
   AuthenticatedClassRoute: AuthenticatedClassRoute,
   AuthenticatedConstellationTestRoute: AuthenticatedConstellationTestRoute,
+  AuthenticatedManageRoute: AuthenticatedManageRoute,
   AuthenticatedNoticeRoute: AuthenticatedNoticeRoute,
   AuthenticatedRosterRoute: AuthenticatedRosterRoute,
   AuthenticatedSchoolRoute: AuthenticatedSchoolRoute,

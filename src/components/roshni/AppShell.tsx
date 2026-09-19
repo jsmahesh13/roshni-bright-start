@@ -1,18 +1,21 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
-import { CalendarDays, PenLine, Users, Building2, ClipboardCheck, ListChecks, LogOut, Menu, X } from "lucide-react";
+import { CalendarDays, PenLine, Users, Building2, ClipboardCheck, ListChecks, LogOut, Menu, X, ShieldCheck, Settings2 } from "lucide-react";
 
 import { WordmarkLink } from "@/components/roshni/SunLogo";
+import { ImpersonationBanner } from "@/components/roshni/ImpersonationBanner";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useProfile } from "@/hooks/useSession";
+import { useIsSuperAdmin, useProfile, useUser } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
 import { useT } from "@/hooks/useLang";
 import { LanguageToggle } from "@/components/roshni/LanguageToggle";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { data: profile } = useProfile();
+  const { data: isSuperAdmin } = useIsSuperAdmin();
+  const { user } = useUser();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -27,7 +30,13 @@ export function AppShell({ children }: { children: ReactNode }) {
     { to: "/roster", label: t("nav_roster"), icon: ListChecks },
 
     ...(profile?.role === "admin"
-      ? [{ to: "/school", label: t("nav_school"), icon: Building2 as typeof Users }]
+      ? [
+          { to: "/school", label: t("nav_school"), icon: Building2 as typeof Users },
+          { to: "/manage", label: t("nav_manage"), icon: Settings2 as typeof Users },
+        ]
+      : []),
+    ...(isSuperAdmin
+      ? [{ to: "/admin", label: t("nav_console"), icon: ShieldCheck as typeof Users }]
       : []),
   ] as const;
 
@@ -85,10 +94,14 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         <div className="rounded-xl border border-sidebar-border bg-card p-3">
           <div className="truncate text-sm font-semibold text-foreground">
-            {profile?.name ?? "…"}
+            {profile?.name ?? user?.email ?? "…"}
           </div>
           <div className="text-xs text-muted-foreground">
-            {profile?.role === "admin" ? t("role_admin") : t("role_teacher")}
+            {isSuperAdmin
+              ? t("nav_console")
+              : profile?.role === "admin"
+                ? t("role_admin")
+                : t("role_teacher")}
           </div>
           <Button
             variant="ghost"
@@ -124,6 +137,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       <div className="min-w-0 flex-1">
+        <ImpersonationBanner />
         <div className="flex items-center gap-3 border-b border-border bg-card/70 px-4 py-3 lg:hidden">
           <button onClick={() => setOpen(true)} aria-label={t("openmenu")}>
             <Menu className="h-5 w-5 text-muted-foreground" />
