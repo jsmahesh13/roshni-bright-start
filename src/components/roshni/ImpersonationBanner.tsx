@@ -30,7 +30,8 @@ export function ImpersonationBanner() {
   const t = useT();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    const check = async () => {
+      const { data } = await supabase.auth.getUser();
       const am = (data.user?.app_metadata ?? {}) as Record<string, unknown>;
       if (am["acting_readonly"] === true) {
         const saved = sessionStorage.getItem(SAVED_KEY);
@@ -43,8 +44,15 @@ export function ImpersonationBanner() {
           }
         }
         setTeacherName(name);
+      } else {
+        setTeacherName(null);
       }
-    });
+    };
+    void check();
+    // The app shell never remounts across client-side navigation, so the
+    // one-time mount check misses session swaps — listen for them instead.
+    const { data: sub } = supabase.auth.onAuthStateChange(() => void check());
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   if (!teacherName) return null;
