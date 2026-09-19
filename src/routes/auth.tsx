@@ -38,7 +38,6 @@ function AuthPage() {
   const seed = useServerFn(ensureDemoStaff);
   const resolveUsernameFn = useServerFn(resolveUsername);
   const clearOwnReadonlyFlagFn = useServerFn(clearOwnReadonlyFlag);
-  void clearOwnReadonlyFlagFn;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
