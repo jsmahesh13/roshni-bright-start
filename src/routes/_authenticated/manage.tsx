@@ -110,7 +110,7 @@ function ManagePage() {
           onClick={() => {
             if (school?.join_code) {
               void navigator.clipboard.writeText(school.join_code);
-              toast.success(t("ad_done_pw").replace("password", "code"));
+              toast.success(t("au_copied"));
             }
           }}
         >
