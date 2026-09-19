@@ -74,8 +74,7 @@ export function ImpersonationBanner() {
       }
       await queryClient.cancelQueries();
       queryClient.clear();
-      navigate({ to: "/admin", replace: true });
-      window.location.reload();
+      window.location.href = "/admin";
     } finally {
       setBusy(false);
     }
