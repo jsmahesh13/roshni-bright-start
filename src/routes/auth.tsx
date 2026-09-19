@@ -259,6 +259,15 @@ function AuthPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
+                  <div className="text-right">
+                    <button
+                      type="button"
+                      onClick={openReset}
+                      className="text-xs font-medium text-gold-deep underline underline-offset-2 hover:text-foreground"
+                    >
+                      {t("au_forgot")}
+                    </button>
+                  </div>
                 </div>
                 <Button type="submit" className="w-full" disabled={busy || !hydrated}>
                   {busy ? "…" : t("enter")}
@@ -271,6 +280,8 @@ function AuthPage() {
             </TabsContent>
 
           </Tabs>
+            </>
+          )}
         </div>
 
         <div>
