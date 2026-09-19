@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PreviewRouteImport } from './routes/preview'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
 import { Route as AuthenticatedClassRouteImport } from './routes/_authenticated/class'
@@ -46,6 +47,11 @@ const AuthRoute = AuthRouteImport.update({
 const PreviewRoute = PreviewRouteImport.update({
   id: '/preview',
   path: '/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/preview': typeof PreviewRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/class': typeof AuthenticatedClassRoute
@@ -153,6 +160,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/preview': typeof PreviewRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/class': typeof AuthenticatedClassRoute
   '/constellation-test': typeof AuthenticatedConstellationTestRoute
@@ -174,6 +182,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/preview': typeof PreviewRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
   '/_authenticated/class': typeof AuthenticatedClassRoute
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/preview'
+    | '/reset-password'
     | '/admin'
     | '/attendance'
     | '/class'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/preview'
+    | '/reset-password'
     | '/attendance'
     | '/class'
     | '/constellation-test'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/preview'
+    | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/attendance'
     | '/_authenticated/class'
@@ -258,6 +270,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   PreviewRoute: typeof PreviewRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -288,6 +301,13 @@ declare module '@tanstack/react-router' {
       path: '/preview'
       fullPath: '/preview'
       preLoaderRoute: typeof PreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -454,6 +474,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   PreviewRoute: PreviewRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
