@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { Eye, LogOut } from "lucide-react";
 
@@ -25,7 +24,6 @@ export function saveImpersonatorSession(saved: SavedImpersonator) {
 export function ImpersonationBanner() {
   const [teacherName, setTeacherName] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const t = useT();
 
